@@ -9,35 +9,35 @@
           <mxGeometry x="10" y="10" width="980" height="800" as="geometry"/>
         </mxCell>
 
-        <mxCell id="cpu" value="&lt;b&gt;ЦП&lt;/b&gt; - центральный процессор&lt;br&gt;Apple M1 Pro&lt;br&gt;ядер / потоков: 6 / 6&lt;br&gt;базовая частота: (из HWiNFO64)&lt;br&gt;кэш: L1 / L2 / L3&lt;br&gt;(из HWiNFO64)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="cpu" value="&lt;b&gt;ЦП&lt;/b&gt; - центральный процессор&lt;br&gt;Apple Part 000 r0p0 (ARM64)&lt;br&gt;ядер / потоков: 4 / 4&lt;br&gt;базовая частота: 2000 МГц&lt;br&gt;кэш: L1 4×192 КБ (инстр.) / 4×128 КБ (данные)&lt;br&gt;L3 интегрированный: 4×12 МБ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="40" y="70" width="380" height="150" as="geometry"/>
         </mxCell>
 
-        <mxCell id="ram" value="&lt;b&gt;ОЗУ&lt;/b&gt; - оперативная память&lt;br&gt;8192 МиБ (8 ГиБ)&lt;br&gt;виртуальный модуль, слот 1&lt;br&gt;тип: LPDDR5&lt;br&gt;частота: (из HWiNFO64)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="ram" value="&lt;b&gt;ОЗУ&lt;/b&gt; - оперативная память&lt;br&gt;8192 МиБ (8 ГиБ) выделено ВМ&lt;br&gt;видимо в гостевой системе: 7680 МиБ&lt;br&gt;тип: SDRAM (VMware Virtual RAM)&lt;br&gt;слоты: 4 × (4 ГБ + 2 ГБ + 1 ГБ + 512 МБ)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="580" y="70" width="380" height="150" as="geometry"/>
         </mxCell>
 
-        <mxCell id="bus" value="&lt;b&gt;СИСТЕМНАЯ МАГИСТРАЛЬ&lt;/b&gt; (системная шина)&lt;br&gt;тип: PCI Express (эмуляция VMware)&lt;br&gt;версия: (из HWiNFO64)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#3563e9;strokeColor=#3563e9;strokeWidth=1;verticalAlign=middle;align=center;fontColor=#ffffff;fontSize=14;fontStyle=0;" vertex="1" parent="1">
+        <mxCell id="bus" value="&lt;b&gt;СИСТЕМНАЯ МАГИСТРАЛЬ&lt;/b&gt; (системная шина)&lt;br&gt;тип: PCI Express (эмуляция VMware)&lt;br&gt;устройство: VMware PCI Express Root Port" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#3563e9;strokeColor=#3563e9;strokeWidth=1;verticalAlign=middle;align=center;fontColor=#ffffff;fontSize=14;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="20" y="300" width="960" height="64" as="geometry"/>
         </mxCell>
 
-        <mxCell id="gpu" value="&lt;b&gt;Видеоадаптер&lt;/b&gt;&lt;br&gt;VMware SVGA (виртуальный)&lt;br&gt;объём видеопамяти: (из сведений о системе)&lt;br&gt;ширина шины памяти: (из сведений о системе)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="gpu" value="&lt;b&gt;Видеоадаптер&lt;/b&gt;&lt;br&gt;VMware SVGA 3D (VMware, Inc.)&lt;br&gt;ОЗУ адаптера: 1 МиБ (1 048 576 байт)&lt;br&gt;драйвер: vm3dum64_loader.dIl (9.17.6.5)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="40" y="450" width="300" height="130" as="geometry"/>
         </mxCell>
 
-        <mxCell id="nvme" value="&lt;b&gt;Накопитель постоянной памяти&lt;/b&gt;&lt;br&gt;виртуальный NVMe, 100 ГиБ&lt;br&gt;устройство: (из HWiNFO64 / сведений о системе)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="nvme" value="&lt;b&gt;Накопитель постоянной памяти&lt;/b&gt;&lt;br&gt;виртуальный NVMe, 100 ГиБ&lt;br&gt;контроллер: VMware NVMe SSD Controller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="350" y="450" width="300" height="130" as="geometry"/>
         </mxCell>
 
-        <mxCell id="net" value="&lt;b&gt;Сетевой адаптер&lt;/b&gt;&lt;br&gt;VMware Ethernet (NAT)&lt;br&gt;макс. пропускная способность:&lt;br&gt;1 Гбит/с (из состояния подключения)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="net" value="&lt;b&gt;Сетевой адаптер&lt;/b&gt;&lt;br&gt;VMware Ethernet (NAT)&lt;br&gt;контроллер: VMware VMXNET3 Ethernet Controller&lt;br&gt;1 Гбит/с" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=8;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="660" y="450" width="300" height="130" as="geometry"/>
         </mxCell>
 
-        <mxCell id="monitor" value="&lt;b&gt;Монитор (виртуальный)&lt;/b&gt;&lt;br&gt;разрешение: (из параметров дисплея)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8eff6;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=middle;align=center;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="monitor" value="&lt;b&gt;Монитор (виртуальный)&lt;/b&gt;&lt;br&gt;разрешение: 4112 × 2580 × 60 Гц" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8eff6;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=middle;align=center;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="40" y="650" width="300" height="70" as="geometry"/>
         </mxCell>
 
-        <mxCell id="volumes" value="&lt;b&gt;Логические тома диска&lt;/b&gt;&lt;br&gt;EFI 300 МиБ | MSR 16 МиБ&lt;br&gt;Recovery ~1 ГиБ&lt;br&gt;C: ~83 ГиБ (NTFS) | swap 2 ГиБ | root ~13 ГиБ (ext4)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8eff6;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=middle;align=center;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
+        <mxCell id="volumes" value="&lt;b&gt;Логические тома диска&lt;/b&gt;&lt;br&gt;EFI 200 МиБ | MSR 16 МиБ&lt;br&gt;Recovery 714 МиБ&lt;br&gt;C: ~83 ГиБ (NTFS, BitLocker) | swap 2 ГиБ | root 14,78 ГиБ (ext4)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8eff6;strokeColor=#cbd5e0;strokeWidth=1;verticalAlign=middle;align=center;fontColor=#2c3e50;fontSize=11;" vertex="1" parent="1">
           <mxGeometry x="350" y="650" width="300" height="110" as="geometry"/>
         </mxCell>
 
