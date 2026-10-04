@@ -1,0 +1,6 @@
+### КОМАНДА: mv ~/OS2/task_01c_src/*.txt ~/OS2/task_01c_dst/ && ls ~/OS2/task_01c_dst
+txt1.txt
+txt2.txt
+txt3.txt
+txt4.txt
+txt5.txt

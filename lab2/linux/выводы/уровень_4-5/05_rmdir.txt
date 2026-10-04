@@ -1,0 +1,2 @@
+### КОМАНДА: rmdir ~/OS2/task_01k/empty_subdir && ls ~/OS2/task_01k
+subdir

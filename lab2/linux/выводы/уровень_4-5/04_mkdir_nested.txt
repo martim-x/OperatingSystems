@@ -1,0 +1,6 @@
+### КОМАНДА: mkdir -p ~/OS2/task_01j/sub/dir/full/path && find ~/OS2/task_01j -type d
+/home/User-6d4ec851/OS2/task_01j
+/home/User-6d4ec851/OS2/task_01j/sub
+/home/User-6d4ec851/OS2/task_01j/sub/dir
+/home/User-6d4ec851/OS2/task_01j/sub/dir/full
+/home/User-6d4ec851/OS2/task_01j/sub/dir/full/path

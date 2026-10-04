@@ -1,0 +1,10 @@
+### КОМАНДА: uname -a; echo "---"; uname -r; echo "---"; uname -m; echo "---"; cat /etc/os-release | head -3
+Linux alarm 7.2.8-1-aarch64-ARCH #1 SMP PREEMPT_DYNAMIC Sat Sep 26 12:05:48 UTC 2026 aarch64 GNU/Linux
+---
+7.2.8-1-aarch64-ARCH
+---
+aarch64
+---
+NAME="Arch Linux ARM"
+PRETTY_NAME="Arch Linux ARM"
+ID=archarm

@@ -1,0 +1,24 @@
+### КОМАНДА: cd ~/OS2 && ls -l *.sh && wc -l *.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851  354 Oct  4 21:46 bat_01.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851  451 Oct  4 21:46 bat_02.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851  390 Oct  4 21:46 bat_03.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851  658 Oct  4 21:46 bat_04.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851  878 Oct  4 21:46 bat_05.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851 3430 Oct  4 19:55 calc.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851 1527 Oct  4 19:55 path_count.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851 5579 Oct  4 21:42 prep.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851 1827 Oct  4 19:55 tempconv.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851 2484 Oct  4 19:55 top5.sh
+-rwxr-xr-x 1 User-6d4ec851 User-6d4ec851 2597 Oct  4 19:55 tree_sizes.sh
+    8 bat_01.sh
+    8 bat_02.sh
+   10 bat_03.sh
+   26 bat_04.sh
+   32 bat_05.sh
+   86 calc.sh
+   33 path_count.sh
+  120 prep.sh
+   36 tempconv.sh
+   51 top5.sh
+   67 tree_sizes.sh
+  477 total

@@ -1,0 +1,7 @@
+### КОМАНДА: cp ~/OS2/task_01a/txt1.txt ~/OS2/task_01a/newname.txt && ls ~/OS2/task_01a
+hidden1.txt
+newname.txt
+system1.txt
+txt1.txt
+txt2.txt
+txt3.txt

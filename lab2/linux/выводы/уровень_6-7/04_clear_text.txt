@@ -1,0 +1,5 @@
+### КОМАНДА: cd ~/OS2/task_01d_2 && for f in *.txt; do > "$f"; done; ls -l ~/OS2/task_01d_2
+total 0
+-rw-r--r-- 1 User-6d4ec851 User-6d4ec851 0 Oct  4 22:11 txt1.txt
+-rw-r--r-- 1 User-6d4ec851 User-6d4ec851 0 Oct  4 22:11 txt2.txt
+-rw-r--r-- 1 User-6d4ec851 User-6d4ec851 0 Oct  4 22:11 txt3.txt

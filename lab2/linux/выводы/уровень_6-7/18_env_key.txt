@@ -1,0 +1,7 @@
+### КОМАНДА: env | sort | grep -E "^(PATH|HOME|USER|HOSTNAME|SHELL|TMPDIR|LANG|TERM)="
+HOME=/home/User-6d4ec851
+LANG=C
+PATH=/home/User-6d4ec851/.dotnet:/home/User-6d4ec851/.dotnet:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+SHELL=/bin/bash
+TERM=xterm-256color
+USER=User-6d4ec851

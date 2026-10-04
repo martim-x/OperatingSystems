@@ -1,0 +1,2 @@
+### КОМАНДА: cd ~/OS2/task_01i/Русский && cd ../English && pwd
+/home/User-6d4ec851/OS2/task_01i/English

@@ -1,0 +1,4 @@
+### КОМАНДА: cp -f ~/OS2/task_01d_1/* ~/OS2/task_01d_2/ && ls ~/OS2/task_01d_2
+txt1.txt
+txt2.txt
+txt3.txt

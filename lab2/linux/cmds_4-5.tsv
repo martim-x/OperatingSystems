@@ -1,0 +1,29 @@
+# Уровень 4-5, Linux. Формат: <номер>\t<имя>\t<команда>
+# Разделитель — табуляция. Ввод для интерактивных заданий — файл <имя>.in
+0	prep	cd ~/OS2 && bash prep.sh | tail -12
+1	cd_abs	cd ~/OS2/task_01i/Русский && pwd
+2	cd_rel	cd ~/OS2/task_01i/Русский && cd ../English && pwd
+3	mkdir	mkdir -p ~/OS2/task_01j && ls -d ~/OS2/task_01j
+4	mkdir_nested	mkdir -p ~/OS2/task_01j/sub/dir/full/path && find ~/OS2/task_01j -type d
+5	rmdir	rmdir ~/OS2/task_01k/empty_subdir && ls ~/OS2/task_01k
+6	cp_all	cp ~/OS2/tasks_tmp/*.txt ~/OS2/task_01a/ && ls ~/OS2/task_01a
+7	cp_interactive	cp -iv ~/OS2/tasks_tmp/*.txt ~/OS2/task_01a/
+8	cp_rename	cp ~/OS2/task_01a/txt1.txt ~/OS2/task_01a/newname.txt && ls ~/OS2/task_01a
+9	cat_merge	cat ~/OS2/task_01a/txt1.txt ~/OS2/task_01a/txt2.txt > ~/OS2/task_01a/merged.txt && cat ~/OS2/task_01a/merged.txt
+10	mv_files	mv ~/OS2/task_01c_src/*.txt ~/OS2/task_01c_dst/ && ls ~/OS2/task_01c_dst
+11	ren_loop	cd ~/OS2/task_01e && for f in *.txt; do mv "$f" "${f%.txt}.bmp"; done; ls ~/OS2/task_01e
+12	ren_user_var	mv ~/OS2/task_01e/txt1.bmp ~/OS2/$USER.bmp && ls ~/OS2/*.bmp
+13	diff_cmp	diff ~/OS2/task_01f/txt1.txt ~/OS2/task_01f/txt2.txt > ~/OS2/task_01f/result.txt; cat ~/OS2/task_01f/result.txt
+14	rm_interactive	rm -iv ~/OS2/task_01g/txt1.txt
+15	find_sys	find ~/OS2/task_01g -maxdepth 1 -name 'system*' -type f -delete; ls ~/OS2/task_01g
+16	find_perm	find ~/OS2/task_01g -perm -u=w -type f -delete; ls -l ~/OS2/task_01g
+17	rm_rf_dir	rm -rf ~/OS2/task_01g/* && rmdir ~/OS2/task_01g && ls ~/OS2
+18	ls_R	ls -R ~/OS2 | head -28
+19	ls_1_file	ls -1 ~/OS2 > ~/OS2/task_01h/user_files.txt && cat ~/OS2/task_01h/user_files.txt
+20	type_con_students	cat > ~/OS2/students.txt
+21	grep_name	grep "Иванов" ~/OS2/students.txt
+22	echo_append	echo "Кузнецов Кузьма" >> ~/OS2/students.txt && cat ~/OS2/students.txt
+23	sort_file	sort ~/OS2/students.txt
+24	bios_sysfs	cat /sys/class/dmi/id/bios_version > ~/OS2/bios.txt; cat ~/OS2/bios.txt
+25	chmod_x	cd ~/OS2 && chmod +x *.sh && ls -l ~/OS2/*.sh
+26	env_vars	env | sort | head -14

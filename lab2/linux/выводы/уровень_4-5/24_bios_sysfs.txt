@@ -1,0 +1,2 @@
+### КОМАНДА: cat /sys/class/dmi/id/bios_version > ~/OS2/bios.txt; cat ~/OS2/bios.txt
+VMW201.00V.21805430.BA64.2305221830

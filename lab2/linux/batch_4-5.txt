@@ -1,0 +1,27 @@
+# Уровень 4-5. Формат: <номер>;;<имя>;;<команда>
+# Порядок строго по заданию, накопительно.
+4;;cd_abs;;cd ~/OS2/task_01i/Русский && pwd
+5;;cd_rel;;cd ~/OS2/task_01i/Русский && cd ../English && pwd
+6;;mkdir;;mkdir -p ~/OS2/task_01j && ls -la ~/OS2/task_01j
+7;;mkdir_nested;;mkdir -p ~/OS2/task_01j/sub/dir/full/path && find ~/OS2/task_01j -type d
+8;;rmdir_empty;;rmdir ~/OS2/task_01k/empty_subdir && ls ~/OS2/task_01k
+9;;cp_all;;cp ~/OS2/tasks_tmp/*.txt ~/OS2/task_01a/ && ls ~/OS2/task_01a
+10;;cp_interactive;;cp -iv ~/OS2/tasks_tmp/*.txt ~/OS2/task_01a/ < /dev/null
+11;;cp_rename;;cp ~/OS2/task_01a/txt1.txt ~/OS2/task_01a/newname.txt && ls ~/OS2/task_01a
+12;;cat_merge;;cat ~/OS2/task_01a/txt1.txt ~/OS2/task_01a/txt2.txt > ~/OS2/task_01a/merged.txt && cat ~/OS2/task_01a/merged.txt
+13;;mv_files;;mv ~/OS2/task_01c_src/*.txt ~/OS2/task_01c_dst/ && ls ~/OS2/task_01c_dst
+14;;ren_loop;;cd ~/OS2/task_01e && for f in *.txt; do mv "$f" "${f%.txt}.bmp"; done; ls ~/OS2/task_01e
+15;;ren_user_var;;mv ~/OS2/task_01e/txt1.bmp ~/OS2/$USER.bmp && ls ~/OS2/*.bmp
+16;;diff_cmp;;diff ~/OS2/task_01f/txt1.txt ~/OS2/task_01f/txt2.txt > ~/OS2/task_01f/result.txt; cat ~/OS2/task_01f/result.txt
+17;;rm_interactive;;rm -iv ~/OS2/task_01g/txt1 < /dev/null
+18;;find_xargs;;find ~/OS2/task_01g -type f -name '*.txt' | xargs rm -f; find ~/OS2/task_01g -type f | sort
+19;;find_perm;;find ~/OS2/task_01g ! -perm -444 -type f -delete; ls -l ~/OS2/task_01g
+20;;rm_rf_dir;;rm -rf ~/OS2/task_01g/* && rmdir ~/OS2/task_01g && ls ~/OS2
+21;;ls_R_less;;ls -R ~/OS2 | head -30
+22;;ls_1_file;;ls -1 ~/OS2 > ~/OS2/task_01h/user_files.txt && cat ~/OS2/task_01h/user_files.txt
+23;;grep_name;;printf 'Иванов Иван\nПетров Пётр\nСидоров Сидор\nИванов Иван\n' > ~/OS2/students.txt && grep "Иванов" ~/OS2/students.txt
+24;;echo_append;;echo "Кузнецов Кузьма" >> ~/OS2/students.txt && cat ~/OS2/students.txt
+25;;sort_file;;sort ~/OS2/students.txt
+26;;bios_sysfs;;ls /sys/class/dmi/id/ 2>&1 | head -5; echo "---"; uname -r
+27;;chmod_x;;cd ~/OS2 && chmod +x *.sh && ls -l ~/OS2/*.sh
+28;;env_vars;;env | sort | head -15

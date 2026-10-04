@@ -1,0 +1,7 @@
+### КОМАНДА: cp -iv ~/OS2/tasks_tmp/*.txt ~/OS2/task_01a/
+### ВВОД: y|y|y|y|y
+cp: overwrite '/home/User-6d4ec851/OS2/task_01a/hidden1.txt'? cp: overwrite '/home/User-6d4ec851/OS2/task_01a/system1.txt'? cp: overwrite '/home/User-6d4ec851/OS2/task_01a/txt1.txt'? cp: overwrite '/home/User-6d4ec851/OS2/task_01a/txt2.txt'? cp: overwrite '/home/User-6d4ec851/OS2/task_01a/txt3.txt'? '/home/User-6d4ec851/OS2/tasks_tmp/hidden1.txt' -> '/home/User-6d4ec851/OS2/task_01a/hidden1.txt'
+'/home/User-6d4ec851/OS2/tasks_tmp/system1.txt' -> '/home/User-6d4ec851/OS2/task_01a/system1.txt'
+'/home/User-6d4ec851/OS2/tasks_tmp/txt1.txt' -> '/home/User-6d4ec851/OS2/task_01a/txt1.txt'
+'/home/User-6d4ec851/OS2/tasks_tmp/txt2.txt' -> '/home/User-6d4ec851/OS2/task_01a/txt2.txt'
+'/home/User-6d4ec851/OS2/tasks_tmp/txt3.txt' -> '/home/User-6d4ec851/OS2/task_01a/txt3.txt'

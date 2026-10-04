@@ -1,0 +1,3 @@
+### КОМАНДА: cat ~/OS2/task_01a/txt1.txt ~/OS2/task_01a/txt2.txt > ~/OS2/task_01a/merged.txt && cat ~/OS2/task_01a/merged.txt
+txt1
+txt2

@@ -1,0 +1,36 @@
+### КОМАНДА: env | sort
+COLORFGBG=15;0
+COLORTERM=truecolor
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
+DISPLAY=:1
+DOTNET_ROOT=/home/User-6d4ec851/.dotnet
+FLATPAK_TTY_PROGRESS=1
+HOME=/home/User-6d4ec851
+KONSOLE_DBUS_ACTIVATION_COOKIE=7CFZ/yMcfDZ1KEa4QOg2ji5LbagqG70NxdcK2E+G3R4=
+KONSOLE_DBUS_SERVICE=:1.1025
+KONSOLE_DBUS_SESSION=/Sessions/1
+KONSOLE_DBUS_WINDOW=/Windows/1
+KONSOLE_VERSION=260801
+LANG=C
+LANGUAGE=
+LOGNAME=User-6d4ec851
+MAIL=/var/spool/mail/User-6d4ec851
+MOTD_SHOWN=pam
+PATH=/home/User-6d4ec851/.dotnet:/home/User-6d4ec851/.dotnet:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+PROFILEHOME=
+PWD=/home/User-6d4ec851
+SHELL=/bin/bash
+SHELL_SESSION_ID=6b0ecb27012749acb89036ffe35a1181
+SHLVL=1
+SSH_CLIENT=192.168.78.1 55338 22
+SSH_CONNECTION=192.168.78.1 55338 192.168.78.154 22
+TERM=xterm-256color
+USER=User-6d4ec851
+VSSCRIPT_PATH=/usr/lib/python3.14/site-packages/vapoursynth/libvsscript.so
+WAYLAND_DISPLAY=wayland-0
+WINDOWID=187650672308336
+XDG_RUNTIME_DIR=/run/user/1001
+XDG_SESSION_CLASS=user
+XDG_SESSION_ID=2768
+XDG_SESSION_TYPE=tty
+_=/usr/bin/env

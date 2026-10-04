@@ -1,0 +1,4 @@
+### КОМАНДА: printenv PATH; echo "---"; echo $PATH | tr ':' '\n' | wc -l
+/home/User-6d4ec851/.dotnet:/home/User-6d4ec851/.dotnet:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+---
+8

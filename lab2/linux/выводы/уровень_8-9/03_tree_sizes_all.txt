@@ -1,0 +1,35 @@
+### КОМАНДА: cd ~/OS2 && ./tree_sizes.sh . | head -34
+================================================================
+ ДЕРЕВО КАТАЛОГОВ: .
+ Формат размера файла: <десятичный> / <двоичный>
+================================================================
+[DIR ] .                                        файлов: 0, размер: 0 B / 0 B
+[DIR ] .                                        файлов: 60, размер: 20.47 KB / 19.99 KiB
+  [FILE] User-6d4ec851.bmp                        5 B / 5 B
+  [FILE] bat_01.sh                                354 B / 354 B
+  [FILE] bat_02.sh                                451 B / 451 B
+  [FILE] bat_03.sh                                390 B / 390 B
+  [FILE] bat_04.sh                                658 B / 658 B
+  [FILE] bat_05.sh                                878 B / 878 B
+  [FILE] calc.sh                                  3.43 KB / 3.35 KiB
+  [FILE] path_count.sh                            1.53 KB / 1.49 KiB
+  [FILE] prep.sh                                  5.58 KB / 5.45 KiB
+  [DIR ] task_01a                                 файлов: 0, размер: 0 B / 0 B
+  [DIR ] task_01b                                 файлов: 9, размер: 56 B / 56 B
+    [FILE] archive-readonly.txt                     8 B / 8 B
+    [DIR ] hidden_dir                               файлов: 4, размер: 23 B / 23 B
+      [DIR ] empty_subdir                             файлов: 0, размер: 0 B / 0 B
+      [DIR ] subdir                                   файлов: 2, размер: 10 B / 10 B
+        [FILE] txt1.txt                                 5 B / 5 B
+        [FILE] txt2.txt                                 5 B / 5 B
+      [FILE] system1.txt                              8 B / 8 B
+      [FILE] txt1.txt                                 5 B / 5 B
+    [FILE] plain.txt                                6 B / 6 B
+    [FILE] readonly.txt                             9 B / 9 B
+    [DIR ] subdir                                   файлов: 2, размер: 10 B / 10 B
+      [DIR ] empty_subdir                             файлов: 0, размер: 0 B / 0 B
+      [FILE] txt1.txt                                 5 B / 5 B
+      [FILE] txt2.txt                                 5 B / 5 B
+  [DIR ] task_01c_dst                             файлов: 0, размер: 0 B / 0 B
+  [DIR ] task_01c_src                             файлов: 5, размер: 25 B / 25 B
+    [FILE] txt1.txt                                 5 B / 5 B

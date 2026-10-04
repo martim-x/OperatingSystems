@@ -1,0 +1,5 @@
+### КОМАНДА: rm -rf ~/OS2/task_01k/subdir && ls -R ~/OS2/task_01k
+/home/User-6d4ec851/OS2/task_01k:
+empty_subdir
+
+/home/User-6d4ec851/OS2/task_01k/empty_subdir:

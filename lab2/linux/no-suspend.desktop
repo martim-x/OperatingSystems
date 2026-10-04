@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=No Suspend / No Lock
+Comment=Держит systemd-inhibit: запрет сна и блокировки экрана на всё время работы
+Exec=systemd-inhibit --what=idle:sleep --who="user" --why="Работа в консоли (ЛР2)" sleep infinity
+Icon=system-lock-screen
+Terminal=false
+X-KDE-autostart-enabled=true

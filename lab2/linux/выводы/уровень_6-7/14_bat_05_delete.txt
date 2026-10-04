@@ -1,0 +1,3 @@
+### КОМАНДА: cd ~/OS2 && bash bat_05.sh delete newfile.txt && ls ~/OS2/newfile.txt
+Удалён файл newfile.txt
+ls: cannot access '/home/User-6d4ec851/OS2/newfile.txt': No such file or directory

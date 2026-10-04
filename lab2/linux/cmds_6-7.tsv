@@ -1,0 +1,22 @@
+# Уровень 6-7, Linux. Формат: <номер>\t<имя>\t<команда>
+# Ввод для интерактивных заданий — файл <имя>.in
+0	prep67	cd ~/OS2 && bash prep.sh | tail -6
+1	xcopy_all	cp -r ~/OS2/task_01b ~/OS2/task_01b_dst_1 && find ~/OS2/task_01b_dst_1 | sort
+2	xcopy_attr	cp -rp ~/OS2/task_01b ~/OS2/task_01b_dst_2 && ls -l ~/OS2/task_01b_dst_2
+3	replace	cp -f ~/OS2/task_01d_1/* ~/OS2/task_01d_2/ && ls ~/OS2/task_01d_2
+4	clear_text	cd ~/OS2/task_01d_2 && for f in *.txt; do > "$f"; done; ls -l ~/OS2/task_01d_2
+5	rd_subdir	rm -rf ~/OS2/task_01k/subdir && ls -R ~/OS2/task_01k
+6	copy_con	cat > ~/OS2/console.txt
+7	type_con_append	cat >> ~/OS2/console.txt
+8	bat_01	cd ~/OS2 && bash bat_01.sh
+9	bat_02	cd ~/OS2 && bash bat_02.sh
+10	bat_03	cd ~/OS2 && bash bat_03.sh alpha beta gamma delta epsilon
+11	bat_04	cd ~/OS2 && bash bat_04.sh 10 4 25
+12	bat_04_err	cd ~/OS2 && bash bat_04.sh 10 0 25
+13	bat_05_create	cd ~/OS2 && bash bat_05.sh create newfile.txt && ls -l ~/OS2/newfile.txt
+14	bat_05_delete	cd ~/OS2 && bash bat_05.sh delete newfile.txt && ls ~/OS2/newfile.txt
+15	bat_05_noarg	cd ~/OS2 && bash bat_05.sh
+16	bat_05_unknown	cd ~/OS2 && bash bat_05.sh unknown newfile.txt
+17	env_all	env | sort
+18	env_key	env | sort | grep -E "^(PATH|HOME|USER|HOSTNAME|SHELL|TMPDIR|LANG|TERM)="
+19	env_diff	printenv PATH; echo "---"; echo $PATH | tr ':' '\n' | wc -l

@@ -1,0 +1,22 @@
+### КОМАНДА: cd ~/OS2 && ./tree_sizes.sh task_01b
+================================================================
+ ДЕРЕВО КАТАЛОГОВ: task_01b
+ Формат размера файла: <десятичный> / <двоичный>
+================================================================
+[DIR ] .                                        файлов: 0, размер: 0 B / 0 B
+[DIR ] task_01b                                 файлов: 9, размер: 56 B / 56 B
+  [FILE] archive-readonly.txt                     8 B / 8 B
+  [DIR ] hidden_dir                               файлов: 4, размер: 23 B / 23 B
+    [DIR ] empty_subdir                             файлов: 0, размер: 0 B / 0 B
+    [DIR ] subdir                                   файлов: 2, размер: 10 B / 10 B
+      [FILE] txt1.txt                                 5 B / 5 B
+      [FILE] txt2.txt                                 5 B / 5 B
+    [FILE] system1.txt                              8 B / 8 B
+    [FILE] txt1.txt                                 5 B / 5 B
+  [FILE] plain.txt                                6 B / 6 B
+  [FILE] readonly.txt                             9 B / 9 B
+  [DIR ] subdir                                   файлов: 2, размер: 10 B / 10 B
+    [DIR ] empty_subdir                             файлов: 0, размер: 0 B / 0 B
+    [FILE] txt1.txt                                 5 B / 5 B
+    [FILE] txt2.txt                                 5 B / 5 B
+================================================================

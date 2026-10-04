@@ -1,0 +1,3 @@
+### КОМАНДА: rm -iv ~/OS2/task_01g/txt1.txt
+### ВВОД: y
+rm: remove regular file '/home/User-6d4ec851/OS2/task_01g/txt1.txt'? removed '/home/User-6d4ec851/OS2/task_01g/txt1.txt'

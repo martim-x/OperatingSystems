@@ -1,0 +1,5 @@
+### КОМАНДА: find ~/OS2/task_01g -maxdepth 1 -name 'system*' -type f -delete; ls ~/OS2/task_01g
+hidden_dir
+plain.txt
+readonly.txt
+subdir

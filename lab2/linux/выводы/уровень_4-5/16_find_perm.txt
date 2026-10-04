@@ -1,0 +1,5 @@
+### КОМАНДА: find ~/OS2/task_01g -perm -u=w -type f -delete; ls -l ~/OS2/task_01g
+total 12
+drwxr-xr-x 4 User-6d4ec851 User-6d4ec851 4096 Oct  4 22:10 hidden_dir
+-r--r--r-- 1 User-6d4ec851 User-6d4ec851    9 Oct  4 22:09 readonly.txt
+drwxr-xr-x 3 User-6d4ec851 User-6d4ec851 4096 Oct  4 22:10 subdir

@@ -1,0 +1,7 @@
+### КОМАНДА: cp -rp ~/OS2/task_01b ~/OS2/task_01b_dst_2 && ls -l ~/OS2/task_01b_dst_2
+total 20
+-r--r--r-- 1 User-6d4ec851 User-6d4ec851    8 Oct  4 22:11 archive-readonly.txt
+drwxr-xr-x 4 User-6d4ec851 User-6d4ec851 4096 Oct  4 22:11 hidden_dir
+-rw-r--r-- 1 User-6d4ec851 User-6d4ec851    6 Oct  4 22:11 plain.txt
+-r--r--r-- 1 User-6d4ec851 User-6d4ec851    9 Oct  4 22:11 readonly.txt
+drwxr-xr-x 3 User-6d4ec851 User-6d4ec851 4096 Oct  4 22:11 subdir

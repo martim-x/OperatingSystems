@@ -1,0 +1,2 @@
+### КОМАНДА: cd ~/OS2 && bash bat_05.sh unknown newfile.txt
+Неизвестный режим: unknown (допустимо: create, delete)

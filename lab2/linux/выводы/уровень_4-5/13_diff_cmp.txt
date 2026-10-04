@@ -1,0 +1,5 @@
+### КОМАНДА: diff ~/OS2/task_01f/txt1.txt ~/OS2/task_01f/txt2.txt > ~/OS2/task_01f/result.txt; cat ~/OS2/task_01f/result.txt
+2c2
+< Hello World
+---
+> Hello, World!

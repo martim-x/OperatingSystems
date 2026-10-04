@@ -1,0 +1,2 @@
+### КОМАНДА: cd ~/OS2 && bash bat_05.sh
+Использование: bat_05.sh create|delete <файл>

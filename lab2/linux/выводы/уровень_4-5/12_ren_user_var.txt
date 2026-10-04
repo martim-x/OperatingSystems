@@ -1,0 +1,2 @@
+### КОМАНДА: mv ~/OS2/task_01e/txt1.bmp ~/OS2/$USER.bmp && ls ~/OS2/*.bmp
+/home/User-6d4ec851/OS2/User-6d4ec851.bmp

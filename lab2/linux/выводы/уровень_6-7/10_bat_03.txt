@@ -1,0 +1,7 @@
+### КОМАНДА: cd ~/OS2 && bash bat_03.sh alpha beta gamma delta epsilon
+=== bat_03: параметры ===
+Все параметры: alpha beta gamma delta epsilon
+Первый: alpha
+Второй: beta
+Третий: gamma
+Четвёртый: delta

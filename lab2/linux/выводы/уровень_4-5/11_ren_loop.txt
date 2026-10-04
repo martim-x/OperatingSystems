@@ -1,0 +1,6 @@
+### КОМАНДА: cd ~/OS2/task_01e && for f in *.txt; do mv "$f" "${f%.txt}.bmp"; done; ls ~/OS2/task_01e
+txt1.bmp
+txt2.bmp
+txt3.bmp
+txt4.bmp
+txt5.bmp

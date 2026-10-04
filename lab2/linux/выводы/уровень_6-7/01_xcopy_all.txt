@@ -1,0 +1,16 @@
+### КОМАНДА: cp -r ~/OS2/task_01b ~/OS2/task_01b_dst_1 && find ~/OS2/task_01b_dst_1 | sort
+/home/User-6d4ec851/OS2/task_01b_dst_1
+/home/User-6d4ec851/OS2/task_01b_dst_1/archive-readonly.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir/empty_subdir
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir/subdir
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir/subdir/txt1.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir/subdir/txt2.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir/system1.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/hidden_dir/txt1.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/plain.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/readonly.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/subdir
+/home/User-6d4ec851/OS2/task_01b_dst_1/subdir/empty_subdir
+/home/User-6d4ec851/OS2/task_01b_dst_1/subdir/txt1.txt
+/home/User-6d4ec851/OS2/task_01b_dst_1/subdir/txt2.txt
