@@ -1,0 +1,9 @@
+﻿### COMMAND: cd /d OS2\task_01d_2 & type nul > txt1.txt & type nul > txt2.txt & type nul > txt3.txt & type nul > txt4.txt & type nul > txt5.txt & cd /d C:\lab2_sync & echo === размеры файлов после очистки === & (for %%F in (OS2\task_01d_2\*.txt) do @echo [%%~nxF] размер %%~zF)
+### OUTPUT:
+=== размеры файлов после очистки ===  
+[txt1.txt] размер 17
+[txt2.txt] размер 17
+[txt3.txt] размер 17
+[txt4.txt] размер 17
+[txt5.txt] размер 17
+

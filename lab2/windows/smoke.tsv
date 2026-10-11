@@ -1,0 +1,2 @@
+0	prep	call C:\\lab2_sync\\prep.bat
+1	cd_abs	cd /d OS2\task_01i\Русский && cd

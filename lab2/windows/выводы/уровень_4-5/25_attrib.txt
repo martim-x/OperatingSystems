@@ -1,0 +1,11 @@
+﻿### COMMAND: attrib OS2\task_01g\*.txt
+### OUTPUT:
+A   H                C:\lab2_sync\OS2\task_01g\hidden1.txt
+A                    C:\lab2_sync\OS2\task_01g\plain1.txt
+A                    C:\lab2_sync\OS2\task_01g\plain2.txt
+A    R               C:\lab2_sync\OS2\task_01g\readonly.txt
+A  S                 C:\lab2_sync\OS2\task_01g\system1.txt
+A  S                 C:\lab2_sync\OS2\task_01g\system2.txt
+A                    C:\lab2_sync\OS2\task_01g\txt1.txt
+A                    C:\lab2_sync\OS2\task_01g\txt2.txt
+

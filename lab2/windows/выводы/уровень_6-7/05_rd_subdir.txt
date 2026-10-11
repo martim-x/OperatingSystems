@@ -1,0 +1,4 @@
+﻿### COMMAND: rd /s /q OS2\task_01k\subdir && dir /b OS2\task_01k
+### OUTPUT:
+empty_subdir
+

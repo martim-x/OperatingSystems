@@ -1,0 +1,10 @@
+﻿### COMMAND: copy OS2\task_01a\txt1.txt OS2\task_01a\newname.txt && dir /b OS2\task_01a
+### OUTPUT:
+merged.txt
+newname.txt
+txt1.txt
+txt2.txt
+txt3.txt
+txt4.txt
+txt5.txt
+

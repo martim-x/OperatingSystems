@@ -1,0 +1,5 @@
+﻿### COMMAND: call C:\lab2_sync\bat_05.bat
+### OUTPUT:
+Ошибка: не указан режим работы
+Использование: bat_05 create|delete имя_файла
+

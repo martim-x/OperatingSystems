@@ -1,0 +1,4 @@
+﻿### COMMAND: systeminfo > OS2\systeminfo.txt & findstr /i "BIOS Version" OS2\systeminfo.txt
+### OUTPUT:
+Версия BIOS:                             VMware, Inc. VMW201.00V.21805430.BA64.2305221830, 22.05.2023
+

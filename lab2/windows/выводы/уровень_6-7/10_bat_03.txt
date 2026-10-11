@@ -1,0 +1,9 @@
+﻿### COMMAND: call C:\lab2_sync\bat_03.bat alpha beta gamma delta epsilon
+### OUTPUT:
+=== bat_03: параметры ===
+Все параметры: alpha beta gamma delta epsilon
+Первый:  beta
+Второй:  gamma
+Третий:  delta
+Четвёртый: epsilon
+

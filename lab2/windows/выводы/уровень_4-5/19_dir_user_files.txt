@@ -1,0 +1,23 @@
+﻿### COMMAND: dir /b /o:n %USERPROFILE% > OS2\task_01h\user_files.txt && type OS2\task_01h\user_files.txt
+### OUTPUT:
+.dotnet
+.gitconfig
+.nuget
+.ssh
+.templateengine
+Contacts
+Desktop
+Documents
+Downloads
+Favorites
+Links
+Music
+OneDrive
+OS2
+Pictures
+Saved Games
+Searches
+source
+SP_lib
+Videos
+

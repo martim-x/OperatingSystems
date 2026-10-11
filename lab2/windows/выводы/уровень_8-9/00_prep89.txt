@@ -1,0 +1,82 @@
+﻿### COMMAND: call C:\lab2_sync\prep.bat
+### OUTPUT:
+[prep] снятие атрибутов и очистка предыдущих каталогов...
+[prep] готово.
+
+[prep] создание структуры OS2...
+[prep] создание файлов и каталогов завершено.
+
+[prep] итоговая структура OS2:
+C:\lab2_sync\OS2\console.txt
+C:\lab2_sync\OS2\students.txt
+C:\lab2_sync\OS2\systeminfo.txt
+C:\lab2_sync\OS2\tasks_tmp
+C:\lab2_sync\OS2\task_01a
+C:\lab2_sync\OS2\task_01b
+C:\lab2_sync\OS2\task_01c_dst
+C:\lab2_sync\OS2\task_01c_src
+C:\lab2_sync\OS2\task_01d_1
+C:\lab2_sync\OS2\task_01d_2
+C:\lab2_sync\OS2\task_01e
+C:\lab2_sync\OS2\task_01f
+C:\lab2_sync\OS2\task_01g
+C:\lab2_sync\OS2\task_01h
+C:\lab2_sync\OS2\task_01i
+C:\lab2_sync\OS2\task_01j
+C:\lab2_sync\OS2\task_01k
+C:\lab2_sync\OS2\tasks_tmp\txt1.txt
+C:\lab2_sync\OS2\tasks_tmp\txt2.txt
+C:\lab2_sync\OS2\tasks_tmp\txt3.txt
+C:\lab2_sync\OS2\tasks_tmp\txt4.txt
+C:\lab2_sync\OS2\tasks_tmp\txt5.txt
+C:\lab2_sync\OS2\task_01b\file1.txt
+C:\lab2_sync\OS2\task_01b\file2.txt
+C:\lab2_sync\OS2\task_01b\file3.txt
+C:\lab2_sync\OS2\task_01b\file4.txt
+C:\lab2_sync\OS2\task_01b\file5.txt
+C:\lab2_sync\OS2\task_01b\hidden_dir
+C:\lab2_sync\OS2\task_01b\subdir
+C:\lab2_sync\OS2\task_01b\hidden_dir\deep1.txt
+C:\lab2_sync\OS2\task_01b\hidden_dir\system1
+C:\lab2_sync\OS2\task_01b\subdir\empty_subdir
+C:\lab2_sync\OS2\task_01b\subdir\sub1.txt
+C:\lab2_sync\OS2\task_01b\subdir\sub2.txt
+C:\lab2_sync\OS2\task_01b\subdir\sub3.txt
+C:\lab2_sync\OS2\task_01b\subdir\sub4.txt
+C:\lab2_sync\OS2\task_01b\subdir\sub5.txt
+C:\lab2_sync\OS2\task_01c_src\txt1.txt
+C:\lab2_sync\OS2\task_01c_src\txt2.txt
+C:\lab2_sync\OS2\task_01c_src\txt3.txt
+C:\lab2_sync\OS2\task_01d_1\txt1.txt
+C:\lab2_sync\OS2\task_01d_1\txt2.txt
+C:\lab2_sync\OS2\task_01d_1\txt3.txt
+C:\lab2_sync\OS2\task_01d_1\txt4.txt
+C:\lab2_sync\OS2\task_01d_1\txt5.txt
+C:\lab2_sync\OS2\task_01d_2\txt1.txt
+C:\lab2_sync\OS2\task_01d_2\txt2.txt
+C:\lab2_sync\OS2\task_01d_2\txt3.txt
+C:\lab2_sync\OS2\task_01d_2\txt4.txt
+C:\lab2_sync\OS2\task_01d_2\txt5.txt
+C:\lab2_sync\OS2\task_01e\txt1.txt
+C:\lab2_sync\OS2\task_01e\txt2.txt
+C:\lab2_sync\OS2\task_01e\txt3.txt
+C:\lab2_sync\OS2\task_01e\txt4.txt
+C:\lab2_sync\OS2\task_01e\txt5.txt
+C:\lab2_sync\OS2\task_01f\txt1.txt
+C:\lab2_sync\OS2\task_01f\txt2.txt
+C:\lab2_sync\OS2\task_01g\hidden_dir
+C:\lab2_sync\OS2\task_01g\plain1.txt
+C:\lab2_sync\OS2\task_01g\plain2.txt
+C:\lab2_sync\OS2\task_01g\readonly.txt
+C:\lab2_sync\OS2\task_01g\subdir
+C:\lab2_sync\OS2\task_01g\txt1.txt
+C:\lab2_sync\OS2\task_01g\txt2.txt
+C:\lab2_sync\OS2\task_01g\subdir\empty_subdir
+C:\lab2_sync\OS2\task_01g\subdir\sub1.txt
+C:\lab2_sync\OS2\task_01i\English
+C:\lab2_sync\OS2\task_01i\Русский
+C:\lab2_sync\OS2\task_01k\empty_subdir
+C:\lab2_sync\OS2\task_01k\subdir
+
+[prep] готово. Можно выполнять задания.
+

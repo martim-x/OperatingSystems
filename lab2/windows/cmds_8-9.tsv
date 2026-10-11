@@ -1,0 +1,23 @@
+# Уровень 8-9, Windows. Формат: <номер>\t<имя>\t<команда>\t[файл с вводом]
+# Разделитель — табуляция.
+# Отличия от задания, вызванные ограничениями автоматического прогона:
+#  - calc.ps1 и tempconv.ps1: интерактивный режим читается через Read-Host,
+#    который игнорирует перенаправленный stdin и вешает очередь, поэтому
+#    добавлен ключ -FileIn с тем же циклом обработки;
+#  - top5.ps1: ключ -Count ограничивает число кадров, иначе бесконечный
+#    цикл до Ctrl+C не даёт снимок; Clear-Host при перенаправлении вывода
+#    стирает предыдущие кадры, поэтому при -Count очистка отключена.
+0	prep89	call C:\lab2_sync\prep.bat
+1	path_count	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\path_count.ps1
+2	tree_sizes	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tree_sizes.ps1 OS2\task_01b
+3	tree_sizes_all	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tree_sizes.ps1 OS2
+4	calc_help	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\calc.ps1 -Help
+5	calc_file	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\calc.ps1 -FileIn C:\lab2_sync\calc.in	calc_in.tsv
+6	calc_expr	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\calc.ps1 2+3*4 10-4/2 2^^10
+7	calc_func	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\calc.ps1 sqrt 16 sin 30 log10 100 ln 10
+8	calc_err	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\calc.ps1 10/0 abc
+9	conv_file	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tempconv.ps1 -FileIn C:\lab2_sync\temp.in	temp_in.tsv
+10	conv_args	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tempconv.ps1 100K 100C 100F 0C
+11	conv_bad	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tempconv.ps1 100X
+12	top5_int3	powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\top5.ps1 -Interval 3 -Count 2
+13	scripts_list	dir /b C:\lab2_sync\*.bat C:\lab2_sync\*.ps1

@@ -1,0 +1,12 @@
+﻿### COMMAND: call C:\lab2_sync\bat_05.bat create OS2\newfile.txt && dir OS2\newfile.txt
+### OUTPUT:
+Создан файл OS2\newfile.txt
+ Том в устройстве C не имеет метки.
+ Серийный номер тома: C2D6-6CBB
+
+ Содержимое папки C:\lab2_sync\OS2
+
+05.10.2026  11:25                69 newfile.txt
+               1 файлов             69 байт
+               0 папок  18 584 203 264 байт свободно
+

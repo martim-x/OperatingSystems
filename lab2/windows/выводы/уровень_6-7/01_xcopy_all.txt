@@ -1,0 +1,33 @@
+﻿### COMMAND: rd /s /q OS2\task_01b_dst_1 2>nul & xcopy OS2\task_01b OS2\task_01b_dst_1 /E /H /S /I /Y && dir /s /b OS2\task_01b_dst_1
+### OUTPUT:
+Не удается найти указанный файл.
+OS2\task_01b\file1.txt
+OS2\task_01b\file2.txt
+OS2\task_01b\file3.txt
+OS2\task_01b\file4.txt
+OS2\task_01b\file5.txt
+OS2\task_01b\hidden_dir\deep1.txt
+OS2\task_01b\hidden_dir\hidden1.txt
+OS2\task_01b\hidden_dir\system1.txt
+OS2\task_01b\subdir\sub1.txt
+OS2\task_01b\subdir\sub2.txt
+OS2\task_01b\subdir\sub3.txt
+OS2\task_01b\subdir\sub4.txt
+OS2\task_01b\subdir\sub5.txt
+╤ъюяшЁютрэю Їрщыют: 13.
+C:\lab2_sync\OS2\task_01b_dst_1\file1.txt
+C:\lab2_sync\OS2\task_01b_dst_1\file2.txt
+C:\lab2_sync\OS2\task_01b_dst_1\file3.txt
+C:\lab2_sync\OS2\task_01b_dst_1\file4.txt
+C:\lab2_sync\OS2\task_01b_dst_1\file5.txt
+C:\lab2_sync\OS2\task_01b_dst_1\hidden_dir
+C:\lab2_sync\OS2\task_01b_dst_1\subdir
+C:\lab2_sync\OS2\task_01b_dst_1\hidden_dir\deep1.txt
+C:\lab2_sync\OS2\task_01b_dst_1\hidden_dir\system1
+C:\lab2_sync\OS2\task_01b_dst_1\subdir\empty_subdir
+C:\lab2_sync\OS2\task_01b_dst_1\subdir\sub1.txt
+C:\lab2_sync\OS2\task_01b_dst_1\subdir\sub2.txt
+C:\lab2_sync\OS2\task_01b_dst_1\subdir\sub3.txt
+C:\lab2_sync\OS2\task_01b_dst_1\subdir\sub4.txt
+C:\lab2_sync\OS2\task_01b_dst_1\subdir\sub5.txt
+

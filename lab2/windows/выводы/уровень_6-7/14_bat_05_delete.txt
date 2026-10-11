@@ -1,0 +1,5 @@
+﻿### COMMAND: call C:\lab2_sync\bat_05.bat delete OS2\newfile.txt && if exist OS2\newfile.txt (echo ФОНД ОСТАЛСЯ) else (echo файла нет - удалён)
+### OUTPUT:
+Удалён файл OS2\newfile.txt
+файла нет - удалён
+

@@ -1,0 +1,6 @@
+﻿### COMMAND: copy OS2\task_01a\txt1.txt + OS2\task_01a\txt2.txt OS2\task_01a\merged.txt && type OS2\task_01a\merged.txt
+### OUTPUT:
+txt1 
+txt2 
+
+

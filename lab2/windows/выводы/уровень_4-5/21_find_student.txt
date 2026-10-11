@@ -1,0 +1,7 @@
+﻿### COMMAND: find "Иванов" OS2\students.txt
+### OUTPUT:
+
+---------- OS2\STUDENTS.TXT
+Иванов Иван Иванович
+Иванова Мария
+

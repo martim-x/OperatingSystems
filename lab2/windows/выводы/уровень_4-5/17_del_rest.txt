@@ -1,0 +1,18 @@
+﻿### COMMAND: rd /s /q OS2\task_01g && dir /b OS2
+### OUTPUT:
+students.txt
+systeminfo.txt
+tasks_tmp
+task_01a
+task_01b
+task_01c_dst
+task_01c_src
+task_01d_1
+task_01d_2
+task_01e
+task_01f
+task_01h
+task_01i
+task_01j
+task_01k
+

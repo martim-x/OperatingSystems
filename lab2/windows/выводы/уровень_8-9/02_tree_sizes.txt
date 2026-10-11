@@ -1,0 +1,26 @@
+﻿### COMMAND: powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tree_sizes.ps1 OS2\task_01b
+### OUTPUT:
+
+============================================================
+ ДЕРЕВО КАТАЛОГОВ: OS2\task_01b
+ Формат размера файла: <десятичные> / <двоичные>
+============================================================
+[DIR ] OS2\task_01b                                  размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\file1.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file2.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file3.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file4.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file5.txt                              17 B /         17 B
+[DIR ] .\OS2\task_01b\hidden_dir                     файлов: 2, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\hidden_dir\deep1.txt                   18 B /         18 B
+[DIR ] .\OS2\task_01b\hidden_dir\system1             файлов: 0, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\hidden_dir\system1.txt                 22 B /         22 B
+[DIR ] .\OS2\task_01b\subdir                         файлов: 5, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01b\subdir\empty_subdir            файлов: 0, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\subdir\sub1.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub2.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub3.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub4.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub5.txt                        13 B /         13 B
+============================================================
+

@@ -1,0 +1,6 @@
+﻿### COMMAND: echo Дополнение к файлу console.txt>> OS2\console.txt && type OS2\console.txt
+### OUTPUT:
+Дополнение к файлу console.txt 
+Первая строка файла
+Вторая строка файла
+

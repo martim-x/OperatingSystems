@@ -1,0 +1,15 @@
+﻿### COMMAND: dir /b C:\lab2_sync\*.bat C:\lab2_sync\*.ps1
+### OUTPUT:
+bat_01.bat
+bat_02.bat
+bat_03.bat
+bat_04.bat
+bat_05.bat
+prep.bat
+calc.ps1
+path_count.ps1
+run_lab.ps1
+tempconv.ps1
+top5.ps1
+tree_sizes.ps1
+

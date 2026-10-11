@@ -1,0 +1,8 @@
+﻿### COMMAND: echo %USERNAME% & echo %USERPROFILE% & echo %TEMP% & echo %PROCESSOR_ARCHITECTURE% & echo %COMPUTERNAME%
+### OUTPUT:
+User-6d4ec851  
+C:\Users\User-6d4ec851  
+C:\Users\USER-6~1\AppData\Local\Temp  
+ARM64  
+DESKTOP-9KMRHJ8
+

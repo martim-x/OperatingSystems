@@ -1,0 +1,8 @@
+﻿### COMMAND: powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tempconv.ps1 100X
+### OUTPUT:
+=== Конвертер температур ===
+Поддерживаемые единицы: K (Кельвин), C (Цельсий), F (Фаренгейт)
+Формат ввода: 100K, 100C или 100F
+
+ОШИБКА: неверный ввод: '100X'. Ожидается число и суффикс K, C или F
+

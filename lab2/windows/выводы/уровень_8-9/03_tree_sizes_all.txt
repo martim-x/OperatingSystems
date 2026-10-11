@@ -1,0 +1,84 @@
+﻿### COMMAND: powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\tree_sizes.ps1 OS2
+### OUTPUT:
+
+============================================================
+ ДЕРЕВО КАТАЛОГОВ: OS2
+ Формат размера файла: <десятичные> / <двоичные>
+============================================================
+[DIR ] OS2                                           размер: 0 B / 0 B
+[FILE] .\OS2\console.txt                                     42 B /         42 B
+[FILE] .\OS2\students.txt                                   262 B /        262 B
+[FILE] .\OS2\systeminfo.txt                               3,40 KB /     3,40 KiB
+[DIR ] .\OS2\task_01a                                файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01b                                файлов: 12, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\file1.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file2.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file3.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file4.txt                              17 B /         17 B
+[FILE] .\OS2\task_01b\file5.txt                              17 B /         17 B
+[DIR ] .\OS2\task_01b\hidden_dir                     файлов: 2, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\hidden_dir\deep1.txt                   18 B /         18 B
+[DIR ] .\OS2\task_01b\hidden_dir\system1             файлов: 0, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\hidden_dir\system1.txt                 22 B /         22 B
+[DIR ] .\OS2\task_01b\subdir                         файлов: 5, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01b\subdir\empty_subdir            файлов: 0, размер: 0 B / 0 B
+[FILE] .\OS2\task_01b\subdir\sub1.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub2.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub3.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub4.txt                        13 B /         13 B
+[FILE] .\OS2\task_01b\subdir\sub5.txt                        13 B /         13 B
+[DIR ] .\OS2\task_01c_dst                            файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01c_src                            файлов: 3, размер: 0 B / 0 B
+[FILE] .\OS2\task_01c_src\txt1.txt                           15 B /         15 B
+[FILE] .\OS2\task_01c_src\txt2.txt                           15 B /         15 B
+[FILE] .\OS2\task_01c_src\txt3.txt                           15 B /         15 B
+[DIR ] .\OS2\task_01d_1                              файлов: 5, размер: 0 B / 0 B
+[FILE] .\OS2\task_01d_1\txt1.txt                             17 B /         17 B
+[FILE] .\OS2\task_01d_1\txt2.txt                             17 B /         17 B
+[FILE] .\OS2\task_01d_1\txt3.txt                             17 B /         17 B
+[FILE] .\OS2\task_01d_1\txt4.txt                             17 B /         17 B
+[FILE] .\OS2\task_01d_1\txt5.txt                             17 B /         17 B
+[DIR ] .\OS2\task_01d_2                              файлов: 5, размер: 0 B / 0 B
+[FILE] .\OS2\task_01d_2\txt1.txt                             23 B /         23 B
+[FILE] .\OS2\task_01d_2\txt2.txt                             23 B /         23 B
+[FILE] .\OS2\task_01d_2\txt3.txt                             23 B /         23 B
+[FILE] .\OS2\task_01d_2\txt4.txt                             23 B /         23 B
+[FILE] .\OS2\task_01d_2\txt5.txt                             23 B /         23 B
+[DIR ] .\OS2\task_01e                                файлов: 5, размер: 0 B / 0 B
+[FILE] .\OS2\task_01e\txt1.txt                               17 B /         17 B
+[FILE] .\OS2\task_01e\txt2.txt                               17 B /         17 B
+[FILE] .\OS2\task_01e\txt3.txt                               17 B /         17 B
+[FILE] .\OS2\task_01e\txt4.txt                               17 B /         17 B
+[FILE] .\OS2\task_01e\txt5.txt                               17 B /         17 B
+[DIR ] .\OS2\task_01f                                файлов: 2, размер: 0 B / 0 B
+[FILE] .\OS2\task_01f\txt1.txt                               14 B /         14 B
+[FILE] .\OS2\task_01f\txt2.txt                               15 B /         15 B
+[DIR ] .\OS2\task_01g                                файлов: 9, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01g\hidden_dir                     файлов: 1, размер: 0 B / 0 B
+[FILE] .\OS2\task_01g\hidden_dir\system1.txt                 24 B /         24 B
+[FILE] .\OS2\task_01g\plain1.txt                             15 B /         15 B
+[FILE] .\OS2\task_01g\plain2.txt                             15 B /         15 B
+[FILE] .\OS2\task_01g\readonly.txt                           17 B /         17 B
+[DIR ] .\OS2\task_01g\subdir                         файлов: 1, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01g\subdir\empty_subdir            файлов: 0, размер: 0 B / 0 B
+[FILE] .\OS2\task_01g\subdir\sub1.txt                        13 B /         13 B
+[FILE] .\OS2\task_01g\system1.txt                            16 B /         16 B
+[FILE] .\OS2\task_01g\system2.txt                            16 B /         16 B
+[FILE] .\OS2\task_01g\txt1.txt                               13 B /         13 B
+[FILE] .\OS2\task_01g\txt2.txt                               13 B /         13 B
+[DIR ] .\OS2\task_01h                                файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01i                                файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01i\English                        файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01i\Русский                        файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01j                                файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01k                                файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01k\empty_subdir                   файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\task_01k\subdir                         файлов: 0, размер: 0 B / 0 B
+[DIR ] .\OS2\tasks_tmp                               файлов: 5, размер: 0 B / 0 B
+[FILE] .\OS2\tasks_tmp\txt1.txt                               7 B /          7 B
+[FILE] .\OS2\tasks_tmp\txt2.txt                               7 B /          7 B
+[FILE] .\OS2\tasks_tmp\txt3.txt                               7 B /          7 B
+[FILE] .\OS2\tasks_tmp\txt4.txt                               7 B /          7 B
+[FILE] .\OS2\tasks_tmp\txt5.txt                               7 B /          7 B
+============================================================
+

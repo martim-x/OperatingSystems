@@ -1,0 +1,7 @@
+﻿### COMMAND: md OS2\task_01j\sub\dir\full\path 2>nul & dir /s /b OS2\task_01j
+### OUTPUT:
+C:\lab2_sync\OS2\task_01j\sub
+C:\lab2_sync\OS2\task_01j\sub\dir
+C:\lab2_sync\OS2\task_01j\sub\dir\full
+C:\lab2_sync\OS2\task_01j\sub\dir\full\path
+

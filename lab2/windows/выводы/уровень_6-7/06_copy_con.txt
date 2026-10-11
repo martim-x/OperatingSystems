@@ -1,0 +1,5 @@
+﻿### COMMAND: (echo Первая строка файла> OS2\console.txt) & (echo Вторая строка файла>> OS2\console.txt) && type OS2\console.txt
+### OUTPUT:
+Первая строка файла
+Вторая строка файла
+

@@ -1,0 +1,1 @@
+7	copy_interactive	copy OS2\task_01a\txt1.txt OS2\task_01a\txt1_copy.txt && dir /b OS2\task_01a	copy_interactive.in

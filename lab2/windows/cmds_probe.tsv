@@ -1,0 +1,1 @@
+19	set_path	echo === значение PATH === & echo %PATH% & echo === сколько каталогов в PATH === & powershell -NoProfile -Command "$env:PATH.Split(';').Count"

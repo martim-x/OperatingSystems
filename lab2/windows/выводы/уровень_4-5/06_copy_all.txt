@@ -1,0 +1,16 @@
+﻿### COMMAND: copy /y OS2\tasks_tmp\*.txt OS2\task_01a\ && dir /b OS2\task_01a
+### INPUT:
+y
+y
+y
+y
+y
+y
+
+### OUTPUT:
+txt1.txt
+txt2.txt
+txt3.txt
+txt4.txt
+txt5.txt
+

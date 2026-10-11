@@ -1,0 +1,8 @@
+﻿### COMMAND: ren OS2\task_01e\*.txt *.bmp && dir /b OS2\task_01e
+### OUTPUT:
+txt1.bmp
+txt2.bmp
+txt3.bmp
+txt4.bmp
+txt5.bmp
+

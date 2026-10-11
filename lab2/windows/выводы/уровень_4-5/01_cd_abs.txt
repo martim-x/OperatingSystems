@@ -1,0 +1,4 @@
+﻿### COMMAND: cd /d OS2\task_01i\Русский && cd
+### OUTPUT:
+C:\lab2_sync\OS2\task_01i\Русский
+

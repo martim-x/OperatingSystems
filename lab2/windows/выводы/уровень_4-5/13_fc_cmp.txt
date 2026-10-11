@@ -1,0 +1,9 @@
+﻿### COMMAND: fc OS2\task_01f\txt1.txt OS2\task_01f\txt2.txt > OS2\task_01f\result.txt & type OS2\task_01f\result.txt
+### OUTPUT:
+╤Ёртэхэшх Їрщыют OS2\TASK_01F\txt1.txt ш OS2\TASK_01F\TXT2.TXT
+***** OS2\TASK_01F\txt1.txt
+Hello World 
+***** OS2\TASK_01F\TXT2.TXT
+Hello, World 
+*****
+

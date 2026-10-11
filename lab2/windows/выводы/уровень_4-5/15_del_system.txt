@@ -1,0 +1,28 @@
+﻿### COMMAND: attrib -S -H OS2\task_01g\system*.txt && del /f /q OS2\task_01g\system*.txt && dir /a OS2\task_01g
+### INPUT:
+y
+y
+y
+y
+y
+y
+
+### OUTPUT:
+ Том в устройстве C не имеет метки.
+ Серийный номер тома: C2D6-6CBB
+
+ Содержимое папки C:\lab2_sync\OS2\task_01g
+
+05.10.2026  12:23    <DIR>          .
+05.10.2026  12:23    <DIR>          ..
+05.10.2026  12:23                16 hidden1.txt
+05.10.2026  12:23    <DIR>          hidden_dir
+05.10.2026  12:23                15 plain1.txt
+05.10.2026  12:23                15 plain2.txt
+05.10.2026  12:23                17 readonly.txt
+05.10.2026  12:23    <DIR>          subdir
+05.10.2026  12:23                13 txt1.txt
+05.10.2026  12:23                13 txt2.txt
+               6 файлов             89 байт
+               4 папок  18 566 987 776 байт свободно
+

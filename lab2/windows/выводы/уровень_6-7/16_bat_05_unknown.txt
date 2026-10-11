@@ -1,0 +1,5 @@
+﻿### COMMAND: call C:\lab2_sync\bat_05.bat unknown OS2\newfile.txt
+### OUTPUT:
+Неизвестный режим: unknown
+Допустимо: create, delete
+

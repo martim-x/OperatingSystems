@@ -1,0 +1,32 @@
+# Уровень 4-5, Windows. Формат: <номер>\t<имя>\t<команда>
+# Разделитель — табуляция. Ввод для интерактивных заданий — файл <имя>.in
+# Рабочий каталог: C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab2\windows
+# Команды выполняются в OS2\ - драйвер делает cd перед каждой.
+0	prep	call C:\lab2_sync\prep.bat
+1	cd_abs	cd /d OS2\task_01i\Русский && cd
+2	cd_rel	cd /d OS2\task_01i\Русский && cd ..\English && cd
+3	md	md OS2\task_01j 2>nul & dir /b OS2
+4	md_nested	md OS2\task_01j\sub\dir\full\path 2>nul & dir /s /b OS2\task_01j
+5	rd	rd OS2\task_01k\empty_subdir && dir /b OS2\task_01k
+6	copy_all	copy /y OS2\tasks_tmp\*.txt OS2\task_01a\ && dir /b OS2\task_01a
+7	copy_interactive	copy OS2\task_01a\txt1.txt OS2\task_01a\txt1_copy.txt && dir /b OS2\task_01a	copy_interactive.in
+8	copy_rename	copy OS2\task_01a\txt1.txt OS2\task_01a\newname.txt && dir /b OS2\task_01a
+9	copy_con_merge	copy OS2\task_01a\txt1.txt + OS2\task_01a\txt2.txt OS2\task_01a\merged.txt && type OS2\task_01a\merged.txt
+10	move_src	move OS2\task_01c_src\*.txt OS2\task_01c_dst\ && dir /b OS2\task_01c_dst && echo --- осталось в src: && dir /b OS2\task_01c_src
+11	ren_ext	ren OS2\task_01e\*.txt *.bmp && dir /b OS2\task_01e
+12	ren_user	ren OS2\task_01e\txt1.bmp %USERNAME%.Ren && dir /b OS2\task_01e
+13	fc_cmp	fc OS2\task_01f\txt1.txt OS2\task_01f\txt2.txt > OS2\task_01f\result.txt & type OS2\task_01f\result.txt
+14	del_confirm	del OS2\task_01g\txt1.txt && dir /b OS2\task_01g
+15	del_system	attrib -S -H OS2	ask_01g\system*.txt && del /f /q OS2	ask_01g\system*.txt && dir /a OS2	ask_01g
+16	del_except_ro	del /f OS2\task_01g\plain*.txt && dir /a OS2\task_01g
+17	del_rest	rd /s /q OS2\task_01g && dir /b OS2
+18	dir_paginate	dir /s /o:n C:\Windows\System32\drivers\etc
+19	dir_user_files	dir /b /o:n %USERPROFILE% > OS2\task_01h\user_files.txt && type OS2\task_01h\user_files.txt
+20	type_con	type OS2\students.txt
+21	find_student	find "Иванов" OS2\students.txt
+22	echo_append	echo Иванова Мария>> OS2\students.txt & echo Петрова Анна>> OS2\students.txt & type OS2\students.txt
+23	sort	sort OS2\students.txt
+24	systeminfo_bios	systeminfo > OS2\systeminfo.txt & findstr /i "BIOS Version" OS2\systeminfo.txt
+25	attrib	attrib OS2\task_01g\*.txt
+26	set_vars	set
+27	echo_vars	echo %USERNAME% && echo %OS% && echo %PROCESSOR_ARCHITECTURE% && echo %TEMP%

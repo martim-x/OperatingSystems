@@ -1,0 +1,9 @@
+﻿### COMMAND: del OS2\task_01g\txt1.txt && dir /b OS2\task_01g
+### OUTPUT:
+hidden_dir
+plain1.txt
+plain2.txt
+readonly.txt
+subdir
+txt2.txt
+

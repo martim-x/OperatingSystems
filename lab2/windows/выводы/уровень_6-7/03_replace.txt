@@ -1,0 +1,14 @@
+﻿### COMMAND: replace OS2\task_01d_1\* OS2\task_01d_2\ /S && dir /b OS2\task_01d_2 && type OS2\task_01d_2\txt1.txt
+### OUTPUT:
+╟рьхэр C:\lab2_sync\OS2\task_01d_2\txt1.txt
+╟рьхэр C:\lab2_sync\OS2\task_01d_2\txt2.txt
+╟рьхэр C:\lab2_sync\OS2\task_01d_2\txt3.txt
+╟рьхэр C:\lab2_sync\OS2\task_01d_2\txt4.txt
+╟рьхэр C:\lab2_sync\OS2\task_01d_2\txt5.txt
+txt1.txt
+txt2.txt
+txt3.txt
+txt4.txt
+txt5.txt
+file 1 content
+

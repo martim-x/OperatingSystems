@@ -1,0 +1,4 @@
+﻿### COMMAND: echo %USERNAME% && echo %OS% && echo %PROCESSOR_ARCHITECTURE% && echo %TEMP%
+### OUTPUT:
+C:\Users\USER-6~1\AppData\Local\Temp
+

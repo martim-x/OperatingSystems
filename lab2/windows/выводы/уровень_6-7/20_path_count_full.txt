@@ -1,0 +1,25 @@
+﻿### COMMAND: powershell -NoProfile -ExecutionPolicy Bypass -File C:\lab2_sync\path_count.ps1
+### OUTPUT:
+============================================================
+ СТАТИСТИКА ПО КАТАЛОГАМ PATH
+============================================================
+C:\WINDOWS\system32                                       619     3778   14,1%
+C:\WINDOWS                                                  8       13   38,1%
+C:\WINDOWS\System32\Wbem                                    9      325    2,7%
+C:\WINDOWS\System32\WindowsPowerShell\v1.0\                 2       18     10%
+C:\WINDOWS\System32\OpenSSH\                               12        4     75%
+C:\Program Files\dotnet\                                    2        2     50%
+C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\       10      424    2,3%
+C:\Program Files\Git\cmd                                   11        0    100%
+C:\Users\User-6d4ec851\AppData\Local\Microsoft\WindowsApps       22        0    100%
+C:\Users\User-6d4ec851\.dotnet\tools                 нет такого каталога
+
+============================================================
+ ИТОГО ПО PATH
+============================================================
+Каталогов в PATH:        9
+Исполняемых команд:      695
+Неисполняемых файлов:    4564
+Всего файлов:            5259
+Доля исполняемых:        13.2%
+

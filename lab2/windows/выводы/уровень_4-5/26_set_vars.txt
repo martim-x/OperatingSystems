@@ -1,0 +1,46 @@
+﻿### COMMAND: set
+### OUTPUT:
+ALLUSERSPROFILE=C:\ProgramData
+APPDATA=C:\Users\User-6d4ec851\AppData\Roaming
+CommonProgramFiles=C:\Program Files\Common Files
+CommonProgramFiles(Arm)=C:\Program Files (Arm)\Common Files
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+CommonProgramW6432=C:\Program Files\Common Files
+COMPUTERNAME=DESKTOP-9KMRHJ8
+ComSpec=C:\WINDOWS\system32\cmd.exe
+DriverData=C:\Windows\System32\Drivers\DriverData
+HOMEDRIVE=C:
+HOMEPATH=\Users\User-6d4ec851
+LOCALAPPDATA=C:\Users\User-6d4ec851\AppData\Local
+LOGONSERVER=\\DESKTOP-9KMRHJ8
+NUMBER_OF_PROCESSORS=4
+OneDrive=C:\Users\User-6d4ec851\OneDrive
+OS=Windows_NT
+Path=C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Git\cmd;C:\Users\User-6d4ec851\AppData\Local\Microsoft\WindowsApps;C:\Users\User-6d4ec851\.dotnet\tools
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.CPL
+PROCESSOR_ARCHITECTURE=ARM64
+PROCESSOR_IDENTIFIER=ARMv8 (64-bit) Family 8 Model 0 Revision   0, Apple
+PROCESSOR_LEVEL=0
+PROCESSOR_REVISION=0000
+ProgramData=C:\ProgramData
+ProgramFiles=C:\Program Files
+ProgramFiles(Arm)=C:\Program Files (Arm)
+ProgramFiles(x86)=C:\Program Files (x86)
+ProgramW6432=C:\Program Files
+PROMPT=$P$G
+PSExecutionPolicyPreference=Bypass
+PSModulePath=C:\Users\User-6d4ec851\Documents\WindowsPowerShell\Modules;C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+PUBLIC=C:\Users\Public
+SystemDrive=C:
+SystemRoot=C:\WINDOWS
+TEMP=C:\Users\USER-6~1\AppData\Local\Temp
+TMP=C:\Users\USER-6~1\AppData\Local\Temp
+UIPATH_DOTNET_ROOT=C:\Program Files\UiPathPlatform\Runtimes\26.0.5
+UIPATH_LANGUAGE=ru
+UIPATH_USER_SERVICE_PATH=C:\Program Files\UiPathPlatform\Robot\26.0.203-cloud.25204\UiPath.Service.UserHost.exe
+USERDOMAIN=DESKTOP-9KMRHJ8
+USERDOMAIN_ROAMINGPROFILE=DESKTOP-9KMRHJ8
+USERNAME=User-6d4ec851
+USERPROFILE=C:\Users\User-6d4ec851
+windir=C:\WINDOWS
+

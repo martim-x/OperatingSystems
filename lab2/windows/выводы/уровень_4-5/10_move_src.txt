@@ -1,0 +1,4 @@
+﻿### COMMAND: move OS2\task_01c_src\*.txt OS2\task_01c_dst\ && dir /b OS2\task_01c_dst && echo --- осталось в src: && dir /b OS2\task_01c_src
+### OUTPUT:
+
+
