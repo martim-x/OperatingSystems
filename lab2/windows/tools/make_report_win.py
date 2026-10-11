@@ -10,11 +10,12 @@
 import os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+LAB = os.path.dirname(HERE)  # корень каталога лабы (скрины/выводы/сценарии)
 sys.path.insert(0, HERE)
 from снимки_разметка import LEVELS
 
-SHOTS = os.path.join(HERE, "скрины")
-TXT = os.path.join(HERE, "выводы")
+SHOTS = os.path.join(LAB, "скрины")
+TXT = os.path.join(LAB, "выводы")
 
 LEVEL_TITLES = {
     "уровень_4-5": "Уровень 4-5. Работа в командной строке операционной системы Windows",
@@ -66,7 +67,7 @@ def cut(text, limit=MAX_BODY):
 
 def load_tsv(name):
     """slug -> команда, из tsv пакета."""
-    p = os.path.join(HERE, name)
+    p = os.path.join(LAB, name)
     out = {}
     for line in open(p, encoding="utf-8"):
         line = line.rstrip("\n")

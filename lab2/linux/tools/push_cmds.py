@@ -19,8 +19,9 @@ import time
 VM = "User-6d4ec851@192.168.78.154"
 SYNC = "/home/User-6d4ec851/lab2_sync"
 HERE = os.path.dirname(os.path.abspath(__file__))
-SHOTS = os.path.join(HERE, "скрины")
-TEXT = os.path.join(HERE, "выводы")
+LAB = os.path.dirname(HERE)  # корень каталога лабы (скрины/выводы/сценарии)
+SHOTS = os.path.join(LAB, "скрины")
+TEXT = os.path.join(LAB, "выводы")
 TIMEOUT = 90  # секунд на одну команду
 
 # Снимки раскладываются по уровням, иначе имена 01_cd_abs и 01_path_count

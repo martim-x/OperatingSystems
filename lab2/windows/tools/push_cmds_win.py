@@ -24,6 +24,7 @@ Q_DIR = "C:/lab2_sync/queue"
 D_DIR = "C:/lab2_sync/done"
 S_DIR = "C:/lab2_sync/shots"
 HERE = os.path.dirname(os.path.abspath(__file__))
+LAB = os.path.dirname(HERE)  # корень каталога лабы (скрины/выводы/сценарии)
 TIMEOUT = 120  # секунд на команду
 
 LEVELS = {
@@ -61,7 +62,7 @@ def q(s):
 def load(tsv):
     """Читает tsv: номер, имя, команда, [файл с вводом]."""
     items = []
-    for line in open(os.path.join(HERE, tsv), encoding="utf-8"):
+    for line in open(os.path.join(LAB, tsv), encoding="utf-8"):
         line = line.rstrip("\n")
         if not line.strip() or line.startswith("#"):
             continue
@@ -74,15 +75,15 @@ def load(tsv):
             # 4-й столбец: имя файла ввода. Для *_in.tsv берётся одноимённый
             # .in в кодировке консоли - сам tsv лежит в UTF-8.
             named = parts[3].strip()
-            cand = os.path.join(HERE, named)
+            cand = os.path.join(LAB, named)
             if os.path.exists(cand):
                 infile = cand
             else:
                 cand = os.path.join(HERE, named.replace(".tsv", ".in"))
                 if os.path.exists(cand):
                     infile = cand
-        elif os.path.exists(os.path.join(HERE, f"{slug}.in")):
-            infile = os.path.join(HERE, f"{slug}.in")
+        elif os.path.exists(os.path.join(LAB, f"{slug}.in")):
+            infile = os.path.join(LAB, f"{slug}.in")
         items.append((num, slug, cmd, infile))
     return items
 

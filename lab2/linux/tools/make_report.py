@@ -12,6 +12,7 @@
 import os, re, importlib.util
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+LAB = os.path.dirname(HERE)  # корень каталога лабы (скрины/выводы/сценарии)
 spec = importlib.util.spec_from_file_location("razm", f"{HERE}/снимки_разметка.py")
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
@@ -73,7 +74,7 @@ def key_of(ptz):
 def load_rows():
     rows = []
     for lvl, mapping in m.LEVELS.items():
-        td = f"{HERE}/выводы/{lvl}"
+        td = f"{LAB}/выводы/{lvl}"
         for old, (new, ptz, win) in mapping.items():
             tf = f"{td}/{old}.txt"
             text = ""
@@ -156,7 +157,7 @@ print("Работа выполнена на виртуальной машине 
       "Arch Linux ARM. Ниже приведены основные характеристики системы, "
       "полученные командами uname и чтением файла /etc/os-release.\n")
 
-sys_txt = f"{HERE}/выводы/уровень_4-5/00b_sys_info.txt"
+sys_txt = f"{LAB}/выводы/уровень_4-5/00b_sys_info.txt"
 sys_out = []
 if os.path.exists(sys_txt):
     raw = open(sys_txt, encoding="utf-8", errors="replace").read()
@@ -353,7 +354,7 @@ SCRIPTS = [
                         "каталога перед выполнением заданий"),
 ]
 for fname, num, cap in SCRIPTS:
-    path = f"{HERE}/{fname}"
+    path = f"{LAB}/{fname}"
     print(f"|| {num} {cap}\n")
     print("```")
     if os.path.exists(path):
