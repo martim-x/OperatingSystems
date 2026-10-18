@@ -1,0 +1,2 @@
+### КОМАНДА: gcc -O2 -Wall -o Lab-03x Lab-03x.c && gcc -O2 -Wall -o Lab-03a Lab-03a.c && gcc -O2 -Wall -o Lab-03d-client Lab-03d-client.c && gcc -O2 -Wall -o Lab-03d-server Lab-03d-server.c && gcc -O2 -Wall -o Lab-03sig Lab-03sig.c && echo "СБОРКА ВЫПОЛНЕНА УСПЕШНО"
+СБОРКА ВЫПОЛНЕНА УСПЕШНО

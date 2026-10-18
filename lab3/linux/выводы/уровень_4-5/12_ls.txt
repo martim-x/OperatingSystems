@@ -1,0 +1,14 @@
+### КОМАНДА: ls -la
+total 120
+drwxr-xr-x  2 User-6d4ec851 User-6d4ec851  4096 Oct 18 15:40 .
+drwx------ 25 User-6d4ec851 User-6d4ec851  4096 Oct 18 15:19 ..
+-rwxr-xr-x  1 User-6d4ec851 User-6d4ec851 71184 Oct 18 15:40 Lab-03a
+-rw-r--r--  1 User-6d4ec851 User-6d4ec851  2499 Oct 18 15:21 Lab-03a.c
+-rwxr-xr-x  1 User-6d4ec851 User-6d4ec851 71208 Oct 18 15:40 Lab-03d-client
+-rw-r--r--  1 User-6d4ec851 User-6d4ec851  2013 Oct 18 15:21 Lab-03d-client.c
+-rwxr-xr-x  1 User-6d4ec851 User-6d4ec851 71928 Oct 18 15:40 Lab-03d-server
+-rw-r--r--  1 User-6d4ec851 User-6d4ec851  4916 Oct 18 15:22 Lab-03d-server.c
+-rwxr-xr-x  1 User-6d4ec851 User-6d4ec851 71248 Oct 18 15:40 Lab-03sig
+-rw-r--r--  1 User-6d4ec851 User-6d4ec851  1611 Oct 18 15:23 Lab-03sig.c
+-rwxr-xr-x  1 User-6d4ec851 User-6d4ec851 71064 Oct 18 15:40 Lab-03x
+-rw-r--r--  1 User-6d4ec851 User-6d4ec851  1360 Oct 18 15:21 Lab-03x.c
