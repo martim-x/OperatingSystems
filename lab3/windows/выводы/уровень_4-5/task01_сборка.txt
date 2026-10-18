@@ -1,0 +1,30 @@
+﻿### COMMAND: cmd /c C:\lab3\build.cmd
+### OUTPUT:
+=== Lab-03x.c ===
+Lab-03x.c
+=== Lab-03a.c ===
+Lab-03a.c
+=== Lab-03b.c ===
+Lab-03b.c
+Lab-03b.c(48): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+=== Lab-03c.c ===
+Lab-03c.c
+=== Lab-03d-client.c ===
+Lab-03d-client.c
+=== Lab-03d-server.c ===
+Lab-03d-server.c
+=== Lab-03hello-parent.c ===
+Lab-03hello-parent.c
+=== Lab-03hello-child.c ===
+Lab-03hello-child.c
+
+=== BUILD OK ===
+Lab-03a.exe
+Lab-03b.exe
+Lab-03c.exe
+Lab-03d-client.exe
+Lab-03d-server.exe
+Lab-03hello-child.exe
+Lab-03hello-parent.exe
+Lab-03x.exe
+

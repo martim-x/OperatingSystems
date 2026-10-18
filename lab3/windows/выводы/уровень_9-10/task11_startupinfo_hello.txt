@@ -1,0 +1,7 @@
+﻿### COMMAND: Lab-03hello-parent.exe
+### OUTPUT:
+Родитель: передаю дочернему процессу через STARTUPINFO строку:
+          "Hello, my dear child!"
+Родитель: дочерний процесс создан, PID=156
+Родитель: фраза передана через STARTUPINFO (lpTitle).
+
