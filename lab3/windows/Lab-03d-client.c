@@ -1,18 +1,9 @@
-/*
- * Lab-03d-client.c — поиск чисел, взаимно простых с M, в диапазоне [L, R] (Windows).
- *
- * Диапазон и число M задаются через аргументы командной строки:
- *   Lab-03d-client <Число M> <Нижний порог L> <Верхний порог R>
- *
- * Найденные числа сохраняются в промежуточном буфере и после завершения цикла
- * отправляются родительскому процессу по анонимному каналу: дескриптор канала
- * передан сервером через STARTUPINFO (стандартный вывод процесса — это канал).
- */
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "console_ru.h" /* вывод кириллицы в консоль (UTF-8 -> OEM 866) */
+#include "console_ru.h"
 
 static int gcd(int a, int b)
 {
@@ -24,10 +15,28 @@ static int gcd(int a, int b)
     return a;
 }
 
+static int should_pause(int argc, char *argv[])
+{
+    if (GetEnvironmentVariableA("PAUSE_ON_EXIT", NULL, 0)) return 1;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--pause") == 0) return 1;
+    }
+    return 0;
+}
+
+static void pause_before_exit(void)
+{
+    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    fflush(stdout);
+    getchar();
+}
+
 int main(int argc, char *argv[])
 {
+    int pause = should_pause(argc, argv);
+
     if (argc != 4) {
-        fprintf(stderr, "Использование: %s <Число M> <Нижний порог L> <Верхний порог R>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <M> <L> <R>\n", argv[0]);
         return 1;
     }
 
@@ -36,14 +45,13 @@ int main(int argc, char *argv[])
     int r = atoi(argv[3]);
 
     if (m <= 0 || l < 1 || l > r) {
-        fprintf(stderr, "Ошибка: требуется M > 0, L >= 1 и L <= R\n");
+        fprintf(stderr, "Error: M > 0, L >= 1, L <= R required\n");
         return 1;
     }
 
-    /* Промежуточный буфер: найденные числа */
     int *found = malloc((size_t)(r - l + 1) * sizeof(int));
-    if (found == NULL) {
-        fprintf(stderr, "Ошибка: не хватило памяти\n");
+    if (!found) {
+        fprintf(stderr, "Error: malloc failed\n");
         return 1;
     }
     int count = 0;
@@ -54,7 +62,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* Отправка результата родителю по анонимному каналу (через стандартный вывод) */
     printf("CHUNK %lu %d %d", (unsigned long)GetCurrentProcessId(), count, 0);
     for (int i = 0; i < count; i++) {
         printf(" %d", found[i]);
@@ -63,5 +70,7 @@ int main(int argc, char *argv[])
     fflush(stdout);
 
     free(found);
+
+    if (pause) pause_before_exit();
     return 0;
 }

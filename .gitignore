@@ -232,3 +232,8 @@ Renders/
 *.aep.lock
 Adobe Premiere Pro Auto-Save/
 Adobe After Effects Auto-Save/
+
+# === Рабочие материалы лабораторных (labN/build) ===
+# Это НЕ артефакты сборки, а исходники отчётов (report.json) и скрины:
+# без них отчёт не пересобрать, поэтому они идут в репозиторий.
+!/lab[0-9]/build/

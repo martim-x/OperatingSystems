@@ -1,12 +1,3 @@
-/*
- * Lab-03sig.c — приложение, устойчивое к Ctrl+C (уровень 9-10, Linux).
- *
- * Приложение выводит отчёт о своей работе каждую секунду. Нажатие Ctrl+C
- * (сигнал SIGINT) не останавливает его: обработчик сигнала переустанавливается
- * и лишь выводит уведомление, а основной цикл продолжается.
- *
- * Остановить приложение можно только сигналом SIGTERM (kill) или SIGKILL.
- */
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
@@ -17,9 +8,8 @@ static void on_sigint(int sig)
 {
     (void)sig;
     sigint_count++;
-    /* Переустанавливаем обработчик: SIGINT снова перехватывается */
     signal(SIGINT, on_sigint);
-    const char msg[] = "\n[!] Получен SIGINT (Ctrl+C) — приложение продолжает работу\n";
+    const char msg[] = "\n[!] SIGINT (Ctrl+C) caught - continuing\n";
     write(STDOUT_FILENO, msg, sizeof(msg) - 1);
 }
 
@@ -27,16 +17,15 @@ int main(void)
 {
     signal(SIGINT, on_sigint);
 
-    printf("Приложение Lab-03sig запущено (PID=%d)\n", getpid());
-    printf("Ctrl+C не способно остановить это приложение.\n");
+    printf("Lab-03sig started (PID=%d)\n", getpid());
+    printf("Ctrl+C cannot stop this application.\n");
     fflush(stdout);
 
     int second = 0;
     for (;;) {
         sleep(1);
         second++;
-        printf("Работаю... прошло %d с (перехвачено SIGINT: %d)\n",
-               second, (int)sigint_count);
+        printf("Running... %d s (SIGINT caught: %d)\n", second, (int)sigint_count);
         fflush(stdout);
     }
 

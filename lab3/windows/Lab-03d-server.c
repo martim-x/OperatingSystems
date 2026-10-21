@@ -1,24 +1,9 @@
-/*
- * Lab-03d-server.c — сервер: запускает K дочерних процессов поиска чисел,
- * взаимно простых с M, на поддиапазонах [L, R] (Windows).
- *
- * Структура вызова:
- *   Lab-03d-server <Количество процессов K> <Число M> <Нижний порог L> <Верхний порог R>
- *
- * Сервер создаёт анонимный канал (CreatePipe), дескриптор канала передаётся
- * дочерним процессам через структуру STARTUPINFO (STARTF_USESTDHANDLES,
- * hStdOutput), читает результаты из канала и выводит:
- *   число M, диапазон [L, R], количество процессов K, общее количество
- *   найденных чисел, сами числа и время работы.
- *
- * Программа не завершается, пока не завершены все дочерние процессы.
- */
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "console_ru.h" /* вывод кириллицы в консоль (UTF-8 -> OEM 866) */
+#include "console_ru.h"
 
 #define MAX_NUMBERS 1000000
 
@@ -30,26 +15,38 @@ static double now_seconds(void)
     return (double)cnt.QuadPart / (double)freq.QuadPart;
 }
 
-/* Полный путь к Lab-03d-client.exe рядом с текущим исполняемым файлом */
 static void client_path(char *out, size_t cap)
 {
     char self[MAX_PATH];
     GetModuleFileNameA(NULL, self, MAX_PATH);
     char *slash = strrchr(self, '\\');
-    if (slash != NULL) {
-        *(slash + 1) = '\0';
-    } else {
-        self[0] = '\0';
-    }
+    if (slash != NULL) *(slash + 1) = '\0';
+    else self[0] = '\0';
     snprintf(out, cap, "%sLab-03d-client.exe", self);
+}
+
+static int should_pause(int argc, char *argv[])
+{
+    if (GetEnvironmentVariableA("PAUSE_ON_EXIT", NULL, 0)) return 1;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--pause") == 0) return 1;
+    }
+    return 0;
+}
+
+static void pause_before_exit(void)
+{
+    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    fflush(stdout);
+    getchar();
 }
 
 int main(int argc, char *argv[])
 {
+    int pause = should_pause(argc, argv);
+
     if (argc != 5) {
-        fprintf(stderr,
-                "Использование: %s <Количество процессов K> <Число M> <Нижний порог L> <Верхний порог R>\n",
-                argv[0]);
+        fprintf(stderr, "Usage: %s <K> <M> <L> <R>\n", argv[0]);
         return 1;
     }
 
@@ -59,7 +56,7 @@ int main(int argc, char *argv[])
     int r = atoi(argv[4]);
 
     if (k < 1 || m <= 0 || l < 1 || l > r) {
-        fprintf(stderr, "Ошибка: требуется K >= 1, M > 0, L >= 1 и L <= R\n");
+        fprintf(stderr, "Error: K >= 1, M > 0, L >= 1, L <= R required\n");
         return 1;
     }
 
@@ -68,23 +65,20 @@ int main(int argc, char *argv[])
 
     double t0 = now_seconds();
 
-    /* Анонимный канал: конец для записи наследуется дочерними процессами */
-    SECURITY_ATTRIBUTES sa;
+    SECURITY_ATTRIBUTES sa = {0};
     sa.nLength = sizeof(sa);
-    sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = TRUE;
 
     HANDLE hRead, hWrite;
     if (!CreatePipe(&hRead, &hWrite, &sa, 0)) {
-        fprintf(stderr, "Ошибка: CreatePipe (%lu)\n", GetLastError());
+        fprintf(stderr, "Error: CreatePipe (%lu)\n", GetLastError());
         return 1;
     }
-    /* Читающий конец дочерним процессам не нужен */
     SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);
 
     HANDLE *procs = malloc((size_t)k * sizeof(HANDLE));
-    if (procs == NULL) {
-        fprintf(stderr, "Ошибка: не хватило памяти\n");
+    if (!procs) {
+        fprintf(stderr, "Error: malloc failed\n");
         return 1;
     }
     int created = 0;
@@ -96,44 +90,37 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < k; i++) {
         int subR = subL + chunk - 1 + (i < remainder ? 1 : 0);
-        if (i == k - 1) {
-            subR = r;
-        }
+        if (i == k - 1) subR = r;
 
-        STARTUPINFOA si;
-        ZeroMemory(&si, sizeof(si));
+        STARTUPINFOA si = {0};
         si.cb = sizeof(si);
         si.dwFlags = STARTF_USESTDHANDLES;
         si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
-        si.hStdOutput = hWrite; /* дескриптор канала — через STARTUPINFO */
+        si.hStdOutput = hWrite;
         si.hStdError = hWrite;
 
-        PROCESS_INFORMATION pi;
-        ZeroMemory(&pi, sizeof(pi));
+        PROCESS_INFORMATION pi = {0};
 
         char cmd[MAX_PATH + 64];
         snprintf(cmd, sizeof(cmd), "\"%s\" %d %d %d", client, m, subL, subR);
 
         if (!CreateProcessA(NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
-            fprintf(stderr, "Ошибка: CreateProcess для поддиапазона [%d, %d] (%lu)\n",
-                    subL, subR, GetLastError());
+            fprintf(stderr, "Error: CreateProcess for [%d, %d] (%lu)\n", subL, subR, GetLastError());
         } else {
             CloseHandle(pi.hThread);
             procs[created++] = pi.hProcess;
-            printf("Запущен дочерний процесс %lu: поддиапазон [%d, %d]\n",
+            printf("Started child %lu: range [%d, %d]\n",
                    (unsigned long)pi.dwProcessId, subL, subR);
         }
         subL = subR + 1;
     }
 
-    /* Закрываем конец для записи: канал закроется, когда завершатся все дети */
     CloseHandle(hWrite);
 
-    /* Читаем данные от дочерних процессов до закрытия канала */
     size_t cap = 1 << 16;
     char *data = malloc(cap);
-    if (data == NULL) {
-        fprintf(stderr, "Ошибка: не хватило памяти\n");
+    if (!data) {
+        fprintf(stderr, "Error: malloc failed\n");
         return 1;
     }
     size_t used = 0;
@@ -143,9 +130,7 @@ int main(int argc, char *argv[])
         if (used + 4096 >= cap) {
             cap *= 2;
             char *bigger = realloc(data, cap);
-            if (bigger == NULL) {
-                break;
-            }
+            if (!bigger) break;
             data = bigger;
         }
         if (!ReadFile(hRead, data + used, (DWORD)(cap - used - 1), &got, NULL) || got == 0) {
@@ -156,55 +141,49 @@ int main(int argc, char *argv[])
     data[used] = '\0';
     CloseHandle(hRead);
 
-    /* Дожидаемся завершения всех дочерних процессов */
     if (created > 0) {
         WaitForMultipleObjects((DWORD)created, procs, TRUE, INFINITE);
     }
-    for (int i = 0; i < created; i++) {
-        CloseHandle(procs[i]);
-    }
+    for (int i = 0; i < created; i++) CloseHandle(procs[i]);
     free(procs);
 
-    /* Разбор ответов детей: строки «CHUNK <PID> <count> 0 <числа...>» */
     int *all = malloc(MAX_NUMBERS * sizeof(int));
-    if (all == NULL) {
-        fprintf(stderr, "Ошибка: не хватило памяти\n");
+    if (!all) {
+        fprintf(stderr, "Error: malloc failed\n");
         return 1;
     }
     int total_found = 0;
 
     char *line = data;
-    while (line != NULL && *line != '\0') {
+    while (line && *line) {
         char *nl = strchr(line, '\n');
-        if (nl != NULL) {
-            *nl = '\0';
-        }
+        if (nl) *nl = '\0';
         if (strncmp(line, "CHUNK ", 6) == 0) {
             char *p = line + 6;
-            (void)strtol(p, &p, 10);             /* PID */
-            int count = (int)strtol(p, &p, 10);  /* количество чисел */
-            (void)strtol(p, &p, 10);             /* служебное поле */
+            (void)strtol(p, &p, 10);
+            int count = (int)strtol(p, &p, 10);
+            (void)strtol(p, &p, 10);
             for (int i = 0; i < count && total_found < MAX_NUMBERS; i++) {
                 all[total_found++] = (int)strtol(p, &p, 10);
             }
         }
-        line = (nl != NULL) ? nl + 1 : NULL;
+        line = nl ? nl + 1 : NULL;
     }
     free(data);
 
     double t1 = now_seconds();
 
-    printf("Число M: %d\n", m);
-    printf("Диапазон [L, R]: [%d, %d]\n", l, r);
-    printf("Количество процессов K: %d\n", k);
-    printf("Общее количество найденных чисел: %d\n", total_found);
-    printf("Найденные числа:");
-    for (int i = 0; i < total_found; i++) {
-        printf(" %d", all[i]);
-    }
+    printf("M: %d\n", m);
+    printf("Range [L, R]: [%d, %d]\n", l, r);
+    printf("Processes K: %d\n", k);
+    printf("Total found: %d\n", total_found);
+    printf("Numbers:");
+    for (int i = 0; i < total_found; i++) printf(" %d", all[i]);
     printf("\n");
-    printf("Время работы: %.6f с\n", t1 - t0);
+    printf("Time: %.6f s\n", t1 - t0);
 
     free(all);
+
+    if (pause) pause_before_exit();
     return 0;
 }

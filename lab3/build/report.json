@@ -1,0 +1,361 @@
+{
+    "title": {
+        "discipline": "Операционные системы",
+        "work_kind": "Лабораторная работа № 3",
+        "work_name": "УПРАВЛЕНИЕ ПРОЦЕССАМИ",
+        "checker": "Проверил: Ассистент Савельева М. Г."
+    },
+    "blocks": [
+        {
+            "type": "element",
+            "text": "Введение"
+        },
+        {
+            "type": "p",
+            "text": "Цель работы – получить навыки управления процессами в Windows и Linux: создание, контроль, обмен данными между процессами, передача через STARTUPINFO."
+        },
+        {
+            "type": "p",
+            "text": "Задачи:"
+        },
+        {
+            "type": "enum",
+            "items": [
+                "написать Lab-03x: цикл 500 мс, вывод PID, аргумент или ITER_NUM;",
+                "реализовать Lab-03a: три дочерних процесса CreateProcess разными способами;",
+                "реализовать Lab-03b: глобальная и локальная ITER_NUM;",
+                "написать Lab-03c: список процессов через Tool Help Library (PID, PPID, имя);",
+                "реализовать Lab-03d-client / Lab-03d-server: поиск чисел, взаимно простых с M, через анонимный канал и STARTUPINFO;",
+                "реализовать Lab-03hello-parent / Lab-03hello-child: передача строки через STARTUPINFO (lpTitle + CREATE_NEW_CONSOLE);",
+                "написать аналоги для Linux: Lab-03x, Lab-03a, Lab-03d-client, Lab-03d-server, Lab-03sig (устойчивость к SIGINT);",
+                "проверить все программы, сделать скриншоты и выводы для уровней 4–5, 7–8, 9–10."
+            ]
+        },
+        {
+            "type": "p",
+            "text": "Работа выполнена на Linux (Arch ARM, GCC 16.1.1) и Windows (Windows 11 ARM, MSVC 19.42). Скриншоты выполнены в терминале. На рисунке @рис:fig3_linux_01_build – сборка Linux, на рисунке @рис:fig3_win_01_build – сборка Windows."
+        },
+        {
+            "type": "h1",
+            "text": "Выполнение заданий на ОС Linux"
+        },
+        {
+            "type": "h2",
+            "text": "Подготовка среды"
+        },
+        {
+            "type": "p",
+            "text": "Linux запущен в VMware Fusion (Arch ARM, KDE Plasma). Пользователь User-6d4ec851. Исходники в ~/OS3. Сборка показана на рисунке @рис:fig3_linux_01_build."
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task01_сборка.png",
+            "caption": "Сборка Linux-приложений: Lab-03x, Lab-03a, Lab-03d-client, Lab-03d-server, Lab-03sig",
+            "label": "fig3_linux_01_build"
+        },
+        {
+            "type": "p",
+            "text": "Все пять программ собрались без ошибок (gcc -O2 -Wall). Исправлены баги: в Lab-03d-server парсер ждал 3 токена вместо 4, в Lab-03sig имя программы было Lab-03c вместо Lab-03sig. Среда готова."
+        },
+        {
+            "type": "h2",
+            "text": "Уровень 4–5: базовые операции с процессами"
+        },
+        {
+            "type": "p",
+            "text": "Проверяется создание процессов, передача параметров, ожидание завершения, анализ через /proc и ps."
+        },
+        {
+            "type": "p",
+            "text": "Lab-03x запущен с аргументом (5 итераций), через ITER_NUM=7, без параметров (ошибка). Результаты на рисунках @рис:fig3_linux_02_arg, @рис:fig3_linux_03_env, @рис:fig3_linux_04_err."
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task02_цикл_аргумент.png",
+            "caption": "Lab-03x с аргументом: 5 итераций, вывод PID",
+            "label": "fig3_linux_02_arg"
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task03_цикл_переменная.png",
+            "caption": "Lab-03x через ITER_NUM=7: 7 итераций",
+            "label": "fig3_linux_03_env"
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task04_цикл_ошибка.png",
+            "caption": "Lab-03x без параметров: ошибка, код возврата 1",
+            "label": "fig3_linux_04_err"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03a создаёт два дочерних Lab-03x: первый – аргумент 5, второй – ITER_NUM=8. Родитель ждёт оба (waitpid). Параллельная работа на рисунке @рис:fig3_linux_05_two_children."
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task05_два_дочерних.png",
+            "caption": "Lab-03a: два дочерних процесса работают параллельно, родитель ждёт",
+            "label": "fig3_linux_05_two_children"
+        },
+        {
+            "type": "p",
+            "text": "Анализ дерева процессов: ps -ef и /proc. Дерево на рисунке @рис:fig3_linux_06_ps_tree (родитель Lab-03a, два дочерних Lab-03x, состояния S/R, PPID). /proc/<PID>/status на рисунке @рис:fig3_linux_07_proc (State, Pid, PPid, Uid, Gid). Содержимое /proc/<PID> на рисунке @рис:fig3_linux_08_proc_dir (fd, environ, cmdline, status). Проверки пройдены."
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task06_ps_дерево.png",
+            "caption": "Дерево процессов: ps -ef показывает родительские связи (PPID)",
+            "label": "fig3_linux_06_ps_tree"
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task07_proc_статус.png",
+            "caption": "Информация из /proc/<PID>/status: State, Pid, PPid, Uid, Gid",
+            "label": "fig3_linux_07_proc"
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_4-5/task12_итоговый_состав.png",
+            "caption": "Содержимое каталога /proc/<PID>: fd, environ, cmdline, status",
+            "label": "fig3_linux_08_proc_dir"
+        },
+        {
+            "type": "p",
+            "text": "Уровень 4–5 на Linux выполнен: все программы работают, параметры передаются, информация получена."
+        },
+        {
+            "type": "h2",
+            "text": "Уровень 7–8: IPC через анонимный канал"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03d-client ищет числа, взаимно простые с M в [L, R], шлёт результат в stdout (перенаправлен в pipe). Lab-03d-server создаёт pipe, делит диапазон на K частей, запускает K клиентов, передаёт поддиапазоны аргументами, читает результаты, выводит список и время. Результаты на рисунках @рис:fig3_linux_09_client, @рис:fig3_linux_10_server3, @рис:fig3_linux_11_server4."
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_7-8/task08_клиент_результат.png",
+            "caption": "Lab-03d-client: M=10, диапазон 1–30, найдены числа, вывод в канал",
+            "label": "fig3_linux_09_client"
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_7-8/task09_сервер_3_процесса.png",
+            "caption": "Lab-03d-server K=3, M=10, 1–100: 40 чисел, время 0.004 с",
+            "label": "fig3_linux_10_server3"
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_7-8/task10_сервер_4_процесса.png",
+            "caption": "Lab-03d-server K=4, M=7, 10–100: результат с 4 поддиапазонами",
+            "label": "fig3_linux_11_server4"
+        },
+        {
+            "type": "p",
+            "text": "Сервер собирает результаты от всех детей, сортирует, выводит полную последовательность. Время через clock_gettime. Уровень 7–8 на Linux выполнен."
+        },
+        {
+            "type": "h2",
+            "text": "Уровень 9–10: обработка сигналов SIGINT"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03sig ставит обработчик SIGINT, переустанавливает себя, выводит уведомление, не завершает программу. Цикл работает дальше, статус каждую секунду. Остановить можно только SIGTERM или SIGKILL. Демонстрация на рисунке @рис:fig3_linux_12_sigint."
+        },
+        {
+            "type": "figure",
+            "file": "../linux/скрины/уровень_9-10/task11_sigint_демо.png",
+            "caption": "Lab-03sig: два Ctrl+C (SIGINT) перехвачены, программа жива, завершается только SIGKILL",
+            "label": "fig3_linux_12_sigint"
+        },
+        {
+            "type": "p",
+            "text": "Программа перехватывает SIGINT, увеличивает счётчик, продолжает работу. Уровень 9–10 на Linux выполнен."
+        },
+        {
+            "type": "h2",
+            "text": "Вывод по разделу"
+        },
+        {
+            "type": "p",
+            "text": "На Linux реализованы: Lab-03x (цикл с аргументом/окружением), Lab-03a (fork+exec двух детей), Lab-03d-client/server (pipe+fork, деление диапазона, сбор результатов), Lab-03sig (перехват SIGINT, неубиваемость по Ctrl+C). Все собраны GCC 16.1.1, протестированы, скриншоты сделаны. Все уровни (4–5, 7–8, 9–10) выполнены."
+        },
+        {
+            "type": "h1",
+            "text": "Выполнение заданий на ОС Windows"
+        },
+        {
+            "type": "h2",
+            "text": "Подготовка среды и сборка"
+        },
+        {
+            "type": "p",
+            "text": "Windows 11 ARM в VMware Fusion. Компилятор MSVC (cl.exe), ARM64 (vcvarsall.bat arm64). Кириллица в cmd (cp866) через console_ru.h (UTF-8 → OEM 866). Сборка на рисунке @рис:fig3_win_01_build."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task01_сборка.png",
+            "caption": "Сборка 8 Windows-приложений: Lab-03x, Lab-03a, Lab-03b, Lab-03c, Lab-03d-client, Lab-03d-server, Lab-03hello-parent, Lab-03hello-child",
+            "label": "fig3_win_01_build"
+        },
+        {
+            "type": "p",
+            "text": "Все 8 программ собрались без ошибок. Среда готова."
+        },
+        {
+            "type": "h2",
+            "text": "Уровень 4–5: создание процессов (CreateProcess)"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03x: цикл 500 мс, вывод PID. Итерации из аргумента; если нет – из ITER_NUM; если нет – ExitProcess(1). Результаты на рисунках @рис:fig3_win_02_arg, @рис:fig3_win_03_env, @рис:fig3_win_04_err."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task02_lab03x_аргумент.png",
+            "caption": "Lab-03x.exe 5: 5 итераций, вывод PID",
+            "label": "fig3_win_02_arg"
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task03_lab03x_окружение.png",
+            "caption": "Lab-03x.exe через set ITER_NUM=7: 7 итераций",
+            "label": "fig3_win_03_env"
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task04_lab03x_ошибка.png",
+            "caption": "Lab-03x.exe без параметров: ошибка, код возврата 1",
+            "label": "fig3_win_04_err"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03a: три CreateProcess для Lab-03x.exe разными способами: (1) только lpApplicationName, (2) только lpCommandLine, (3) lpApplicationName + lpCommandLine с пробелом. Проверено: (1) – ошибка 2 (файл не найден), (2) и (3) – работают. На рисунке @рис:fig3_win_05_lab03a."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task05_lab03a_три_процесса.png",
+            "caption": "Lab-03a.exe 3: два успешных процесса (2 и 3), первый – ошибка 2",
+            "label": "fig3_win_05_lab03a"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03b: переменные окружения. (1) Только exe – глобальная ITER_NUM (нет → ошибка). (2) lpCommandLine с аргументом – работает. (3) SetEnvironmentVariable(\"ITER_NUM\", \"3\") перед вызовом – локальная переменная наследуется, итерации = 3. На рисунке @рис:fig3_win_06_lab03b."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task06_lab03b_переменные_окружения.png",
+            "caption": "Lab-03b.exe 3: глобальная ITER_NUM не задана (ошибка), аргумент работает (3), локальная ITER_NUM=3 работает (3)",
+            "label": "fig3_win_06_lab03b"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03c: список процессов через Tool Help Library (CreateToolhelp32Snapshot, Process32First/Next). Вывод: имя, PID, PPID. На рисунке @рис:fig3_win_07_lab03c – Lab-03c.exe (PID=1424) из cmd.exe (PID=5084). Уровень 4–5 на Windows выполнен."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task07_lab03c_список_процессов.png",
+            "caption": "Lab-03c.exe: таблица процессов (имя, PID, PPID), Lab-03c.exe (PID=1424), родитель cmd.exe (PID=5084)",
+            "label": "fig3_win_07_lab03c"
+        },
+        {
+            "type": "p",
+            "text": "Таблица процессов получена, PID и PPID верные. Скриншот трёх одновременно запущенных процессов (родитель + два дочерних) – на рисунке @рис:fig3_win_08_three_proc."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_4-5/task11_three_proc.png",
+            "caption": "Три одновременных процесса: родитель Lab-03a и два дочерних Lab-03x",
+            "label": "fig3_win_08_three_proc"
+        },
+        {
+            "type": "p",
+            "text": "Уровень 4–5 на Windows выполнен: процессы создаются, параметры передаются, информация получена."
+        },
+        {
+            "type": "h2",
+            "text": "Уровень 7–8: IPC через канал и STARTUPINFO"
+        },
+        {
+            "type": "p",
+            "text": "Lab-03d-client: поиск взаимно простых с M в [L, R], результат в stdout (в pipe) формате CHUNK <PID> <count> 0 <числа>. Lab-03d-server: CreatePipe (bInheritHandle=TRUE), дескриптор записи в STARTUPINFO (hStdOutput, STARTF_USESTDHANDLES), делит диапазон на K частей, запускает K клиентов, собирает результаты, выводит M, [L, R], K, количество, числа, время (QueryPerformanceCounter). Результаты на рисунках @рис:fig3_win_09_client, @рис:fig3_win_10_server3, @рис:fig3_win_11_server4."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_7-8/task08_lab03d_клиент.png",
+            "caption": "Lab-03d-client.exe 10 1 30: найдены числа, вывод в канал",
+            "label": "fig3_win_09_client"
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_7-8/task09_lab03d_сервер_3.png",
+            "caption": "Lab-03d-server.exe 3 10 1 100: K=3, 40 чисел, время 0.035 с",
+            "label": "fig3_win_10_server3"
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_7-8/task10_lab03d_сервер_4.png",
+            "caption": "Lab-03d-server.exe 4 7 10 100: K=4, другой M и диапазон",
+            "label": "fig3_win_11_server4"
+        },
+        {
+            "type": "p",
+            "text": "В Process Explorer у детей виден дескриптор File (Pipe) – анонимный канал. Сервер ждёт всех детей (WaitForMultipleObjects). Уровень 7–8 на Windows выполнен."
+        },
+        {
+            "type": "h2",
+            "text": "Уровень 9–10: передача через STARTUPINFO"
+        },
+        {
+            "type": "p",
+            "text": "Задача: родитель передаёт дочернему \"Hello, my dear child!\" через STARTUPINFO, без окружения, аргументов, перенаправления, IPC. Решение: si.lpTitle = фраза; CreateProcess с CREATE_NEW_CONSOLE – только при новой консоли Windows применяет lpTitle как заголовок окна. Дочерний читает через GetConsoleTitle и выводит. Демонстрация на рисунке @рис:fig3_win_12_hello. Список exe на рисунке @рис:fig3_win_13_ls."
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_9-10/task11_startupinfo_hello.png",
+            "caption": "Lab-03hello-parent.exe: родитель создаёт дочерний с CREATE_NEW_CONSOLE и lpTitle; дочернее окно показывает фразу",
+            "label": "fig3_win_12_hello"
+        },
+        {
+            "type": "figure",
+            "file": "../windows/скрины/уровень_9-10/task12_список_exe.png",
+            "caption": "Список собранных exe в C:\\lab3",
+            "label": "fig3_win_13_ls"
+        },
+        {
+            "type": "p",
+            "text": "Подтверждено: lpTitle работает только с CREATE_NEW_CONSOLE; аргументы в lpApplicationName не работают (ошибка 2); только lpCommandLine или lpApplicationName+lpCommandLine (с пробелом) корректны; наследуемые дескрипторы pipe через STARTUPINFO (STARTF_USESTDHANDLES). Уровень 9–10 на Windows выполнен."
+        },
+        {
+            "type": "h2",
+            "text": "Вывод по разделу"
+        },
+        {
+            "type": "p",
+            "text": "На Windows реализованы: Lab-03x (ExitProcess, аргументы/ITER_NUM), Lab-03a (три CreateProcess разными способами), Lab-03b (глобальная/локальная ITER_NUM), Lab-03c (Tool Help Library, PID/PPID), Lab-03d-client/server (CreatePipe + STARTUPINFO.hStdOutput, наследуемые дескрипторы), Lab-03hello-parent/child (lpTitle + CREATE_NEW_CONSOLE). Все собраны MSVC ARM64, скриншоты сделаны. Все уровни (4–5, 7–8, 9–10) выполнены."
+        },
+        {
+            "type": "element",
+            "text": "Заключение"
+        },
+        {
+            "type": "p",
+            "text": "Лабораторная работа №3 выполнена полностью на уровне 9–10 для обеих систем."
+        },
+        {
+            "type": "p",
+            "text": "Linux: Lab-03x, Lab-03a, Lab-03d-client/server, Lab-03sig. Все собраны GCC 16.1.1, протестированы."
+        },
+        {
+            "type": "p",
+            "text": "Windows: Lab-03x, Lab-03a, Lab-03b, Lab-03c, Lab-03d-client/server, Lab-03hello-parent/child. Все собраны MSVC ARM64, протестированы."
+        },
+        {
+            "type": "p",
+            "text": "Выводы по Windows API: lpApplicationName не работает (ошибка 2); lpCommandLine или lpApplicationName+lpCommandLine (с пробелом) – ок; lpTitle только с CREATE_NEW_CONSOLE; наследуемые дескрипторы pipe через STARTUPINFO (STARTF_USESTDHANDLES)."
+        },
+        {
+            "type": "p",
+            "text": "Все скриншоты и выводы сохранены в репозитории: lab3/linux/скрины/уровень_*/, lab3/linux/выводы/уровень_*/, lab3/windows/скрины/уровень_*/, lab3/windows/выводы/уровень_*/. Исходники в lab3/linux/ и lab3/windows/."
+        }
+    ]
+}

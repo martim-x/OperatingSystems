@@ -1,33 +1,42 @@
-/*
- * Lab-03hello-child.c — дочерний процесс (Windows, уровень 9-10).
- *
- * Получает строку, переданную родителем через структуру STARTUPINFO, и выводит
- * её на консоль. Строка читается из заголовка консоли (GetConsoleTitle) —
- * это единственный строковый канал, доступный через STARTUPINFO без
- * переменных окружения, аргументов командной строки, перенаправления
- * потоков и стандартных механизмов IPC.
- */
 #include <windows.h>
 #include <stdio.h>
 
-#include "console_ru.h" /* вывод кириллицы в консоль (UTF-8 -> OEM 866) */
+#include "console_ru.h"
 
-int main(void)
+static int should_pause(int argc, char *argv[])
 {
+    if (GetEnvironmentVariableA("PAUSE_ON_EXIT", NULL, 0)) return 1;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--pause") == 0) return 1;
+    }
+    return 0;
+}
+
+static void pause_before_exit(void)
+{
+    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    fflush(stdout);
+    getchar();
+}
+
+int main(int argc, char *argv[])
+{
+    int pause = should_pause(argc, argv);
+
     char title[256];
     DWORD n = GetConsoleTitleA(title, sizeof(title));
 
     if (n == 0) {
-        fprintf(stderr, "Дочерний процесс: не удалось прочитать заголовок консоли (%lu)\n",
-                GetLastError());
+        fprintf(stderr, "Child: failed to read console title (%lu)\n", GetLastError());
         return 1;
     }
 
-    printf("Дочерний процесс (PID=%lu): получено через STARTUPINFO: %s\n",
+    printf("Child (PID=%lu): received via STARTUPINFO: %s\n",
            (unsigned long)GetCurrentProcessId(), title);
     fflush(stdout);
 
-    /* Пауза, чтобы окно дочернего процесса успело попасть в снимок экрана */
     Sleep(4000);
+
+    if (pause) pause_before_exit();
     return 0;
 }

@@ -1,137 +1,101 @@
-/*
- * Lab-03b.c — родительский процесс создаёт три дочерних процесса (Windows),
- * вариант Lab-03a с работой через переменные окружения:
- *
- *   1) только имя файла (без количества итераций) — Lab-03x берёт итерации
- *      из глобальной переменной окружения ITER_NUM;
- *   2) только второй параметр (lpCommandLine) — количество итераций
- *      передаётся аргументом командной строки;
- *   3) NULL вместо второго параметра; перед созданием процесса устанавливается
- *      ЛОКАЛЬНАЯ переменная окружения ITER_NUM (значение отличается от
- *      глобальной переменной).
- *
- * Родитель дожидается завершения всех созданных дочерних процессов
- * (выполняются одновременно), затем освобождает ресурсы.
- */
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "console_ru.h" /* вывод кириллицы в консоль (UTF-8 -> OEM 866) */
+#include "console_ru.h"
 
 #define DEFAULT_ITER "5"
-#define LOCAL_ITER   "3" /* локальное значение ITER_NUM, отличается от глобального */
+#define LOCAL_ITER "3"
 
-/* Полный путь к Lab-03x.exe рядом с текущим исполняемым файлом */
 static void child_path(char *out, size_t cap)
 {
     char self[MAX_PATH];
     GetModuleFileNameA(NULL, self, MAX_PATH);
     char *slash = strrchr(self, '\\');
-    if (slash != NULL) {
-        *(slash + 1) = '\0';
-    } else {
-        self[0] = '\0';
-    }
+    if (slash != NULL) *(slash + 1) = '\0';
+    else self[0] = '\0';
     snprintf(out, cap, "%sLab-03x.exe", self);
+}
+
+static int should_pause(int argc, char *argv[])
+{
+    if (GetEnvironmentVariableA("PAUSE_ON_EXIT", NULL, 0)) return 1;
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--pause") == 0) return 1;
+    }
+    return 0;
+}
+
+static void pause_before_exit(void)
+{
+    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    fflush(stdout);
+    getchar();
 }
 
 int main(int argc, char *argv[])
 {
-    const char *iter = (argc > 1) ? argv[1] : DEFAULT_ITER;
+    const char *iter = (argc > 1 && strcmp(argv[1], "--pause") != 0) ? argv[1] : DEFAULT_ITER;
+    int pause = should_pause(argc, argv);
 
     char child[MAX_PATH];
     child_path(child, sizeof(child));
-    printf("Дочерняя программа: %s\n", child);
-    printf("Глобальная ITER_NUM=%s, локальная ITER_NUM=%s\n\n",
-           getenv("ITER_NUM") != NULL ? getenv("ITER_NUM") : "(не задана)", LOCAL_ITER);
+    printf("Child program: %s\n", child);
+    printf("Global ITER_NUM=%s, Local ITER_NUM=%s\n\n",
+           getenv("ITER_NUM") ? getenv("ITER_NUM") : "(unset)", LOCAL_ITER);
 
-    PROCESS_INFORMATION pi[3];
-    BOOL ok[3];
-    int i;
+    PROCESS_INFORMATION pi[3] = {0};
+    BOOL ok[3] = {0};
+    STARTUPINFOA si = {0};
+    si.cb = sizeof(si);
 
-    for (i = 0; i < 3; i++) {
-        ZeroMemory(&pi[i], sizeof(pi[i]));
-        ok[i] = FALSE;
-    }
-
-    /* Процесс 1: только имя файла — итерации из глобальной ITER_NUM */
+    /* Process 1: only exe name - iterations from global ITER_NUM */
     {
-        STARTUPINFOA si;
-        ZeroMemory(&si, sizeof(si));
-        si.cb = sizeof(si);
-
-        printf("[1] lpApplicationName=\"%s\", lpCommandLine=NULL — итерации из глобальной ITER_NUM\n", child);
+        printf("[1] lpApplicationName=\"%s\", lpCommandLine=NULL - global ITER_NUM\n", child);
         ok[0] = CreateProcessA(child, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[0]);
-        if (ok[0]) {
-            printf("    процесс создан, PID=%lu\n\n", (unsigned long)pi[0].dwProcessId);
-        } else {
-            printf("    НЕ создан, код ошибки %lu\n\n", GetLastError());
-        }
+        if (ok[0]) printf("    created, PID=%lu\n\n", (unsigned long)pi[0].dwProcessId);
+        else printf("    FAILED, error %lu\n\n", GetLastError());
     }
 
-    /* Процесс 2: только второй параметр — итерации аргументом командной строки */
+    /* Process 2: lpCommandLine with argument */
     {
         char cmd[MAX_PATH + 16];
-        STARTUPINFOA si;
         snprintf(cmd, sizeof(cmd), "%s %s", child, iter);
-        ZeroMemory(&si, sizeof(si));
-        si.cb = sizeof(si);
-
         printf("[2] lpApplicationName=NULL, lpCommandLine=\"%s\"\n", cmd);
         ok[1] = CreateProcessA(NULL, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[1]);
-        if (ok[1]) {
-            printf("    процесс создан, PID=%lu\n\n", (unsigned long)pi[1].dwProcessId);
-        } else {
-            printf("    НЕ создан, код ошибки %lu\n\n", GetLastError());
-        }
+        if (ok[1]) printf("    created, PID=%lu\n\n", (unsigned long)pi[1].dwProcessId);
+        else printf("    FAILED, error %lu\n\n", GetLastError());
     }
 
-    /* Процесс 3: NULL вместо второго параметра; локальная ITER_NUM=%s */
+    /* Process 3: lpCommandLine=NULL, local ITER_NUM set before CreateProcess */
     {
-        STARTUPINFOA si;
-        ZeroMemory(&si, sizeof(si));
-        si.cb = sizeof(si);
-
         SetEnvironmentVariableA("ITER_NUM", LOCAL_ITER);
-
-        printf("[3] lpApplicationName=\"%s\", lpCommandLine=NULL — локальная ITER_NUM=%s\n", child, LOCAL_ITER);
+        printf("[3] lpApplicationName=\"%s\", lpCommandLine=NULL - local ITER_NUM=%s\n", child, LOCAL_ITER);
         ok[2] = CreateProcessA(child, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[2]);
-        if (ok[2]) {
-            printf("    процесс создан, PID=%lu\n\n", (unsigned long)pi[2].dwProcessId);
-        } else {
-            printf("    НЕ создан, код ошибки %lu\n\n", GetLastError());
+        if (ok[2]) printf("    created, PID=%lu\n\n", (unsigned long)pi[2].dwProcessId);
+        else printf("    FAILED, error %lu\n\n", GetLastError());
+    }
+
+    HANDLE h[3];
+    DWORD count = 0;
+    for (int i = 0; i < 3; i++) if (ok[i]) h[count++] = pi[i].hProcess;
+
+    printf("Parent waiting for %lu children...\n", count);
+    if (count > 0) WaitForMultipleObjects(count, h, TRUE, INFINITE);
+
+    for (int i = 0; i < 3; i++) {
+        if (ok[i]) {
+            DWORD code = 0;
+            GetExitCodeProcess(pi[i].hProcess, &code);
+            printf("Child %lu exited (code %lu)\n",
+                   (unsigned long)pi[i].dwProcessId, (unsigned long)code);
+            CloseHandle(pi[i].hProcess);
+            CloseHandle(pi[i].hThread);
         }
     }
 
-    /* Ожидание завершения всех созданных дочерних процессов */
-    {
-        HANDLE h[3];
-        DWORD count = 0;
-        for (i = 0; i < 3; i++) {
-            if (ok[i]) {
-                h[count++] = pi[i].hProcess;
-            }
-        }
-
-        printf("Родитель ожидает завершения дочерних процессов...\n");
-        if (count > 0) {
-            WaitForMultipleObjects(count, h, TRUE, INFINITE);
-        }
-
-        for (i = 0; i < 3; i++) {
-            if (ok[i]) {
-                DWORD code = 0;
-                GetExitCodeProcess(pi[i].hProcess, &code);
-                printf("Дочерний процесс %lu завершён (код %lu)\n",
-                       (unsigned long)pi[i].dwProcessId, (unsigned long)code);
-                CloseHandle(pi[i].hProcess);
-                CloseHandle(pi[i].hThread);
-            }
-        }
-    }
-
-    printf("Все созданные дочерние процессы завершены, родитель завершает работу.\n");
+    printf("All children done, parent exiting.\n");
+    if (pause) pause_before_exit();
     return 0;
 }
