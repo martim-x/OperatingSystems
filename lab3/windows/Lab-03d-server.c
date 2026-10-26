@@ -25,13 +25,9 @@ static void client_path(char *out, size_t cap)
     snprintf(out, cap, "%sLab-03d-client.exe", self);
 }
 
-static int should_pause(int argc, char *argv[])
+static int should_pause(void)
 {
-    if (GetEnvironmentVariableA("PAUSE_ON_EXIT", NULL, 0)) return 1;
-    for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--pause") == 0) return 1;
-    }
-    return 0;
+    return GetEnvironmentVariableA("PAUSE_ON_EXIT", NULL, 0) != 0;
 }
 
 static void pause_before_exit(void)
@@ -43,7 +39,7 @@ static void pause_before_exit(void)
 
 int main(int argc, char *argv[])
 {
-    int pause = should_pause(argc, argv);
+    int pause = should_pause();
 
     if (argc != 5) {
         fprintf(stderr, "Usage: %s <K> <M> <L> <R>\n", argv[0]);

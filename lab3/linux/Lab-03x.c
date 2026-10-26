@@ -3,13 +3,9 @@
 #include <unistd.h>
 #include <string.h>
 
-static int should_pause(int argc, char *argv[])
+static int should_pause(void)
 {
-    if (getenv("PAUSE_ON_EXIT")) return 1;
-    for (int i = 1; i < argc; i++) {
-        if (strcmp(argv[i], "--pause") == 0) return 1;
-    }
-    return 0;
+    return getenv("PAUSE_ON_EXIT") != NULL;
 }
 
 static void pause_before_exit(void)
@@ -22,7 +18,7 @@ static void pause_before_exit(void)
 int main(int argc, char *argv[])
 {
     int iterations;
-    int pause = should_pause(argc, argv);
+    int pause = should_pause();
 
     if (argc > 1 && strcmp(argv[1], "--pause") != 0) {
         iterations = atoi(argv[1]);
