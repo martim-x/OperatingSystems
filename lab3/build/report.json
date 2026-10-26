@@ -285,8 +285,8 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task15_procexp_pipe.png",
-      "caption": "Process Explorer: нижняя панель Handles родителя (Lab-03.exe, PID 4536) – дескрипторы двух дочерних процессов типа Process",
+      "file": "../windows/скрины/уровень_4-5/task16_procexp_handles.png",
+      "caption": "Process Explorer: нижняя панель Handles процесса Lab-03a – дескрипторы дочерних Lab-03x",
       "label": "fig3_win_16_pipe_45"
     },
     {
