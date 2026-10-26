@@ -84,7 +84,9 @@ def make_figures(figures, have_labels):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
+    ap.add_argument("--only", default="", help="через запятую: какие метки добавлять (по умолчанию все)")
     args = ap.parse_args()
+    only = {s.strip() for s in args.only.split(",") if s.strip()}
 
     data = json.load(open(REPORT, encoding="utf-8"))
     blocks = data["blocks"]
@@ -110,6 +112,12 @@ def main():
             print(f"!! не найден якорь для группы: {group.get('anchor_label') or group.get('anchor_text_prefix')}")
             continue
         suffix = group.get("strip_suffix")
+        if only:
+            figs = [f for f in figs if f["label"] in only]
+            if not figs:
+                continue
+            plan.append((anchor + 1, figs))
+            continue
         if suffix and blocks[anchor].get("text", "").endswith(suffix):
             blocks[anchor]["text"] = blocks[anchor]["text"][: -len(suffix)]
         new_blocks = [{"type": "p", "text": group["text"]}] + figs

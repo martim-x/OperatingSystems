@@ -269,6 +269,28 @@
     },
     {
       "type": "p",
+      "text": "Те же процессы видны из консоли командой tasklist (рисунок @рис:fig3_win_13_cmd); в Диспетчере задач по фильтру находится родительский Lab-03a (рисунок @рис:fig3_win_14_taskmgr). Дескрипторы родителя и двух дочерних процессов показаны в нижней панели Handles Process Explorer (рисунок @рис:fig3_win_16_pipe_45)."
+    },
+    {
+      "type": "figure",
+      "file": "../windows/скрины/уровень_4-5/task09_cmd.png",
+      "caption": "tasklist | findstr /i Lab-03: процессы Lab-03a и два Lab-03x с PID",
+      "label": "fig3_win_13_cmd"
+    },
+    {
+      "type": "figure",
+      "file": "../windows/скрины/уровень_4-5/task10_taskmgr.png",
+      "caption": "Диспетчер задач Windows: процесс Lab-03a.exe, найденный по фильтру «3a»",
+      "label": "fig3_win_14_taskmgr"
+    },
+    {
+      "type": "figure",
+      "file": "../windows/скрины/уровень_4-5/task15_procexp_pipe.png",
+      "caption": "Process Explorer: нижняя панель Handles родителя (Lab-03.exe, PID 4536) – дескрипторы двух дочерних процессов типа Process",
+      "label": "fig3_win_16_pipe_45"
+    },
+    {
+      "type": "p",
       "text": "Уровень 4–5 на Windows выполнен: процессы создаются, параметры передаются, информация получена."
     },
     {
@@ -299,7 +321,21 @@
     },
     {
       "type": "p",
-      "text": "В Process Explorer у детей виден дескриптор File (Pipe) – анонимный канал. Сервер ждёт всех детей (WaitForMultipleObjects). Уровень 7–8 на Windows выполнен."
+      "text": "В Process Explorer у детей виден дескриптор File (Pipe) – анонимный канал. Сервер ждёт всех детей (WaitForMultipleObjects)."
+    },
+    {
+      "type": "p",
+      "text": "Нижняя панель Handles в Process Explorer показывает и дескриптор канала типа File (\\Device\\NamedPipe), и дескрипторы запущенных процессов Lab-03d-client (рисунок @рис:fig3_win_17_pipe_78)."
+    },
+    {
+      "type": "figure",
+      "file": "../windows/скрины/уровень_7-8/task15_procexp_pipe.png",
+      "caption": "Process Explorer: дескриптор канала \\Device\\NamedPipe и дескрипторы процессов Lab-03d-client в нижней панели Handles",
+      "label": "fig3_win_17_pipe_78"
+    },
+    {
+      "type": "p",
+      "text": "Уровень 7–8 на Windows выполнен: канал анонимный, дескриптор наследуется потомком, сервер дождался всех детей и собрал результат."
     },
     {
       "type": "h2",
