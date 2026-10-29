@@ -244,7 +244,7 @@
     {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task06_lab03b_переменные_окружения.png",
-      "caption": "set \"ITER_NUM=5\" && Lab-03b.exe: глобальная 5, аргумент 5, локальная 3 — все три процесса созданы",
+      "caption": "Запуск Lab-03b.exe с ITER_NUM=5: глобальная 5, аргумент 5, локальная 3 – все три процесса созданы",
       "label": "fig3_win_06_lab03b"
     },
     {
@@ -286,7 +286,7 @@
     {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task16_procexp_handles.png",
-      "caption": "Process Explorer: нижняя панель Handles процесса Lab-03a — дескрипторы дочерних Lab-03x",
+      "caption": "Process Explorer: нижняя панель Handles процесса Lab-03a – дескрипторы дочерних Lab-03x",
       "label": "fig3_win_16_pipe_45"
     },
     {
