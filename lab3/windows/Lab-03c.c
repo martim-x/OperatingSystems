@@ -1,6 +1,6 @@
 #include <windows.h>
-#include <tlhelp32.h>
 #include <stdio.h>
+#include <tlhelp32.h>
 
 #include "console_ru.h"
 
@@ -11,7 +11,7 @@ static int should_pause(void)
 
 static void pause_before_exit(void)
 {
-    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    printf("PID=%lu: нажмите Enter для выхода...\n", (unsigned long)GetCurrentProcessId());
     fflush(stdout);
     getchar();
 }
@@ -22,14 +22,14 @@ int main(void)
 
     HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (snap == INVALID_HANDLE_VALUE) {
-        fprintf(stderr, "Error: CreateToolhelp32Snapshot (%lu)\n", GetLastError());
+        fprintf(stderr, "Ошибка: CreateToolhelp32Snapshot (%lu)\n", GetLastError());
         return 1;
     }
 
     PROCESSENTRY32 pe;
     pe.dwSize = sizeof(pe);
 
-    printf("%-38s %8s %8s\n", "Process Name", "PID", "PPID");
+    printf("%-38s %8s %8s\n", "Имя процесса", "PID", "PPID");
     printf("%-38s %8s %8s\n", "--------------------------------------", "--------", "--------");
 
     if (Process32First(snap, &pe)) {

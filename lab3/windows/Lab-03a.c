@@ -27,7 +27,7 @@ static int should_pause(void)
 
 static void pause_before_exit(void)
 {
-    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    printf("PID=%lu: нажмите Enter для выхода...\n", (unsigned long)GetCurrentProcessId());
     fflush(stdout);
     getchar();
 }
@@ -39,64 +39,68 @@ int main(void)
 
     char child[MAX_PATH];
     child_path(child, sizeof(child));
-    printf("Child program: %s (iterations: %s)\n\n", child, iter);
+    printf("Дочерняя программа: %s (количество итераций: %s)\n\n", child, iter);
 
     PROCESS_INFORMATION pi[3];
     BOOL ok[3] = {0};
     STARTUPINFOA si = {0};
     si.cb = sizeof(si);
 
-    /* Process 1: only lpApplicationName with arg (fails - error 2) */
+    /* Процесс 1: только lpApplicationName, количество итераций тоже в нём —
+       так задумано по методичке, ожидается ошибка 2. */
     {
         char app[MAX_PATH + 16];
         snprintf(app, sizeof(app), "%s %s", child, iter);
         printf("[1] lpApplicationName=\"%s\", lpCommandLine=NULL\n", app);
         ok[0] = CreateProcessA(app, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[0]);
-        if (ok[0]) printf("    created, PID=%lu\n\n", (unsigned long)pi[0].dwProcessId);
-        else printf("    FAILED, error %lu\n\n", GetLastError());
+        if (ok[0]) printf("    процесс создан, PID=%lu\n\n", (unsigned long)pi[0].dwProcessId);
+        else printf("    НЕ создан, код ошибки %lu\n\n", GetLastError());
     }
 
-    /* Process 2: only lpCommandLine */
+    /* Процесс 2: только lpCommandLine. */
     {
         char cmd[MAX_PATH + 16];
         snprintf(cmd, sizeof(cmd), "%s %s", child, iter);
         printf("[2] lpApplicationName=NULL, lpCommandLine=\"%s\"\n", cmd);
         ok[1] = CreateProcessA(NULL, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[1]);
-        if (ok[1]) printf("    created, PID=%lu\n\n", (unsigned long)pi[1].dwProcessId);
-        else printf("    FAILED, error %lu\n\n", GetLastError());
+        if (ok[1]) printf("    процесс создан, PID=%lu\n\n", (unsigned long)pi[1].dwProcessId);
+        else printf("    НЕ создан, код ошибки %lu\n\n", GetLastError());
     }
 
-    /* Process 3: lpApplicationName + lpCommandLine with leading space */
+    /* Процесс 3: имя в lpApplicationName, итерации в lpCommandLine.
+       Пробел в начале строки обязателен — иначе имя процесса уедет в argv[0]. */
     {
         char cmd[MAX_PATH + 16];
         snprintf(cmd, sizeof(cmd), " %s", iter);
         printf("[3] lpApplicationName=\"%s\", lpCommandLine=\"%s\"\n", child, cmd);
         ok[2] = CreateProcessA(child, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[2]);
-        if (ok[2]) printf("    created, PID=%lu\n\n", (unsigned long)pi[2].dwProcessId);
-        else printf("    FAILED, error %lu\n\n", GetLastError());
+        if (ok[2]) printf("    процесс создан, PID=%lu\n\n", (unsigned long)pi[2].dwProcessId);
+        else printf("    НЕ создан, код ошибки %lu\n\n", GetLastError());
     }
 
+    /* Родитель ждёт завершения всех дочерних процессов (они работают
+       одновременно) и только потом завершается сам. */
     HANDLE h[3];
     DWORD count = 0;
     for (int i = 0; i < 3; i++) {
         if (ok[i]) h[count++] = pi[i].hProcess;
     }
 
-    printf("Parent waiting for %lu children...\n", count);
+    printf("Родитель ожидает завершения дочерних процессов (%lu)...\n", count);
     if (count > 0) WaitForMultipleObjects(count, h, TRUE, INFINITE);
 
     for (int i = 0; i < 3; i++) {
         if (ok[i]) {
             DWORD code = 0;
             GetExitCodeProcess(pi[i].hProcess, &code);
-            printf("Child %lu exited (code %lu)\n",
+            printf("Дочерний процесс %lu завершён (код %lu)\n",
                    (unsigned long)pi[i].dwProcessId, (unsigned long)code);
             CloseHandle(pi[i].hProcess);
             CloseHandle(pi[i].hThread);
         }
     }
 
-    printf("All children done, parent exiting.\n");
+    printf("Все созданные дочерние процессы завершены, родитель завершает работу.\n");
     if (pause) pause_before_exit();
     return 0;
 }

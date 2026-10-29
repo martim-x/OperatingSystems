@@ -10,7 +10,7 @@ static int should_pause(void)
 
 static void pause_before_exit(void)
 {
-    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    printf("PID=%lu: нажмите Enter для выхода...\n", (unsigned long)GetCurrentProcessId());
     fflush(stdout);
     getchar();
 }
@@ -19,15 +19,17 @@ int main(void)
 {
     int pause = should_pause();
 
+    /* Единственный источник данных — заголовок консоли, который родитель
+       задал через STARTUPINFO.lpTitle. */
     char title[256];
     DWORD n = GetConsoleTitleA(title, sizeof(title));
 
     if (n == 0) {
-        fprintf(stderr, "Child: failed to read console title (%lu)\n", GetLastError());
+        fprintf(stderr, "Дочерний процесс: не удалось прочитать заголовок консоли (%lu)\n", GetLastError());
         return 1;
     }
 
-    printf("Child (PID=%lu): received via STARTUPINFO: %s\n",
+    printf("Дочерний процесс (PID=%lu): получено через STARTUPINFO: %s\n",
            (unsigned long)GetCurrentProcessId(), title);
     fflush(stdout);
 

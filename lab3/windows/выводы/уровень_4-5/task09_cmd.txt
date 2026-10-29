@@ -1,0 +1,6 @@
+﻿### COMMAND: tasklist | findstr /i "Lab-03"
+### OUTPUT:
+Lab-03a.exe                   6188 Console                    1     8 032 КБ
+Lab-03x.exe                  11080 Console                    1     5 196 КБ
+Lab-03x.exe                  10496 Console                    1     5 200 КБ
+

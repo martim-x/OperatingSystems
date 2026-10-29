@@ -1,0 +1,179 @@
+{
+  "lab": "ЛР3, Windows-часть",
+  "run": "2026-10-29",
+  "note": "status=новый — кадр снят в прогоне 2026-10-29 на сборке без аргументов командной строки; status=старый — кадр прежней сборки, в отчёте не используется. Поле file_time — время файла в репозитории (для кадров 20:02 это время копирования пачки), фактический диапазон съёмки указан в run_window. Кадр task08_procexp.png (прежняя сборка, в отчёте не используется) удалён 29.10.2026.",
+  "items": [
+    {
+      "file": "скрины/windows/уровень_4-5/task01_сборка.png",
+      "status": "новый",
+      "content": "cmd /c C:\\lab3\\build.cmd → === BUILD OK ===, 8 exe",
+      "size": 274488,
+      "px": "2100x1094",
+      "sha256": "925cf2e654bf6fb3",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task02_lab03x_аргумент.png",
+      "status": "новый",
+      "content": "Lab-03x.exe 5 → 5 итераций с PID",
+      "size": 289724,
+      "px": "2100x1094",
+      "sha256": "b4b68ad53f9a3744",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task03_lab03x_окружение.png",
+      "status": "новый",
+      "content": "set \"ITER_NUM=7\" && Lab-03x.exe → 7 итераций",
+      "size": 110980,
+      "px": "2100x1253",
+      "sha256": "4f7659d7550abfb9",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task04_lab03x_ошибка.png",
+      "status": "новый",
+      "content": "Lab-03x.exe & echo Код возврата → ошибка, код 1",
+      "size": 74141,
+      "px": "2100x1253",
+      "sha256": "2aa512ac616f4c43",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task05_lab03a_три_процесса.png",
+      "status": "новый",
+      "content": "Lab-03a.exe (без аргументов) → [1] ошибка 2, [2] и [3] созданы",
+      "size": 355907,
+      "px": "2100x1253",
+      "sha256": "959b9224d6fcc283",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task06_lab03b_переменные_окружения.png",
+      "status": "новый",
+      "content": "set \"ITER_NUM=5\" && Lab-03b.exe → глобальная 5, локальная 3",
+      "size": 391530,
+      "px": "2100x1253",
+      "sha256": "672b0bd0b68c240c",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task07_lab03c_список_процессов.png",
+      "status": "новый",
+      "content": "Lab-03c.exe → таблица имя/PID/PPID, Lab-03c 8336 из cmd 7244",
+      "size": 117628,
+      "px": "2100x1253",
+      "sha256": "7c3eeb83a0f7c655",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task09_cmd.png",
+      "status": "новый",
+      "content": "tasklist | findstr /i \"Lab-03\" → Lab-03a 6188, Lab-03x 11080/10496",
+      "size": 79921,
+      "px": "2100x1253",
+      "sha256": "b1ca02b0f6a7394b",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task10_taskmgr.png",
+      "status": "новый",
+      "content": "Диспетчер задач, вкладка «Подробности», поиск Lab → 10120, 4600, 10476 (снимок пользователя)",
+      "size": 235722,
+      "px": "2200x992",
+      "sha256": "e2de71bac48286a3",
+      "file_time": "2026-10-29 21:01"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task11_three_proc.png",
+      "status": "новый",
+      "content": "Process Explorer, фильтр Lab-03 → Lab-03a 10120 + Lab-03x 10476, 4600",
+      "size": 122192,
+      "px": "2200x1334",
+      "sha256": "36cd4c427f2b3ea7",
+      "file_time": "2026-10-29 21:08"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task15_procexp_pipe.png",
+      "status": "новый",
+      "content": "PE, Handles Lab-03a до конца списка: File/Key/Directory, канала нет",
+      "size": 696614,
+      "px": "2200x1334",
+      "sha256": "99f2013081dd5edb",
+      "file_time": "2026-10-29 21:08"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task16_procexp_handles.png",
+      "status": "новый",
+      "content": "PE, Handles Lab-03a: Process→Lab-03x(10476), Process→Lab-03x(4600), Thread",
+      "size": 698874,
+      "px": "2200x1334",
+      "sha256": "085ec52ec055a08e",
+      "file_time": "2026-10-29 21:08"
+    },
+    {
+      "file": "скрины/windows/уровень_7-8/task08_lab03d_клиент.png",
+      "status": "новый",
+      "content": "Lab-03d-client.exe 10 1 30 → CHUNK 3636 12 0 ...",
+      "size": 616540,
+      "px": "2100x1477",
+      "sha256": "82f57e46ef0fc35e",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_7-8/task09_lab03d_сервер_3.png",
+      "status": "новый",
+      "content": "Lab-03d-server.exe 3 10 1 100 → 40 чисел",
+      "size": 191500,
+      "px": "2100x1253",
+      "sha256": "5d60d76c9ad3a331",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_7-8/task10_lab03d_сервер_4.png",
+      "status": "новый",
+      "content": "Lab-03d-server.exe 4 7 10 100 → 78 чисел",
+      "size": 248772,
+      "px": "2100x1253",
+      "sha256": "b6a37511b989f96b",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_7-8/task15_procexp_pipe.png",
+      "status": "новый",
+      "content": "PE, Handles сервера: File \\Device\\NamedPipe + 3×Process на Lab-03d-client",
+      "size": 516653,
+      "px": "2200x1334",
+      "sha256": "2f62184c56ff58d0",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_7-8/task16_procexp_handles.png",
+      "status": "новый",
+      "content": "PE, Handles сервера: 3×Process Lab-03d-client(772,6044,4764)",
+      "size": 516052,
+      "px": "2200x1334",
+      "sha256": "cf2cf0994e7b6033",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_9-10/task11_startupinfo_hello.png",
+      "status": "новый",
+      "content": "Lab-03hello-parent.exe → дочернее окно «Hello, my dear child!»",
+      "size": 30720,
+      "px": "2056x1290",
+      "sha256": "1ea18e338b0a210e",
+      "file_time": "2026-10-29 20:02"
+    },
+    {
+      "file": "скрины/windows/уровень_9-10/task12_список_exe.png",
+      "status": "новый",
+      "content": "dir /b *.exe → 8 исполняемых файлов",
+      "size": 91488,
+      "px": "2100x1253",
+      "sha256": "b806d12180277a62",
+      "file_time": "2026-10-29 20:02"
+    }
+  ],
+  "run_window": "29.10.2026, 19:11–21:08 (консольные кадры 19:11–20:02, Process Explorer 21:08, Диспетчер задач 20:59 — снимок пользователя)"
+}

@@ -232,13 +232,9 @@
       "text": "Lab-03a: три CreateProcess для Lab-03x.exe разными способами: (1) только lpApplicationName, (2) только lpCommandLine, (3) lpApplicationName + lpCommandLine с пробелом. Проверено: (1) – ошибка 2 (файл не найден), (2) и (3) – работают. На рисунке @рис:fig3_win_05_lab03a."
     },
     {
-      "type": "p",
-      "text": "Приложение Lab-03a аргументов командной строки не принимает: количество итераций дочерним процессам задано константой 5, что соответствует структуре вызова из методички. На рисунке @рис:fig3_win_05_lab03a зафиксирован снимок, сделанный до унификации, когда аргумент ещё принимался."
-    },
-    {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task05_lab03a_три_процесса.png",
-      "caption": "Lab-03a.exe 3: два успешных процесса (2 и 3), первый – ошибка 2",
+      "caption": "Lab-03a.exe (без аргументов командной строки): [1] ошибка 2, [2] и [3] созданы, по 5 итераций",
       "label": "fig3_win_05_lab03a"
     },
     {
@@ -246,13 +242,9 @@
       "text": "Lab-03b: переменные окружения. (1) Только exe – глобальная ITER_NUM (нет → ошибка). (2) lpCommandLine с аргументом – работает. (3) SetEnvironmentVariable(«ITER_NUM», «3») перед вызовом – локальная переменная наследуется, итерации = 3. На рисунке @рис:fig3_win_06_lab03b."
     },
     {
-      "type": "p",
-      "text": "Приложение Lab-03b также не принимает аргументов командной строки: итерации определяются переменной окружения ITER_NUM, локальное значение равно 3 и отличается от глобального. Снимок на рисунке @рис:fig3_win_06_lab03b сделан до унификации структуры вызова."
-    },
-    {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task06_lab03b_переменные_окружения.png",
-      "caption": "Lab-03b.exe 3: глобальная ITER_NUM не задана (ошибка), аргумент работает (3), локальная ITER_NUM=3 работает (3)",
+      "caption": "set \"ITER_NUM=5\" && Lab-03b.exe: глобальная 5, аргумент 5, локальная 3 — все три процесса созданы",
       "label": "fig3_win_06_lab03b"
     },
     {
@@ -262,7 +254,7 @@
     {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task07_lab03c_список_процессов.png",
-      "caption": "Lab-03c.exe: таблица процессов (имя, PID, PPID), Lab-03c.exe (PID=1424), родитель cmd.exe (PID=5084)",
+      "caption": "Lab-03c.exe: таблица процессов (имя, PID, PPID), Lab-03c.exe (PID=8336) из cmd.exe (PID=7244)",
       "label": "fig3_win_07_lab03c"
     },
     {
@@ -272,7 +264,7 @@
     {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task11_three_proc.png",
-      "caption": "Три одновременных процесса: родитель Lab-03a и два дочерних Lab-03x",
+      "caption": "Три одновременных процесса: Lab-03a.exe (PID 10120) и два дочерних Lab-03x.exe (PID 10476, 4600)",
       "label": "fig3_win_08_three_proc"
     },
     {
@@ -288,13 +280,13 @@
     {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task10_taskmgr.png",
-      "caption": "Диспетчер задач Windows: процесс Lab-03a.exe, найденный по фильтру «3a»",
+      "caption": "Диспетчер задач, вкладка «Подробности», поиск «Lab»: Lab-03a.exe (10120) и два Lab-03x.exe (4600, 10476)",
       "label": "fig3_win_14_taskmgr"
     },
     {
       "type": "figure",
       "file": "скрины/windows/уровень_4-5/task16_procexp_handles.png",
-      "caption": "Process Explorer: нижняя панель Handles процесса Lab-03a – дескрипторы дочерних Lab-03x",
+      "caption": "Process Explorer: нижняя панель Handles процесса Lab-03a — дескрипторы дочерних Lab-03x",
       "label": "fig3_win_16_pipe_45"
     },
     {
@@ -338,7 +330,7 @@
     {
       "type": "figure",
       "file": "скрины/windows/уровень_7-8/task15_procexp_pipe.png",
-      "caption": "Process Explorer: дескриптор канала \\Device\\NamedPipe и дескрипторы процессов Lab-03d-client в нижней панели Handles",
+      "caption": "Process Explorer: у сервера дескриптор канала File \\Device\\NamedPipe и дескрипторы трёх процессов Lab-03d-client",
       "label": "fig3_win_17_pipe_78"
     },
     {

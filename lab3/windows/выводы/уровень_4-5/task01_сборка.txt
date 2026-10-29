@@ -6,7 +6,6 @@ Lab-03x.c
 Lab-03a.c
 === Lab-03b.c ===
 Lab-03b.c
-Lab-03b.c(48): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 === Lab-03c.c ===
 Lab-03c.c
 === Lab-03d-client.c ===

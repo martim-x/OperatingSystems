@@ -30,6 +30,7 @@ public class W32 {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)] public string FaceName;
     }
     [DllImport("user32.dll")] public static extern bool EnumWindows(EnumProc cb, IntPtr p);
+    [DllImport("user32.dll")] public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
     [DllImport("user32.dll", CharSet = CharSet.Unicode)] public static extern int GetClassName(IntPtr h, System.Text.StringBuilder sb, int n);
     [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
     public delegate bool EnumProc(IntPtr h, IntPtr p);
@@ -121,6 +122,19 @@ public class W32 {
         SetConsoleScreenBufferSize(outH, new COORD { X = 220, Y = 70 });
         ShowWindow(GetConsoleWindow(), 3);
     }
+    // Поднять окно консоли на передний план и развернуть его.
+    // SetForegroundWindow из фонового процесса возвращает "успех", а окно
+    // остаётся позади, поэтому используется приём ALT + TOPMOST с проверкой.
+    public static bool FocusHwnd(IntPtr h) {
+        if (h == IntPtr.Zero) return false;
+        ShowWindow(h, 3);
+        keybd_event(0x12, 0, 0, UIntPtr.Zero);
+        SetWindowPos(h, new IntPtr(-1), 0, 0, 0, 0, 0x0001 | 0x0002);
+        SetForegroundWindow(h);
+        SetWindowPos(h, new IntPtr(-2), 0, 0, 0, 0, 0x0001 | 0x0002);
+        keybd_event(0x12, 0, 2, UIntPtr.Zero);
+        return GetForegroundWindow() == h;
+    }
     public static void Focus() {
         IntPtr h = GetConsoleWindow();
         ShowWindow(h, 3);
@@ -152,6 +166,16 @@ function W([string]$m) {
     # log to file only: console text would end up inside the captured frame
     $line = "{0} {1}" -f (Get-Date -Format "HH:mm:ss"), $m
     Add-Content -Path $LOG -Value $line -Encoding UTF8
+}
+
+# Развернуть и поднять окно консоли. GetConsoleWindow() в Windows Terminal
+# указывает на служебное окно, поэтому ищем настоящий хост по классу.
+function FocusConsole {
+    $r = [W32]::FindConsoleRect()
+    if ($r[0] -lt 0) { try { [W32]::Focus() } catch { }; return }
+    $ok = [W32]::FocusHwnd([W32]::ConsoleHwnd)
+    Start-Sleep -Milliseconds 350
+    if (-not $ok) { W "focus not taken" }
 }
 
 # Capture the console CLIENT area so the terminal fills the frame.
@@ -401,7 +425,7 @@ while ($true) {
     W "запуск $runFile, тело $body".Replace("`r`n", " / ")
 
     if ($isWin) {
-        [W32]::Focus()
+        FocusConsole
         Start-Sleep -Milliseconds 300
         cmd /c call $runFile | Out-Null
         Start-Sleep -Milliseconds 1200
@@ -428,10 +452,10 @@ while ($true) {
     if ($isGui) {
         # Рисуем промпт ДО запуска (консоль ещё в фокусе), затем запускаем:
         # окно команды появится поверх и попадёт в снимок.
-        [W32]::Focus()
+        FocusConsole
         Start-Sleep -Milliseconds 400
         Clear-Host
-        Write-Wrapped "[User-6d4ec851@DESKTOP-9KMRHJ8 OS3]`$ $cmd" -Color Green -Indent 0
+        Write-Wrapped "C:\lab3>$cmd" -Color Green -Indent 0
         Write-Host ""
         cmd /c call $runFile
         Start-Sleep -Milliseconds 1000
@@ -464,14 +488,14 @@ while ($true) {
     # The console window must be active before repainting: while it is in the
     # background, Clear-Host/Write-Host are deferred and the screenshot ends up
     # showing the previous command instead of the current one.
-    [W32]::Focus()
+    FocusConsole
     Start-Sleep -Milliseconds 400
 
     # Build the visible frame: prompt, typed input, output.
     # Long paths do not wrap in the console, so wrap them ourselves,
     # otherwise the right part of the command is cut off in the screenshot.
     Clear-Host
-    $prompt = "[User-6d4ec851@DESKTOP-9KMRHJ8 OS3]`$ $cmd"
+    $prompt = "C:\lab3>$cmd"
     Write-Wrapped $prompt -Color Green -Indent 0
     if (Test-Path $inFile) {
         Write-Host ($oenc.GetString([System.IO.File]::ReadAllBytes($inFile)).TrimEnd())

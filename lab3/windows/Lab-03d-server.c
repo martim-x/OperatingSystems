@@ -32,7 +32,7 @@ static int should_pause(void)
 
 static void pause_before_exit(void)
 {
-    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    printf("PID=%lu: нажмите Enter для выхода...\n", (unsigned long)GetCurrentProcessId());
     fflush(stdout);
     getchar();
 }
@@ -41,8 +41,9 @@ int main(int argc, char *argv[])
 {
     int pause = should_pause();
 
+    /* Структура вызова: Lab-03d-server <K> <Число M> <Нижний порог> <Верхний порог> */
     if (argc != 5) {
-        fprintf(stderr, "Usage: %s <K> <M> <L> <R>\n", argv[0]);
+        fprintf(stderr, "Использование: %s <K> <M> <L> <R>\n", argv[0]);
         return 1;
     }
 
@@ -52,7 +53,7 @@ int main(int argc, char *argv[])
     int r = atoi(argv[4]);
 
     if (k < 1 || m <= 0 || l < 1 || l > r) {
-        fprintf(stderr, "Error: K >= 1, M > 0, L >= 1, L <= R required\n");
+        fprintf(stderr, "Ошибка: требуется K >= 1, M > 0, L >= 1, L <= R\n");
         return 1;
     }
 
@@ -61,20 +62,21 @@ int main(int argc, char *argv[])
 
     double t0 = now_seconds();
 
+    /* Анонимный канал: дескриптор записи наследуется дочерними процессами. */
     SECURITY_ATTRIBUTES sa = {0};
     sa.nLength = sizeof(sa);
     sa.bInheritHandle = TRUE;
 
     HANDLE hRead, hWrite;
     if (!CreatePipe(&hRead, &hWrite, &sa, 0)) {
-        fprintf(stderr, "Error: CreatePipe (%lu)\n", GetLastError());
+        fprintf(stderr, "Ошибка: CreatePipe (%lu)\n", GetLastError());
         return 1;
     }
     SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);
 
     HANDLE *procs = malloc((size_t)k * sizeof(HANDLE));
     if (!procs) {
-        fprintf(stderr, "Error: malloc failed\n");
+        fprintf(stderr, "Ошибка: не удалось выделить память\n");
         return 1;
     }
     int created = 0;
@@ -84,6 +86,8 @@ int main(int argc, char *argv[])
     int remainder = total % k;
     int subL = l;
 
+    /* Диапазон [L, R] делится на K равных частей, каждый дочерний процесс
+       обрабатывает свой поддиапазон. */
     for (int i = 0; i < k; i++) {
         int subR = subL + chunk - 1 + (i < remainder ? 1 : 0);
         if (i == k - 1) subR = r;
@@ -101,11 +105,11 @@ int main(int argc, char *argv[])
         snprintf(cmd, sizeof(cmd), "\"%s\" %d %d %d", client, m, subL, subR);
 
         if (!CreateProcessA(NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {
-            fprintf(stderr, "Error: CreateProcess for [%d, %d] (%lu)\n", subL, subR, GetLastError());
+            fprintf(stderr, "Ошибка: CreateProcess для [%d, %d] (%lu)\n", subL, subR, GetLastError());
         } else {
             CloseHandle(pi.hThread);
             procs[created++] = pi.hProcess;
-            printf("Started child %lu: range [%d, %d]\n",
+            printf("Запущен дочерний процесс %lu: поддиапазон [%d, %d]\n",
                    (unsigned long)pi.dwProcessId, subL, subR);
         }
         subL = subR + 1;
@@ -116,11 +120,13 @@ int main(int argc, char *argv[])
     size_t cap = 1 << 16;
     char *data = malloc(cap);
     if (!data) {
-        fprintf(stderr, "Error: malloc failed\n");
+        fprintf(stderr, "Ошибка: не удалось выделить память\n");
         return 1;
     }
     size_t used = 0;
 
+    /* Читаем канал до EOF: EOF наступает, когда все дочерние процессы
+       закрыли унаследованный дескриптор записи. */
     for (;;) {
         DWORD got = 0;
         if (used + 4096 >= cap) {
@@ -137,6 +143,7 @@ int main(int argc, char *argv[])
     data[used] = '\0';
     CloseHandle(hRead);
 
+    /* Программа не может быть завершена, пока не завершены все дочерние. */
     if (created > 0) {
         WaitForMultipleObjects((DWORD)created, procs, TRUE, INFINITE);
     }
@@ -145,11 +152,12 @@ int main(int argc, char *argv[])
 
     int *all = malloc(MAX_NUMBERS * sizeof(int));
     if (!all) {
-        fprintf(stderr, "Error: malloc failed\n");
+        fprintf(stderr, "Ошибка: не удалось выделить память\n");
         return 1;
     }
     int total_found = 0;
 
+    /* Разбор строк CHUNK <PID> <количество> 0 <числа...> */
     char *line = data;
     while (line && *line) {
         char *nl = strchr(line, '\n');
@@ -169,14 +177,14 @@ int main(int argc, char *argv[])
 
     double t1 = now_seconds();
 
-    printf("M: %d\n", m);
-    printf("Range [L, R]: [%d, %d]\n", l, r);
-    printf("Processes K: %d\n", k);
-    printf("Total found: %d\n", total_found);
-    printf("Numbers:");
+    printf("Число M: %d\n", m);
+    printf("Диапазон [L, R]: [%d, %d]\n", l, r);
+    printf("Количество процессов K: %d\n", k);
+    printf("Общее количество найденных чисел: %d\n", total_found);
+    printf("Найденные числа:");
     for (int i = 0; i < total_found; i++) printf(" %d", all[i]);
     printf("\n");
-    printf("Time: %.6f s\n", t1 - t0);
+    printf("Время работы: %.6f с\n", t1 - t0);
 
     free(all);
 

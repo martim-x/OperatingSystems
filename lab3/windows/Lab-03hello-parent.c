@@ -23,7 +23,7 @@ static int should_pause(void)
 
 static void pause_before_exit(void)
 {
-    printf("PID=%lu: press Enter to exit...\n", (unsigned long)GetCurrentProcessId());
+    printf("PID=%lu: нажмите Enter для выхода...\n", (unsigned long)GetCurrentProcessId());
     fflush(stdout);
     getchar();
 }
@@ -35,9 +35,11 @@ int main(void)
     char child[MAX_PATH];
     child_path(child, sizeof(child));
 
-    printf("Parent: passing string via STARTUPINFO:\n");
+    printf("Родитель: передаю дочернему процессу через STARTUPINFO строку:\n");
     printf("          \"%s\"\n", PHRASE);
 
+    /* Фраза уходит в поле lpTitle; Windows применяет его как заголовок окна
+       только при создании новой консоли (CREATE_NEW_CONSOLE). */
     STARTUPINFOA si = {0};
     si.cb = sizeof(si);
     si.lpTitle = (LPSTR)PHRASE;
@@ -45,12 +47,12 @@ int main(void)
     PROCESS_INFORMATION pi = {0};
 
     if (!CreateProcessA(child, NULL, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
-        fprintf(stderr, "Error: CreateProcess (%lu)\n", GetLastError());
+        fprintf(stderr, "Ошибка: CreateProcess (%lu)\n", GetLastError());
         return 1;
     }
 
-    printf("Parent: child created, PID=%lu\n", (unsigned long)pi.dwProcessId);
-    printf("Parent: phrase passed via STARTUPINFO (lpTitle).\n");
+    printf("Родитель: дочерний процесс создан, PID=%lu\n", (unsigned long)pi.dwProcessId);
+    printf("Родитель: фраза передана через STARTUPINFO (lpTitle).\n");
 
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
