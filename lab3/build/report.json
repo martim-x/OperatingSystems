@@ -49,7 +49,7 @@
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task01_сборка.png",
+      "file": "скрины/linux/уровень_4-5/task01_сборка.png",
       "caption": "Сборка Linux-приложений: Lab-03x, Lab-03a, Lab-03d-client, Lab-03d-server, Lab-03sig",
       "label": "fig3_linux_01_build"
     },
@@ -71,19 +71,19 @@
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task02_цикл_аргумент.png",
+      "file": "скрины/linux/уровень_4-5/task02_цикл_аргумент.png",
       "caption": "Lab-03x с аргументом: 5 итераций, вывод PID",
       "label": "fig3_linux_02_arg"
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task03_цикл_переменная.png",
+      "file": "скрины/linux/уровень_4-5/task03_цикл_переменная.png",
       "caption": "Lab-03x через ITER_NUM=7: 7 итераций",
       "label": "fig3_linux_03_env"
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task04_цикл_ошибка.png",
+      "file": "скрины/linux/уровень_4-5/task04_цикл_ошибка.png",
       "caption": "Lab-03x без параметров: ошибка, код возврата 1",
       "label": "fig3_linux_04_err"
     },
@@ -93,7 +93,7 @@
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task05_два_дочерних.png",
+      "file": "скрины/linux/уровень_4-5/task05_два_дочерних.png",
       "caption": "Lab-03a: два дочерних процесса работают параллельно, родитель ждёт",
       "label": "fig3_linux_05_two_children"
     },
@@ -103,19 +103,19 @@
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task06_ps_дерево.png",
+      "file": "скрины/linux/уровень_4-5/task06_ps_дерево.png",
       "caption": "Дерево процессов: ps -ef показывает родительские связи (PPID)",
       "label": "fig3_linux_06_ps_tree"
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task07_proc_статус.png",
+      "file": "скрины/linux/уровень_4-5/task07_proc_статус.png",
       "caption": "Информация из /proc/<PID>/status: State, Pid, PPid, Uid, Gid",
       "label": "fig3_linux_07_proc"
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_4-5/task12_итоговый_состав.png",
+      "file": "скрины/linux/уровень_4-5/task12_итоговый_состав.png",
       "caption": "Содержимое каталога /proc/<PID>: fd, environ, cmdline, status",
       "label": "fig3_linux_08_proc_dir"
     },
@@ -133,19 +133,19 @@
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_7-8/task08_клиент_результат.png",
+      "file": "скрины/linux/уровень_7-8/task08_клиент_результат.png",
       "caption": "Lab-03d-client: M=10, диапазон 1–30, найдены числа, вывод в канал",
       "label": "fig3_linux_09_client"
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_7-8/task09_сервер_3_процесса.png",
+      "file": "скрины/linux/уровень_7-8/task09_сервер_3_процесса.png",
       "caption": "Lab-03d-server K=3, M=10, 1–100: 40 чисел, время 0.004 с",
       "label": "fig3_linux_10_server3"
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_7-8/task10_сервер_4_процесса.png",
+      "file": "скрины/linux/уровень_7-8/task10_сервер_4_процесса.png",
       "caption": "Lab-03d-server K=4, M=7, 10–100: результат с 4 поддиапазонами",
       "label": "fig3_linux_11_server4"
     },
@@ -163,7 +163,7 @@
     },
     {
       "type": "figure",
-      "file": "../linux/скрины/уровень_9-10/task11_sigint_демо.png",
+      "file": "скрины/linux/уровень_9-10/task11_sigint_демо.png",
       "caption": "Lab-03sig: два Ctrl+C (SIGINT) перехвачены, программа жива, завершается только SIGKILL",
       "label": "fig3_linux_12_sigint"
     },
@@ -193,7 +193,7 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task01_сборка.png",
+      "file": "скрины/windows/уровень_4-5/task01_сборка.png",
       "caption": "Сборка 8 Windows-приложений: Lab-03x, Lab-03a, Lab-03b, Lab-03c, Lab-03d-client, Lab-03d-server, Lab-03hello-parent, Lab-03hello-child",
       "label": "fig3_win_01_build"
     },
@@ -211,19 +211,19 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task02_lab03x_аргумент.png",
+      "file": "скрины/windows/уровень_4-5/task02_lab03x_аргумент.png",
       "caption": "Lab-03x.exe 5: 5 итераций, вывод PID",
       "label": "fig3_win_02_arg"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task03_lab03x_окружение.png",
+      "file": "скрины/windows/уровень_4-5/task03_lab03x_окружение.png",
       "caption": "Lab-03x.exe через set ITER_NUM=7: 7 итераций",
       "label": "fig3_win_03_env"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task04_lab03x_ошибка.png",
+      "file": "скрины/windows/уровень_4-5/task04_lab03x_ошибка.png",
       "caption": "Lab-03x.exe без параметров: ошибка, код возврата 1",
       "label": "fig3_win_04_err"
     },
@@ -237,7 +237,7 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task05_lab03a_три_процесса.png",
+      "file": "скрины/windows/уровень_4-5/task05_lab03a_три_процесса.png",
       "caption": "Lab-03a.exe 3: два успешных процесса (2 и 3), первый – ошибка 2",
       "label": "fig3_win_05_lab03a"
     },
@@ -251,7 +251,7 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task06_lab03b_переменные_окружения.png",
+      "file": "скрины/windows/уровень_4-5/task06_lab03b_переменные_окружения.png",
       "caption": "Lab-03b.exe 3: глобальная ITER_NUM не задана (ошибка), аргумент работает (3), локальная ITER_NUM=3 работает (3)",
       "label": "fig3_win_06_lab03b"
     },
@@ -261,7 +261,7 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task07_lab03c_список_процессов.png",
+      "file": "скрины/windows/уровень_4-5/task07_lab03c_список_процессов.png",
       "caption": "Lab-03c.exe: таблица процессов (имя, PID, PPID), Lab-03c.exe (PID=1424), родитель cmd.exe (PID=5084)",
       "label": "fig3_win_07_lab03c"
     },
@@ -271,7 +271,7 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task11_three_proc.png",
+      "file": "скрины/windows/уровень_4-5/task11_three_proc.png",
       "caption": "Три одновременных процесса: родитель Lab-03a и два дочерних Lab-03x",
       "label": "fig3_win_08_three_proc"
     },
@@ -281,19 +281,19 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task09_cmd.png",
+      "file": "скрины/windows/уровень_4-5/task09_cmd.png",
       "caption": "tasklist | findstr /i Lab-03: процессы Lab-03a и два Lab-03x с PID",
       "label": "fig3_win_13_cmd"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task10_taskmgr.png",
+      "file": "скрины/windows/уровень_4-5/task10_taskmgr.png",
       "caption": "Диспетчер задач Windows: процесс Lab-03a.exe, найденный по фильтру «3a»",
       "label": "fig3_win_14_taskmgr"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_4-5/task16_procexp_handles.png",
+      "file": "скрины/windows/уровень_4-5/task16_procexp_handles.png",
       "caption": "Process Explorer: нижняя панель Handles процесса Lab-03a – дескрипторы дочерних Lab-03x",
       "label": "fig3_win_16_pipe_45"
     },
@@ -311,19 +311,19 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_7-8/task08_lab03d_клиент.png",
+      "file": "скрины/windows/уровень_7-8/task08_lab03d_клиент.png",
       "caption": "Lab-03d-client.exe 10 1 30: найдены числа, вывод в канал",
       "label": "fig3_win_09_client"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_7-8/task09_lab03d_сервер_3.png",
+      "file": "скрины/windows/уровень_7-8/task09_lab03d_сервер_3.png",
       "caption": "Lab-03d-server.exe 3 10 1 100: K=3, 40 чисел, время 0.035 с",
       "label": "fig3_win_10_server3"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_7-8/task10_lab03d_сервер_4.png",
+      "file": "скрины/windows/уровень_7-8/task10_lab03d_сервер_4.png",
       "caption": "Lab-03d-server.exe 4 7 10 100: K=4, другой M и диапазон",
       "label": "fig3_win_11_server4"
     },
@@ -337,7 +337,7 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_7-8/task15_procexp_pipe.png",
+      "file": "скрины/windows/уровень_7-8/task15_procexp_pipe.png",
       "caption": "Process Explorer: дескриптор канала \\Device\\NamedPipe и дескрипторы процессов Lab-03d-client в нижней панели Handles",
       "label": "fig3_win_17_pipe_78"
     },
@@ -355,13 +355,13 @@
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_9-10/task11_startupinfo_hello.png",
+      "file": "скрины/windows/уровень_9-10/task11_startupinfo_hello.png",
       "caption": "Lab-03hello-parent.exe: родитель создаёт дочерний с CREATE_NEW_CONSOLE и lpTitle; дочернее окно показывает фразу",
       "label": "fig3_win_12_hello"
     },
     {
       "type": "figure",
-      "file": "../windows/скрины/уровень_9-10/task12_список_exe.png",
+      "file": "скрины/windows/уровень_9-10/task12_список_exe.png",
       "caption": "Список собранных exe в C:\\lab3",
       "label": "fig3_win_13_ls"
     },

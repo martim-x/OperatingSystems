@@ -76,7 +76,7 @@ def make_figures(figures, have_labels):
             continue
         if os.path.getsize(path) < 100_000:   # плейсхолдер, а не кадр
             continue
-        out.append({"type": "figure", "file": "../windows/скрины/" + rel,
+        out.append({"type": "figure", "file": "скрины/windows/" + rel,
                     "caption": caption, "label": label})
     return out
 

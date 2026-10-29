@@ -13,3 +13,20 @@
 - `lectures/` — лекции.
 - `labs/` — задания лабораторных работ.
 - `labN/` — решения и рабочие материалы по конкретным ЛР.
+
+### Состав папки `labN/`
+
+| Элемент | Назначение |
+|---|---|
+| `README.md` | теория и ответы на вопросы к ЛР |
+| `labN.docx`, `labN.pdf` | отчёт по ЛР (docx — сдаваемый, pdf — контроль вёрстки) |
+| `build/report.json` | исходник отчёта для `BstuReportBuilder` |
+| `build/скрины/` | все скриншоты: `linux/уровень_X/`, `windows/уровень_X/` |
+| `linux/`, `windows/` | код, сценарии, `выводы/` (фактический вывод программ) |
+
+Отчёт пересобирается из корня репозитория `BstuReportBuilder`:
+
+```bash
+cd ~/Documents/VisualStudioCodeRepos/BstuReportBuilder
+/opt/homebrew/bin/python3 -m app build <путь>/labN/build/report.json -o <путь>/labN/labN.docx --check --pdf
+```
