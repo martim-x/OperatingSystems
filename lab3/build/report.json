@@ -89,16 +89,6 @@
     },
     {
       "type": "p",
-      "text": "Lab-03a создаёт два дочерних Lab-03x: первый – аргумент 5, второй – ITER_NUM=8. Родитель ждёт оба (waitpid). Параллельная работа на рисунке @рис:fig3_linux_05_two_children."
-    },
-    {
-      "type": "figure",
-      "file": "скрины/linux/уровень_4-5/task05_два_дочерних_(С аргументом).png",
-      "caption": "Lab-03a: два дочерних процесса работают параллельно, родитель ждёт (первый – аргумент 5)",
-      "label": "fig3_linux_05_two_children"
-    },
-    {
-      "type": "p",
       "text": "Анализ дерева процессов: ps -ef и /proc. Дерево на рисунке @рис:fig3_linux_06_ps_tree (родитель Lab-03a, два дочерних Lab-03x, состояния S/R, PPID). /proc/<PID>/status на рисунке @рис:fig3_linux_07_proc (State, Pid, PPid, Uid, Gid). Содержимое /proc/<PID> на рисунке @рис:fig3_linux_08_proc_dir (fd, environ, cmdline, status). Проверки пройдены."
     },
     {
