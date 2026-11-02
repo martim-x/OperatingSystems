@@ -28,12 +28,12 @@
         "реализовать Lab-03d-client / Lab-03d-server: поиск чисел, взаимно простых с M, через анонимный канал и STARTUPINFO;",
         "реализовать Lab-03hello-parent / Lab-03hello-child: передача строки через STARTUPINFO (lpTitle + CREATE_NEW_CONSOLE);",
         "написать аналоги для Linux: Lab-03x, Lab-03a, Lab-03d-client, Lab-03d-server, Lab-03sig (устойчивость к SIGINT);",
-        "проверить все программы, сделать скриншоты и выводы для уровней 4–5, 7–8, 9–10."
+        "сопоставить результаты запусков и способы взаимодействия процессов в обеих операционных системах."
       ]
     },
     {
       "type": "p",
-      "text": "Работа выполнена на Linux (Arch ARM, GCC 16.1.1) и Windows (Windows 11 ARM, MSVC 19.42). Скриншоты выполнены в терминале. На рисунке @рис:fig3_linux_01_build – сборка Linux, на рисунке @рис:fig3_win_01_build – сборка Windows."
+      "text": "Работа выполнена в виртуальных машинах Arch Linux ARM и Windows 11 ARM. Для Linux использован компилятор GCC, для Windows – MSVC. В работе сопоставлены способы запуска дочерних процессов, передачи параметров и обмена результатами через анонимный канал."
     },
     {
       "type": "h1",
@@ -55,7 +55,7 @@
     },
     {
       "type": "p",
-      "text": "Сборка выполнена командой gcc с ключами -O2 -Wall для каждого из пяти исходных файлов (Lab-03x, Lab-03a, Lab-03d-client, Lab-03d-server, Lab-03sig); вывод команды – строка «СБОРКА ВЫПОЛНЕНА УСПЕШНО»."
+      "text": "Для каждой программы выполнена компиляция командой gcc с параметрами -O2 -Wall. После последовательной сборки пяти программ получено сообщение «СБОРКА ВЫПОЛНЕНА УСПЕШНО». Исходный текст Lab-03x приведён в листинге @лист:linux_x."
     },
     {
       "type": "h2",
@@ -63,7 +63,7 @@
     },
     {
       "type": "p",
-      "text": "Проверяется создание процессов, передача параметров, ожидание завершения, анализ через /proc и ps."
+      "text": "Для проверки передачи параметров выполнены три запуска Lab-03x: с аргументом командной строки, с переменной окружения ITER_NUM и без обоих источников. На каждой итерации программа выводит PID и номер итерации, затем выполняет задержку 500 мс."
     },
     {
       "type": "p",
@@ -89,7 +89,17 @@
     },
     {
       "type": "p",
-      "text": "Анализ дерева процессов: ps -ef и /proc. Дерево на рисунке @рис:fig3_linux_06_ps_tree (родитель Lab-03a, два дочерних Lab-03x, состояния S/R, PPID). /proc/<PID>/status на рисунке @рис:fig3_linux_07_proc (State, Pid, PPid, Uid, Gid). Содержимое /proc/<PID> на рисунке @рис:fig3_linux_08_proc_dir (fd, environ, cmdline, status). Проверки пройдены."
+      "text": "В Lab-03a два дочерних процесса создаются через fork и загружают Lab-03x вызовом execl. Первому передаётся аргумент 5, для второго родитель устанавливает ITER_NUM=8. После запуска обоих процессов родитель ожидает их через waitpid. Исходный текст приведён в листинге @лист:linux_a. На рисунке @рис:fig3_linux_05_two_children показаны чередующийся вывод дочерних процессов и их завершение с кодом 0."
+    },
+    {
+      "type": "figure",
+      "file": "скрины/linux/уровень_4-5/task05_два_дочерних_(С аргументом).png",
+      "caption": "Lab-03a: параллельное выполнение двух Lab-03x и ожидание их завершения",
+      "label": "fig3_linux_05_two_children"
+    },
+    {
+      "type": "p",
+      "text": "Для изучения родительских связей использована команда ps -ef. Дерево процессов показано на рисунке @рис:fig3_linux_06_ps_tree. Файл /proc/<PID>/status содержит состояние процесса, PID, PPID, число потоков и объём резидентной памяти; соответствующий вывод и содержимое каталога /proc/<PID> приведены на рисунке @рис:fig3_linux_07_proc. Исходные и исполняемые файлы в рабочем каталоге показаны на рисунке @рис:fig3_linux_08_proc_dir."
     },
     {
       "type": "figure",
@@ -100,18 +110,18 @@
     {
       "type": "figure",
       "file": "скрины/linux/уровень_4-5/task07_proc_статус.png",
-      "caption": "Информация из /proc/<PID>/status: State, Pid, PPid, Uid, Gid",
+      "caption": "Состояние процесса и содержимое каталога /proc/<PID>",
       "label": "fig3_linux_07_proc"
     },
     {
       "type": "figure",
       "file": "скрины/linux/уровень_4-5/task12_итоговый_состав.png",
-      "caption": "Содержимое каталога /proc/<PID>: fd, environ, cmdline, status",
+      "caption": "Исходные и исполняемые файлы в рабочем каталоге ~/OS3",
       "label": "fig3_linux_08_proc_dir"
     },
     {
       "type": "p",
-      "text": "Уровень 4–5 на Linux выполнен: все программы работают, параметры передаются, информация получена."
+      "text": "Запуски показали приоритет аргумента командной строки и возможность получения числа итераций из ITER_NUM. При отсутствии обоих источников Lab-03x завершился с кодом 1. Ожидание дочерних процессов в Lab-03a организовано с помощью waitpid."
     },
     {
       "type": "h2",
@@ -119,7 +129,7 @@
     },
     {
       "type": "p",
-      "text": "Lab-03d-client ищет числа, взаимно простые с M в [L, R], шлёт результат в stdout (перенаправлен в pipe). Lab-03d-server создаёт pipe, делит диапазон на K частей, запускает K клиентов, передаёт поддиапазоны аргументами, читает результаты, выводит список и время. Результаты на рисунках @рис:fig3_linux_09_client, @рис:fig3_linux_10_server3, @рис:fig3_linux_11_server4."
+      "text": "Для поиска чисел, взаимно простых с M, разработаны Lab-03d-client и Lab-03d-server. Клиент проверяет условие НОД(n, M) = 1 для каждого n из [L, R] и передаёт найденные числа через стандартный вывод. Сервер создаёт pipe, делит диапазон на K поддиапазонов и запускает клиентов через fork и execl; перед запуском стандартный вывод каждого клиента перенаправляется в канал вызовом dup2. Исходные тексты приведены в листингах @лист:linux_client и @лист:linux_server. Отдельный запуск клиента показан на рисунке @рис:fig3_linux_09_client, запуски сервера с тремя и четырьмя процессами – на рисунках @рис:fig3_linux_10_server3 и @рис:fig3_linux_11_server4."
     },
     {
       "type": "figure",
@@ -130,7 +140,7 @@
     {
       "type": "figure",
       "file": "скрины/linux/уровень_7-8/task09_сервер_3_процесса.png",
-      "caption": "Lab-03d-server K=3, M=10, 1–100: 40 чисел, время 0.004 с",
+      "caption": "Lab-03d-server: K=3, M=10, диапазон [1, 100], найдено 40 чисел",
       "label": "fig3_linux_10_server3"
     },
     {
@@ -141,7 +151,7 @@
     },
     {
       "type": "p",
-      "text": "Сервер собирает результаты от всех детей, сортирует, выводит полную последовательность. Время через clock_gettime. Уровень 7–8 на Linux выполнен."
+      "text": "При M = 10 в диапазоне [1, 100] сервер получил 40 чисел, при M = 7 в диапазоне [10, 100] – 78. Сервер читает сообщения из канала и ожидает завершения клиентов через waitpid. Числа выводятся в порядке получения сообщений; отдельная сортировка в программе не выполняется. Продолжительность измеряется с помощью clock_gettime с CLOCK_MONOTONIC."
     },
     {
       "type": "h2",
@@ -149,17 +159,17 @@
     },
     {
       "type": "p",
-      "text": "Lab-03sig ставит обработчик SIGINT, переустанавливает себя, выводит уведомление, не завершает программу. Цикл работает дальше, статус каждую секунду. Остановить можно только SIGTERM или SIGKILL. Демонстрация на рисунке @рис:fig3_linux_12_sigint."
+      "text": "Для сохранения работы после SIGINT в Lab-03sig установлен обработчик сигнала. Он увеличивает счётчик, повторно устанавливает обработчик и выводит уведомление через write. Основной цикл продолжает выполнение после обработки сигнала. Исходный текст приведён в листинге @лист:linux_sig. На рисунке @рис:fig3_linux_12_sigint показана отправка двух SIGINT командой kill -INT и последующее завершение через kill -9."
     },
     {
       "type": "figure",
       "file": "скрины/linux/уровень_9-10/task11_sigint_демо.png",
-      "caption": "Lab-03sig: два Ctrl+C (SIGINT) перехвачены, программа жива, завершается только SIGKILL",
+      "caption": "Lab-03sig: продолжение работы после двух SIGINT и завершение через SIGKILL",
       "label": "fig3_linux_12_sigint"
     },
     {
       "type": "p",
-      "text": "Программа перехватывает SIGINT, увеличивает счётчик, продолжает работу. Уровень 9–10 на Linux выполнен."
+      "text": "После каждого из двух SIGINT процесс продолжил вывод состояния, а счётчик обработанных сигналов увеличился. В данном запуске процесс завершён сигналом SIGKILL. Обработчик SIGTERM в программе не установлен, поэтому этот сигнал также сохраняет стандартное действие завершения."
     },
     {
       "type": "h2",
@@ -167,7 +177,7 @@
     },
     {
       "type": "p",
-      "text": "На Linux реализованы: Lab-03x (цикл с аргументом/окружением), Lab-03a (fork+exec двух детей), Lab-03d-client/server (pipe+fork, деление диапазона, сбор результатов), Lab-03sig (перехват SIGINT, неубиваемость по Ctrl+C). Все собраны GCC 16.1.1, протестированы, скриншоты сделаны. Все уровни (4–5, 7–8, 9–10) выполнены."
+      "text": "В Linux создание процесса отделено от загрузки программы: fork создаёт дочерний процесс, а execl заменяет его исполняемый образ. Параметры передаются через аргументы и окружение, результаты вычислений – через pipe с перенаправлением stdout. Ожидание через waitpid позволяет родителю завершиться после дочерних процессов. Обработка SIGINT продемонстрировала продолжение основного цикла после поступления сигнала."
     },
     {
       "type": "h1",
@@ -179,7 +189,7 @@
     },
     {
       "type": "p",
-      "text": "Windows 11 ARM в VMware Fusion. Компилятор MSVC (cl.exe), ARM64 (vcvarsall.bat arm64). Кириллица в cmd (cp866) через console_ru.h (UTF-8 → OEM 866). Сборка на рисунке @рис:fig3_win_01_build."
+      "text": "Программы для Windows собраны в виртуальной машине Windows 11 ARM компилятором MSVC для ARM64. Заголовочный файл console_ru.h выполняет перекодирование консольного вывода из UTF-8 в OEM 866. Его текст приведён в листинге @лист:windows_console. Запуск сборки показан на рисунке @рис:fig3_win_01_build."
     },
     {
       "type": "figure",
@@ -189,7 +199,7 @@
     },
     {
       "type": "p",
-      "text": "Сборка выполнена пакетным файлом build.cmd: окружение MSVC настраивается вызовом vcvarsall.bat arm64, затем для каждого из восьми исходных файлов вызывается cl /nologo /W3 /O2 /utf-8; завершает работу строка «BUILD OK»."
+      "text": "Пакетный файл build.cmd настраивает окружение вызовом vcvarsall.bat arm64 и компилирует программы с ключами /nologo /W3 /O2 /utf-8. Для проверки работы используются полученные исполняемые файлы Lab-03x, Lab-03a, Lab-03b, Lab-03c, Lab-03d-client, Lab-03d-server, Lab-03hello-parent и Lab-03hello-child."
     },
     {
       "type": "h2",
@@ -197,7 +207,7 @@
     },
     {
       "type": "p",
-      "text": "Lab-03x: цикл 500 мс, вывод PID. Итерации из аргумента; если нет – из ITER_NUM; если нет – ExitProcess(1). Результаты на рисунках @рис:fig3_win_02_arg, @рис:fig3_win_03_env, @рис:fig3_win_04_err."
+      "text": "В Lab-03x реализован цикл с задержкой Sleep(500) и выводом PID на каждой итерации. Число итераций читается из аргумента командной строки, при его отсутствии – из ITER_NUM. Если не задан ни один источник, вызывается ExitProcess(1). Исходный текст приведён в листинге @лист:windows_x. Запуски с аргументом 5, с ITER_NUM=7 и без параметров показаны на рисунках @рис:fig3_win_02_arg, @рис:fig3_win_03_env и @рис:fig3_win_04_err."
     },
     {
       "type": "figure",
@@ -219,7 +229,7 @@
     },
     {
       "type": "p",
-      "text": "Lab-03a: три CreateProcess для Lab-03x.exe разными способами: (1) только lpApplicationName, (2) только lpCommandLine, (3) lpApplicationName + lpCommandLine с пробелом. Проверено: (1) – ошибка 2 (файл не найден), (2) и (3) – работают. На рисунке @рис:fig3_win_05_lab03a."
+      "text": "Программа Lab-03a выполняет три вызова CreateProcess для запуска Lab-03x. В первом вызове полный путь и число итераций переданы только через lpApplicationName; получена ошибка 2, так как аргумент включён в имя исполняемого файла. Во втором вызове путь и число итераций переданы через lpCommandLine, в третьем путь задан в lpApplicationName, число итераций – в lpCommandLine с ведущим пробелом. Последние два процесса выполнили по пять итераций; родитель дождался завершения и закрыл дескрипторы (рисунок @рис:fig3_win_05_lab03a). Исходный код приведён в листинге @лист:windows_a."
     },
     {
       "type": "figure",
@@ -229,7 +239,7 @@
     },
     {
       "type": "p",
-      "text": "Lab-03b: переменные окружения. (1) Только exe – глобальная ITER_NUM (нет → ошибка). (2) lpCommandLine с аргументом – работает. (3) SetEnvironmentVariable(«ITER_NUM», «3») перед вызовом – локальная переменная наследуется, итерации = 3. На рисунке @рис:fig3_win_06_lab03b."
+      "text": "Для проверки наследования окружения Lab-03b запущен при ITER_NUM=5. Первый дочерний процесс получил это значение из окружения; второй получил аргумент 5. Перед третьим запуском родитель установил ITER_NUM=3 через SetEnvironmentVariableA и передал NULL в lpCommandLine. В результате созданы три процесса с числом итераций 5, 5 и 3 соответственно. Исходный текст приведён в листинге @лист:windows_b, результат – на рисунке @рис:fig3_win_06_lab03b."
     },
     {
       "type": "figure",
@@ -239,7 +249,7 @@
     },
     {
       "type": "p",
-      "text": "Lab-03c: список процессов через Tool Help Library (CreateToolhelp32Snapshot, Process32First/Next). Вывод: имя, PID, PPID. На рисунке @рис:fig3_win_07_lab03c – Lab-03c.exe (PID=1424) из cmd.exe (PID=5084). Уровень 4–5 на Windows выполнен."
+      "text": "Для получения списка процессов в Lab-03c использованы CreateToolhelp32Snapshot и Process32First/Process32Next. Для каждой записи выводятся имя исполняемого файла, PID и PPID. Исходный текст приведён в листинге @лист:windows_c. На рисунке @рис:fig3_win_07_lab03c показана запись Lab-03c.exe с PID 8336 и PPID 7244, соответствующим cmd.exe."
     },
     {
       "type": "figure",
@@ -249,7 +259,7 @@
     },
     {
       "type": "p",
-      "text": "Таблица процессов получена, PID и PPID верные. Скриншот трёх одновременно запущенных процессов (родитель + два дочерних) – на рисунке @рис:fig3_win_08_three_proc."
+      "text": "Родительские связи дополнительно проверены средствами наблюдения за процессами. На рисунке @рис:fig3_win_08_three_proc показаны Lab-03a.exe и два дочерних Lab-03x.exe."
     },
     {
       "type": "figure",
@@ -259,7 +269,7 @@
     },
     {
       "type": "p",
-      "text": "Те же процессы видны из консоли командой tasklist (рисунок @рис:fig3_win_13_cmd); в Диспетчере задач по фильтру находится родительский Lab-03a (рисунок @рис:fig3_win_14_taskmgr). Дескрипторы родителя и двух дочерних процессов показаны в нижней панели Handles Process Explorer (рисунок @рис:fig3_win_16_pipe_45)."
+      "text": "Команда tasklist с фильтром findstr показывает Lab-03a и два Lab-03x на рисунке @рис:fig3_win_13_cmd. В Диспетчере задач на рисунке @рис:fig3_win_14_taskmgr отображаются родительский и два дочерних процесса; PID относятся к показанному запуску и могут отличаться от консольного примера. В нижней панели Handles Process Explorer видны дескрипторы дочерних процессов у Lab-03a на рисунке @рис:fig3_win_16_pipe_45."
     },
     {
       "type": "figure",
@@ -281,7 +291,7 @@
     },
     {
       "type": "p",
-      "text": "Уровень 4–5 на Windows выполнен: процессы создаются, параметры передаются, информация получена."
+      "text": "Сопоставление запусков позволило отделить ошибку передачи аргумента в lpApplicationName от корректной передачи командной строки. Пример Lab-03b показал наследование текущего окружения при создании процесса, а Lab-03c – получение родительских идентификаторов через Tool Help Library."
     },
     {
       "type": "h2",
@@ -289,18 +299,12 @@
     },
     {
       "type": "p",
-      "text": "Lab-03d-client: поиск взаимно простых с M в [L, R], результат в stdout (в pipe) формате CHUNK <PID> <count> 0 <числа>. Lab-03d-server: CreatePipe (bInheritHandle=TRUE), дескриптор записи в STARTUPINFO (hStdOutput, STARTF_USESTDHANDLES), делит диапазон на K частей, запускает K клиентов, собирает результаты, выводит M, [L, R], K, количество, числа, время (QueryPerformanceCounter). Результаты на рисунках @рис:fig3_win_09_client, @рис:fig3_win_10_server3, @рис:fig3_win_11_server4."
-    },
-    {
-      "type": "figure",
-      "file": "скрины/windows/уровень_7-8/task08_lab03d_клиент.png",
-      "caption": "Lab-03d-client.exe 10 1 30: найдены числа, вывод в канал",
-      "label": "fig3_win_09_client"
+      "text": "Для параллельного поиска чисел, взаимно простых с M, сервер Lab-03d-server создаёт анонимный канал через CreatePipe и запускает K экземпляров Lab-03d-client. Дескриптор записи передаётся через STARTUPINFO.hStdOutput с флагом STARTF_USESTDHANDLES и разрешённым наследованием дескрипторов. Каждый клиент обрабатывает свой поддиапазон и передаёт сообщение CHUNK с PID, количеством и найденными числами. Сервер читает канал, ожидает завершения клиентов и выводит общий результат; время измеряется через QueryPerformanceCounter. Исходные тексты приведены в листингах @лист:windows_client и @лист:windows_server. Результаты запусков сервера с тремя и четырьмя процессами показаны на рисунках @рис:fig3_win_10_server3 и @рис:fig3_win_11_server4."
     },
     {
       "type": "figure",
       "file": "скрины/windows/уровень_7-8/task09_lab03d_сервер_3.png",
-      "caption": "Lab-03d-server.exe 3 10 1 100: K=3, 40 чисел, время 0.035 с",
+      "caption": "Lab-03d-server.exe: K=3, M=10, диапазон [1, 100], найдено 40 чисел",
       "label": "fig3_win_10_server3"
     },
     {
@@ -311,21 +315,21 @@
     },
     {
       "type": "p",
-      "text": "В Process Explorer у детей виден дескриптор File (Pipe) – анонимный канал. Сервер ждёт всех детей (WaitForMultipleObjects)."
+      "text": "При K = 3, M = 10 и диапазоне [1, 100] сервер нашёл 40 чисел. Для K = 4, M = 7 и диапазона [10, 100] получено 78 чисел. Время измерено QueryPerformanceCounter; на этих запусках получено 0,037381 и 0,048172 с соответственно."
     },
     {
       "type": "p",
-      "text": "Нижняя панель Handles в Process Explorer показывает и дескриптор канала типа File (\\Device\\NamedPipe), и дескрипторы запущенных процессов Lab-03d-client (рисунок @рис:fig3_win_17_pipe_78)."
+      "text": "В нижней панели Handles Process Explorer виден объект \\Device\\NamedPipe, связанный с каналом, и дескрипторы дочерних процессов Lab-03d-client. Снимок показывает канал в списке дескрипторов (рисунок @рис:fig3_win_17_pipe_78)."
     },
     {
       "type": "figure",
       "file": "скрины/windows/уровень_7-8/task15_procexp_pipe.png",
-      "caption": "Process Explorer: у сервера дескриптор канала File \\Device\\NamedPipe и дескрипторы трёх процессов Lab-03d-client",
+      "caption": "Process Explorer: канал \\Device\\NamedPipe и дескрипторы дочерних клиентов",
       "label": "fig3_win_17_pipe_78"
     },
     {
       "type": "p",
-      "text": "Уровень 7–8 на Windows выполнен: канал анонимный, дескриптор наследуется потомком, сервер дождался всех детей и собрал результат."
+      "text": "Разделение диапазона позволило распределить проверку чисел между клиентами. Наследуемый дескриптор связал стандартный вывод клиентов с каналом сервера, а чтение результатов и ожидание процессов обеспечили завершение родителя после выполнения дочерних вычислений."
     },
     {
       "type": "h2",
@@ -333,7 +337,7 @@
     },
     {
       "type": "p",
-      "text": "На рисунке @рис:fig3_win_12_hello видно, как родитель сообщает о передаче строки «Hello, my dear child!», выводит PID созданного дочернего процесса, а сама фраза стоит в заголовке окна дочернего процесса. Аргументы командной строки, переменные окружения и перенаправление ввода-вывода при этом не используются, поэтому единственный канал передачи – STARTUPINFO."
+      "text": "Для передачи фразы «Hello, my dear child!» родитель записывает её в STARTUPINFO.lpTitle и создаёт дочерний процесс с CREATE_NEW_CONSOLE. Дочерняя программа считывает заголовок консоли через GetConsoleTitleA и выводит полученную строку. Для передачи фразы используются lpTitle и создание новой консоли, а не аргументы командной строки, переменные окружения или перенаправление потоков. Исходные тексты родителя и дочерней программы приведены в листингах @лист:windows_hello_parent и @лист:windows_hello_child. Полученная дочерним процессом строка показана на рисунке @рис:fig3_win_12_hello. Состав исполняемых файлов приведён на рисунке @рис:fig3_win_13_ls."
     },
     {
       "type": "figure",
@@ -349,7 +353,7 @@
     },
     {
       "type": "p",
-      "text": "Уровень 9–10 на Windows выполнен: фраза доставлена через STARTUPINFO, а список исполняемых файлов на рисунке @рис:fig3_win_13_ls совпадает с восемью собранными приложениями."
+      "text": "Дочерний процесс вывел фразу, заданную родителем в заголовке новой консоли. В этом примере STARTUPINFO определяет начальные параметры консоли, а GetConsoleTitleA позволяет прочитать переданное значение."
     },
     {
       "type": "h2",
@@ -357,7 +361,7 @@
     },
     {
       "type": "p",
-      "text": "На Windows реализованы: Lab-03x (ExitProcess, аргументы/ITER_NUM), Lab-03a (три CreateProcess разными способами), Lab-03b (глобальная/локальная ITER_NUM), Lab-03c (Tool Help Library, PID/PPID), Lab-03d-client/server (CreatePipe + STARTUPINFO.hStdOutput, наследуемые дескрипторы), Lab-03hello-parent/child (lpTitle + CREATE_NEW_CONSOLE). Все собраны MSVC ARM64, скриншоты сделаны. Все уровни (4–5, 7–8, 9–10) выполнены."
+      "text": "В Windows запуск исполняемого файла и создание процесса выполняются вызовом CreateProcess. Примеры показали различие между именем программы и командной строкой, наследование окружения и дескрипторов, получение списка процессов и ожидание завершения. В задачах обмена данными STARTUPINFO использована для настройки стандартного вывода клиента и заголовка новой консоли."
     },
     {
       "type": "element",
@@ -365,19 +369,96 @@
     },
     {
       "type": "p",
-      "text": "Лабораторная работа №3 выполнена полностью на уровне 9–10 для обеих систем."
+      "text": "В ходе работы исследованы создание и завершение процессов, передача параметров, получение сведений о процессах и обмен данными между родителем и дочерними программами в Linux и Windows."
     },
     {
       "type": "p",
-      "text": "Linux: Lab-03x, Lab-03a, Lab-03d-client/server, Lab-03sig. Все собраны GCC 16.1.1, протестированы."
+      "text": "В Linux использованы fork, execl и waitpid. Для обмена результатами применён анонимный канал с перенаправлением stdout через dup2. Пример обработки SIGINT показал, что реакция процесса на этот сигнал может быть изменена обработчиком."
     },
     {
       "type": "p",
-      "text": "Windows: Lab-03x, Lab-03a, Lab-03b, Lab-03c, Lab-03d-client/server, Lab-03hello-parent/child. Все собраны MSVC ARM64, протестированы."
+      "text": "В Windows рассмотрены варианты вызова CreateProcess и наследование ITER_NUM. Параллельный поиск чисел выполнен с передачей дескриптора канала через STARTUPINFO, а отдельная пара программ продемонстрировала передачу строки через заголовок консоли."
     },
     {
       "type": "p",
-      "text": "Выводы по Windows API: lpApplicationName не работает (ошибка 2); lpCommandLine или lpApplicationName+lpCommandLine (с пробелом) – ок; lpTitle только с CREATE_NEW_CONSOLE; наследуемые дескрипторы pipe через STARTUPINFO (STARTF_USESTDHANDLES)."
+      "text": "Ошибка 2 в первом вызове Lab-03a связана не с неработоспособностью lpApplicationName, а с включением аргумента в строку имени файла. Полученные результаты подтверждают необходимость раздельно учитывать путь к программе, командную строку, окружение и наследуемые дескрипторы при создании процесса."
     }
-  ]
+  ],
+  "listings": [
+    {
+      "title": "Lab-03x.c (Linux)",
+      "label": "linux_x",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <unistd.h>\n#include <string.h>\n\nstatic int should_pause(void)\n{\n    return getenv(\"PAUSE_ON_EXIT\") != NULL;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%d: press Enter to exit...\\n\", getpid());\n    fflush(stdout);\n    getchar();\n}\n\nint main(int argc, char *argv[])\n{\n    int iterations;\n    int pause = should_pause();\n\n    if (argc > 1 && strcmp(argv[1], \"--pause\") != 0) {\n        iterations = atoi(argv[1]);\n    } else {\n        const char *env = getenv(\"ITER_NUM\");\n        if (!env) {\n            fprintf(stderr, \"Error: no argument or ITER_NUM env var\\n\");\n            return 1;\n        }\n        iterations = atoi(env);\n    }\n\n    printf(\"Iterations: %d\\n\", iterations);\n\n    for (int i = 1; i <= iterations; i++) {\n        printf(\"PID=%d iteration=%d\\n\", getpid(), i);\n        fflush(stdout);\n        usleep(500000);\n    }\n\n    if (pause) pause_before_exit();\n    return 0;\n}"
+    },
+    {
+      "title": "Lab-03a.c (Linux)",
+      "label": "linux_a",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <unistd.h>\n#include <sys/wait.h>\n\n#define FIRST_ITER  \"5\"\n#define SECOND_ITER \"8\"\n\nint main(void)\n{\n    pid_t pid1, pid2;\n\n    pid1 = fork();\n    if (pid1 < 0) {\n        perror(\"fork (1)\");\n        return 1;\n    }\n    if (pid1 == 0) {\n        execl(\"./Lab-03x\", \"Lab-03x\", FIRST_ITER, (char *)NULL);\n        perror(\"execl (1)\");\n        _exit(1);\n    }\n\n    setenv(\"ITER_NUM\", SECOND_ITER, 1);\n    pid2 = fork();\n    if (pid2 < 0) {\n        perror(\"fork (2)\");\n        return 1;\n    }\n    if (pid2 == 0) {\n        execl(\"./Lab-03x\", \"Lab-03x\", (char *)NULL);\n        perror(\"execl (2)\");\n        _exit(1);\n    }\n\n    printf(\"Parent PID=%d waiting for children...\\n\", getpid());\n    printf(\"  Child 1: PID=%d (5 iterations)\\n\", pid1);\n    printf(\"  Child 2: PID=%d (8 iterations)\\n\", pid2);\n    printf(\"  >>> Run 'ps -ef | grep Lab-03x' in another terminal <<<\\n\");\n    fflush(stdout);\n\n    int status;\n    waitpid(pid1, &status, 0);\n    printf(\"Child %d exited (code %d)\\n\", pid1, WEXITSTATUS(status));\n    waitpid(pid2, &status, 0);\n    printf(\"Child %d exited (code %d)\\n\", pid2, WEXITSTATUS(status));\n\n    printf(\"All children done, parent exiting.\\n\");\n    return 0;\n}"
+    },
+    {
+      "title": "Lab-03d-client.c (Linux)",
+      "label": "linux_client",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <unistd.h>\n#include <string.h>\n\nstatic int gcd(int a, int b)\n{\n    while (b != 0) {\n        int t = b;\n        b = a % b;\n        a = t;\n    }\n    return a;\n}\n\nstatic int should_pause(void)\n{\n    return getenv(\"PAUSE_ON_EXIT\") != NULL;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%d: press Enter to exit...\\n\", getpid());\n    fflush(stdout);\n    getchar();\n}\n\nint main(int argc, char *argv[])\n{\n    if (argc != 4) {\n        fprintf(stderr, \"Usage: %s <M> <L> <R>\\n\", argv[0]);\n        return 1;\n    }\n\n    int m = atoi(argv[1]);\n    int l = atoi(argv[2]);\n    int r = atoi(argv[3]);\n\n    if (m <= 0 || l < 1 || l > r) {\n        fprintf(stderr, \"Error: M > 0, L >= 1, L <= R required\\n\");\n        return 1;\n    }\n\n    int *found = malloc((size_t)(r - l + 1) * sizeof(int));\n    if (!found) {\n        perror(\"malloc\");\n        return 1;\n    }\n    int count = 0;\n\n    for (int n = l; n <= r; n++) {\n        if (gcd(n, m) == 1) {\n            found[count++] = n;\n        }\n    }\n\n    printf(\"CHUNK %d %d %d\", getpid(), count, 0);\n    for (int i = 0; i < count; i++) {\n        printf(\" %d\", found[i]);\n    }\n    printf(\"\\n\");\n    fflush(stdout);\n\n    free(found);\n\n    if (should_pause()) pause_before_exit();\n    return 0;\n}"
+    },
+    {
+      "title": "Lab-03d-server.c (Linux)",
+      "label": "linux_server",
+      "code": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <unistd.h>\n#include <sys/wait.h>\n#include <time.h>\n\n#define MAX_NUMBERS 100000\n\nstatic double now_seconds(void)\n{\n    struct timespec ts;\n    clock_gettime(CLOCK_MONOTONIC, &ts);\n    return ts.tv_sec + ts.tv_nsec / 1e9;\n}\n\nint main(int argc, char *argv[])\n{\n    if (argc != 5) {\n        fprintf(stderr, \"Usage: %s <K> <M> <L> <R>\\n\", argv[0]);\n        return 1;\n    }\n\n    int k = atoi(argv[1]);\n    int m = atoi(argv[2]);\n    int l = atoi(argv[3]);\n    int r = atoi(argv[4]);\n\n    if (k < 1 || m <= 0 || l < 1 || l > r) {\n        fprintf(stderr, \"Error: K >= 1, M > 0, L >= 1, L <= R required\\n\");\n        return 1;\n    }\n\n    double t0 = now_seconds();\n\n    int fd[2];\n    if (pipe(fd) < 0) {\n        perror(\"pipe\");\n        return 1;\n    }\n\n    int total = r - l + 1;\n    int chunk = total / k;\n    int remainder = total % k;\n\n    pid_t *pids = malloc((size_t)k * sizeof(pid_t));\n    if (!pids) {\n        perror(\"malloc\");\n        return 1;\n    }\n\n    int sub_l = l;\n    for (int i = 0; i < k; i++) {\n        int sub_r = sub_l + chunk - 1 + (i < remainder ? 1 : 0);\n        if (i == k - 1) sub_r = r;\n\n        pid_t pid = fork();\n        if (pid < 0) {\n            perror(\"fork\");\n            return 1;\n        }\n        if (pid == 0) {\n            close(fd[0]);\n            dup2(fd[1], STDOUT_FILENO);\n            close(fd[1]);\n\n            char ml[32], ll[32], rl[32];\n            snprintf(ml, sizeof(ml), \"%d\", m);\n            snprintf(ll, sizeof(ll), \"%d\", sub_l);\n            snprintf(rl, sizeof(rl), \"%d\", sub_r);\n            execl(\"./Lab-03d-client\", \"Lab-03d-client\", ml, ll, rl, (char *)NULL);\n            perror(\"execl\");\n            _exit(1);\n        }\n        pids[i] = pid;\n        sub_l = sub_r + 1;\n    }\n\n    close(fd[1]);\n    FILE *in = fdopen(fd[0], \"r\");\n    if (!in) {\n        perror(\"fdopen\");\n        return 1;\n    }\n\n    int *all = malloc(MAX_NUMBERS * sizeof(int));\n    if (!all) {\n        perror(\"malloc\");\n        return 1;\n    }\n    int total_found = 0;\n\n    char line[1 << 16];\n    while (fgets(line, sizeof(line), in) != NULL) {\n        if (line[0] != 'C') continue;\n        int pid_val, count, reserved;\n        if (sscanf(line, \"CHUNK %d %d %d\", &pid_val, &count, &reserved) != 3) continue;\n        char *p = line;\n        for (int i = 0; i < 4; i++) {\n            p = strchr(p + 1, ' ');\n            if (!p) break;\n        }\n        if (!p) continue;\n        for (int i = 0; i < count && total_found < MAX_NUMBERS; i++) {\n            all[total_found++] = (int)strtol(p, &p, 10);\n        }\n    }\n    fclose(in);\n\n    for (int i = 0; i < k; i++) {\n        int status;\n        waitpid(pids[i], &status, 0);\n    }\n\n    double t1 = now_seconds();\n\n    printf(\"M: %d\\n\", m);\n    printf(\"Range [L, R]: [%d, %d]\\n\", l, r);\n    printf(\"Processes K: %d\\n\", k);\n    printf(\"Total found: %d\\n\", total_found);\n    printf(\"Numbers:\");\n    for (int i = 0; i < total_found; i++) {\n        printf(\" %d\", all[i]);\n    }\n    printf(\"\\n\");\n    printf(\"Time: %.6f s\\n\", t1 - t0);\n\n    free(all);\n    free(pids);\n    return 0;\n}"
+    },
+    {
+      "title": "Lab-03sig.c (Linux)",
+      "label": "linux_sig",
+      "code": "#include <stdio.h>\n#include <signal.h>\n#include <unistd.h>\n\nstatic volatile sig_atomic_t sigint_count = 0;\n\nstatic void on_sigint(int sig)\n{\n    (void)sig;\n    sigint_count++;\n    signal(SIGINT, on_sigint);\n    const char msg[] = \"\\n[!] SIGINT (Ctrl+C) caught - continuing\\n\";\n    write(STDOUT_FILENO, msg, sizeof(msg) - 1);\n}\n\nint main(void)\n{\n    signal(SIGINT, on_sigint);\n\n    printf(\"Lab-03sig started (PID=%d)\\n\", getpid());\n    printf(\"Ctrl+C cannot stop this application.\\n\");\n    fflush(stdout);\n\n    int second = 0;\n    for (;;) {\n        sleep(1);\n        second++;\n        printf(\"Running... %d s (SIGINT caught: %d)\\n\", second, (int)sigint_count);\n        fflush(stdout);\n    }\n\n    return 0;\n}"
+    },
+    {
+      "title": "Lab-03x.c (Windows)",
+      "label": "windows_x",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#include \"console_ru.h\"\n\n/* Пауза перед выходом нужна только для съёмки кадров, где окно должно\n   оставаться на экране; на поведение по методичке она не влияет. */\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(int argc, char *argv[])\n{\n    int iterations;\n    int pause = should_pause();\n\n    /* Количество итераций: аргумент командной строки, иначе ITER_NUM,\n       иначе – завершение с ошибкой через ExitProcess. */\n    if (argc > 1) {\n        iterations = atoi(argv[1]);\n    } else {\n        char buf[32];\n        DWORD n = GetEnvironmentVariableA(\"ITER_NUM\", buf, sizeof(buf));\n        if (n == 0 || n >= sizeof(buf)) {\n            fprintf(stderr, \"Ошибка: не задан аргумент командной строки и переменная окружения ITER_NUM\\n\");\n            ExitProcess(1);\n        }\n        iterations = atoi(buf);\n    }\n\n    printf(\"Количество итераций: %d\\n\", iterations);\n\n    for (int i = 1; i <= iterations; i++) {\n        printf(\"PID=%lu итерация=%d\\n\", (unsigned long)GetCurrentProcessId(), i);\n        fflush(stdout);\n        Sleep(500);\n    }\n\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03a.c (Windows)",
+      "label": "windows_a",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#include \"console_ru.h\"\n\n#define DEFAULT_ITER \"5\"\n\nstatic void child_path(char *out, size_t cap)\n{\n    char self[MAX_PATH];\n    GetModuleFileNameA(NULL, self, MAX_PATH);\n    char *slash = strrchr(self, '\\\\');\n    if (slash != NULL) {\n        *(slash + 1) = '\\0';\n    } else {\n        self[0] = '\\0';\n    }\n    snprintf(out, cap, \"%sLab-03x.exe\", self);\n}\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(void)\n{\n    const char *iter = DEFAULT_ITER;\n    int pause = should_pause();\n\n    char child[MAX_PATH];\n    child_path(child, sizeof(child));\n    printf(\"Дочерняя программа: %s (количество итераций: %s)\\n\\n\", child, iter);\n\n    PROCESS_INFORMATION pi[3];\n    BOOL ok[3] = {0};\n    STARTUPINFOA si = {0};\n    si.cb = sizeof(si);\n\n    /* Процесс 1: только lpApplicationName, количество итераций тоже в нём –\n       так задумано по методичке, ожидается ошибка 2. */\n    {\n        char app[MAX_PATH + 16];\n        snprintf(app, sizeof(app), \"%s %s\", child, iter);\n        printf(\"[1] lpApplicationName=\\\"%s\\\", lpCommandLine=NULL\\n\", app);\n        ok[0] = CreateProcessA(app, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[0]);\n        if (ok[0]) printf(\"    процесс создан, PID=%lu\\n\\n\", (unsigned long)pi[0].dwProcessId);\n        else printf(\"    НЕ создан, код ошибки %lu\\n\\n\", GetLastError());\n    }\n\n    /* Процесс 2: только lpCommandLine. */\n    {\n        char cmd[MAX_PATH + 16];\n        snprintf(cmd, sizeof(cmd), \"%s %s\", child, iter);\n        printf(\"[2] lpApplicationName=NULL, lpCommandLine=\\\"%s\\\"\\n\", cmd);\n        ok[1] = CreateProcessA(NULL, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[1]);\n        if (ok[1]) printf(\"    процесс создан, PID=%lu\\n\\n\", (unsigned long)pi[1].dwProcessId);\n        else printf(\"    НЕ создан, код ошибки %lu\\n\\n\", GetLastError());\n    }\n\n    /* Процесс 3: имя в lpApplicationName, итерации в lpCommandLine.\n       Пробел в начале строки обязателен – иначе имя процесса уедет в argv[0]. */\n    {\n        char cmd[MAX_PATH + 16];\n        snprintf(cmd, sizeof(cmd), \" %s\", iter);\n        printf(\"[3] lpApplicationName=\\\"%s\\\", lpCommandLine=\\\"%s\\\"\\n\", child, cmd);\n        ok[2] = CreateProcessA(child, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[2]);\n        if (ok[2]) printf(\"    процесс создан, PID=%lu\\n\\n\", (unsigned long)pi[2].dwProcessId);\n        else printf(\"    НЕ создан, код ошибки %lu\\n\\n\", GetLastError());\n    }\n\n    /* Родитель ждёт завершения всех дочерних процессов (они работают\n       одновременно) и только потом завершается сам. */\n    HANDLE h[3];\n    DWORD count = 0;\n    for (int i = 0; i < 3; i++) {\n        if (ok[i]) h[count++] = pi[i].hProcess;\n    }\n\n    printf(\"Родитель ожидает завершения дочерних процессов (%lu)...\\n\", count);\n    if (count > 0) WaitForMultipleObjects(count, h, TRUE, INFINITE);\n\n    for (int i = 0; i < 3; i++) {\n        if (ok[i]) {\n            DWORD code = 0;\n            GetExitCodeProcess(pi[i].hProcess, &code);\n            printf(\"Дочерний процесс %lu завершён (код %lu)\\n\",\n                   (unsigned long)pi[i].dwProcessId, (unsigned long)code);\n            CloseHandle(pi[i].hProcess);\n            CloseHandle(pi[i].hThread);\n        }\n    }\n\n    printf(\"Все созданные дочерние процессы завершены, родитель завершает работу.\\n\");\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03b.c (Windows)",
+      "label": "windows_b",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#include \"console_ru.h\"\n\n#define DEFAULT_ITER \"5\"\n#define LOCAL_ITER \"3\"\n\nstatic void child_path(char *out, size_t cap)\n{\n    char self[MAX_PATH];\n    GetModuleFileNameA(NULL, self, MAX_PATH);\n    char *slash = strrchr(self, '\\\\');\n    if (slash != NULL) *(slash + 1) = '\\0';\n    else self[0] = '\\0';\n    snprintf(out, cap, \"%sLab-03x.exe\", self);\n}\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(void)\n{\n    const char *iter = DEFAULT_ITER;\n    int pause = should_pause();\n\n    const char *global_iter = \"(не задана)\";\n    char gbuf[32];\n    DWORD glen = GetEnvironmentVariableA(\"ITER_NUM\", gbuf, sizeof(gbuf));\n    if (glen > 0 && glen < sizeof(gbuf)) global_iter = gbuf;\n\n    char child[MAX_PATH];\n    child_path(child, sizeof(child));\n    printf(\"Дочерняя программа: %s\\n\", child);\n    printf(\"Глобальная ITER_NUM=%s, локальная ITER_NUM=%s\\n\\n\", global_iter, LOCAL_ITER);\n\n    PROCESS_INFORMATION pi[3] = {0};\n    BOOL ok[3] = {0};\n    STARTUPINFOA si = {0};\n    si.cb = sizeof(si);\n\n    /* Процесс 1: только имя файла – итерации из глобальной ITER_NUM. */\n    {\n        printf(\"[1] lpApplicationName=\\\"%s\\\", lpCommandLine=NULL - глобальная ITER_NUM\\n\", child);\n        ok[0] = CreateProcessA(child, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[0]);\n        if (ok[0]) printf(\"    процесс создан, PID=%lu\\n\\n\", (unsigned long)pi[0].dwProcessId);\n        else printf(\"    НЕ создан, код ошибки %lu\\n\\n\", GetLastError());\n    }\n\n    /* Процесс 2: итерации передаются аргументом в lpCommandLine. */\n    {\n        char cmd[MAX_PATH + 16];\n        snprintf(cmd, sizeof(cmd), \"%s %s\", child, iter);\n        printf(\"[2] lpApplicationName=NULL, lpCommandLine=\\\"%s\\\"\\n\", cmd);\n        ok[1] = CreateProcessA(NULL, cmd, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[1]);\n        if (ok[1]) printf(\"    процесс создан, PID=%lu\\n\\n\", (unsigned long)pi[1].dwProcessId);\n        else printf(\"    НЕ создан, код ошибки %lu\\n\\n\", GetLastError());\n    }\n\n    /* Процесс 3: второй параметр NULL, перед вызовом задаётся локальная\n       ITER_NUM – значение отличается от глобального. */\n    {\n        SetEnvironmentVariableA(\"ITER_NUM\", LOCAL_ITER);\n        printf(\"[3] lpApplicationName=\\\"%s\\\", lpCommandLine=NULL - локальная ITER_NUM=%s\\n\", child, LOCAL_ITER);\n        ok[2] = CreateProcessA(child, NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi[2]);\n        if (ok[2]) printf(\"    процесс создан, PID=%lu\\n\\n\", (unsigned long)pi[2].dwProcessId);\n        else printf(\"    НЕ создан, код ошибки %lu\\n\\n\", GetLastError());\n    }\n\n    HANDLE h[3];\n    DWORD count = 0;\n    for (int i = 0; i < 3; i++) if (ok[i]) h[count++] = pi[i].hProcess;\n\n    printf(\"Родитель ожидает завершения дочерних процессов (%lu)...\\n\", count);\n    if (count > 0) WaitForMultipleObjects(count, h, TRUE, INFINITE);\n\n    for (int i = 0; i < 3; i++) {\n        if (ok[i]) {\n            DWORD code = 0;\n            GetExitCodeProcess(pi[i].hProcess, &code);\n            printf(\"Дочерний процесс %lu завершён (код %lu)\\n\",\n                   (unsigned long)pi[i].dwProcessId, (unsigned long)code);\n            CloseHandle(pi[i].hProcess);\n            CloseHandle(pi[i].hThread);\n        }\n    }\n\n    printf(\"Все созданные дочерние процессы завершены, родитель завершает работу.\\n\");\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03c.c (Windows)",
+      "label": "windows_c",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <tlhelp32.h>\n\n#include \"console_ru.h\"\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(void)\n{\n    int pause = should_pause();\n\n    HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);\n    if (snap == INVALID_HANDLE_VALUE) {\n        fprintf(stderr, \"Ошибка: CreateToolhelp32Snapshot (%lu)\\n\", GetLastError());\n        return 1;\n    }\n\n    PROCESSENTRY32 pe;\n    pe.dwSize = sizeof(pe);\n\n    printf(\"%-38s %8s %8s\\n\", \"Имя процесса\", \"PID\", \"PPID\");\n    printf(\"%-38s %8s %8s\\n\", \"--------------------------------------\", \"--------\", \"--------\");\n\n    if (Process32First(snap, &pe)) {\n        do {\n            printf(\"%-38s %8lu %8lu\\n\",\n                   pe.szExeFile, (unsigned long)pe.th32ProcessID,\n                   (unsigned long)pe.th32ParentProcessID);\n        } while (Process32Next(snap, &pe));\n    }\n\n    CloseHandle(snap);\n\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03d-client.c (Windows)",
+      "label": "windows_client",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#include \"console_ru.h\"\n\nstatic int gcd(int a, int b)\n{\n    while (b != 0) {\n        int t = b;\n        b = a % b;\n        a = t;\n    }\n    return a;\n}\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(int argc, char *argv[])\n{\n    int pause = should_pause();\n\n    /* Структура вызова: Lab-03d-client <Число M> <Нижний порог> <Верхний порог> */\n    if (argc != 4) {\n        fprintf(stderr, \"Использование: %s <M> <L> <R>\\n\", argv[0]);\n        return 1;\n    }\n\n    int m = atoi(argv[1]);\n    int l = atoi(argv[2]);\n    int r = atoi(argv[3]);\n\n    if (m <= 0 || l < 1 || l > r) {\n        fprintf(stderr, \"Ошибка: требуется M > 0, L >= 1, L <= R\\n\");\n        return 1;\n    }\n\n    int *found = malloc((size_t)(r - l + 1) * sizeof(int));\n    if (!found) {\n        fprintf(stderr, \"Ошибка: не удалось выделить память\\n\");\n        return 1;\n    }\n    int count = 0;\n\n    /* Числа, взаимно простые с M: НОД(n, M) == 1. */\n    for (int n = l; n <= r; n++) {\n        if (gcd(n, m) == 1) {\n            found[count++] = n;\n        }\n    }\n\n    /* Результат уходит в анонимный канал, который родитель передал\n       через STARTUPINFO (hStdOutput). */\n    printf(\"CHUNK %lu %d %d\", (unsigned long)GetCurrentProcessId(), count, 0);\n    for (int i = 0; i < count; i++) {\n        printf(\" %d\", found[i]);\n    }\n    printf(\"\\n\");\n    fflush(stdout);\n\n    free(found);\n\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03d-server.c (Windows)",
+      "label": "windows_server",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n\n#include \"console_ru.h\"\n\n#define MAX_NUMBERS 1000000\n\nstatic double now_seconds(void)\n{\n    LARGE_INTEGER freq, cnt;\n    QueryPerformanceFrequency(&freq);\n    QueryPerformanceCounter(&cnt);\n    return (double)cnt.QuadPart / (double)freq.QuadPart;\n}\n\nstatic void client_path(char *out, size_t cap)\n{\n    char self[MAX_PATH];\n    GetModuleFileNameA(NULL, self, MAX_PATH);\n    char *slash = strrchr(self, '\\\\');\n    if (slash != NULL) *(slash + 1) = '\\0';\n    else self[0] = '\\0';\n    snprintf(out, cap, \"%sLab-03d-client.exe\", self);\n}\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(int argc, char *argv[])\n{\n    int pause = should_pause();\n\n    /* Структура вызова: Lab-03d-server <K> <Число M> <Нижний порог> <Верхний порог> */\n    if (argc != 5) {\n        fprintf(stderr, \"Использование: %s <K> <M> <L> <R>\\n\", argv[0]);\n        return 1;\n    }\n\n    int k = atoi(argv[1]);\n    int m = atoi(argv[2]);\n    int l = atoi(argv[3]);\n    int r = atoi(argv[4]);\n\n    if (k < 1 || m <= 0 || l < 1 || l > r) {\n        fprintf(stderr, \"Ошибка: требуется K >= 1, M > 0, L >= 1, L <= R\\n\");\n        return 1;\n    }\n\n    char client[MAX_PATH];\n    client_path(client, sizeof(client));\n\n    double t0 = now_seconds();\n\n    /* Анонимный канал: дескриптор записи наследуется дочерними процессами. */\n    SECURITY_ATTRIBUTES sa = {0};\n    sa.nLength = sizeof(sa);\n    sa.bInheritHandle = TRUE;\n\n    HANDLE hRead, hWrite;\n    if (!CreatePipe(&hRead, &hWrite, &sa, 0)) {\n        fprintf(stderr, \"Ошибка: CreatePipe (%lu)\\n\", GetLastError());\n        return 1;\n    }\n    SetHandleInformation(hRead, HANDLE_FLAG_INHERIT, 0);\n\n    HANDLE *procs = malloc((size_t)k * sizeof(HANDLE));\n    if (!procs) {\n        fprintf(stderr, \"Ошибка: не удалось выделить память\\n\");\n        return 1;\n    }\n    int created = 0;\n\n    int total = r - l + 1;\n    int chunk = total / k;\n    int remainder = total % k;\n    int subL = l;\n\n    /* Диапазон [L, R] делится на K равных частей, каждый дочерний процесс\n       обрабатывает свой поддиапазон. */\n    for (int i = 0; i < k; i++) {\n        int subR = subL + chunk - 1 + (i < remainder ? 1 : 0);\n        if (i == k - 1) subR = r;\n\n        STARTUPINFOA si = {0};\n        si.cb = sizeof(si);\n        si.dwFlags = STARTF_USESTDHANDLES;\n        si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);\n        si.hStdOutput = hWrite;\n        si.hStdError = hWrite;\n\n        PROCESS_INFORMATION pi = {0};\n\n        char cmd[MAX_PATH + 64];\n        snprintf(cmd, sizeof(cmd), \"\\\"%s\\\" %d %d %d\", client, m, subL, subR);\n\n        if (!CreateProcessA(NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi)) {\n            fprintf(stderr, \"Ошибка: CreateProcess для [%d, %d] (%lu)\\n\", subL, subR, GetLastError());\n        } else {\n            CloseHandle(pi.hThread);\n            procs[created++] = pi.hProcess;\n            printf(\"Запущен дочерний процесс %lu: поддиапазон [%d, %d]\\n\",\n                   (unsigned long)pi.dwProcessId, subL, subR);\n        }\n        subL = subR + 1;\n    }\n\n    CloseHandle(hWrite);\n\n    size_t cap = 1 << 16;\n    char *data = malloc(cap);\n    if (!data) {\n        fprintf(stderr, \"Ошибка: не удалось выделить память\\n\");\n        return 1;\n    }\n    size_t used = 0;\n\n    /* Читаем канал до EOF: EOF наступает, когда все дочерние процессы\n       закрыли унаследованный дескриптор записи. */\n    for (;;) {\n        DWORD got = 0;\n        if (used + 4096 >= cap) {\n            cap *= 2;\n            char *bigger = realloc(data, cap);\n            if (!bigger) break;\n            data = bigger;\n        }\n        if (!ReadFile(hRead, data + used, (DWORD)(cap - used - 1), &got, NULL) || got == 0) {\n            break;\n        }\n        used += got;\n    }\n    data[used] = '\\0';\n    CloseHandle(hRead);\n\n    /* Программа не может быть завершена, пока не завершены все дочерние. */\n    if (created > 0) {\n        WaitForMultipleObjects((DWORD)created, procs, TRUE, INFINITE);\n    }\n    for (int i = 0; i < created; i++) CloseHandle(procs[i]);\n    free(procs);\n\n    int *all = malloc(MAX_NUMBERS * sizeof(int));\n    if (!all) {\n        fprintf(stderr, \"Ошибка: не удалось выделить память\\n\");\n        return 1;\n    }\n    int total_found = 0;\n\n    /* Разбор строк CHUNK <PID> <количество> 0 <числа...> */\n    char *line = data;\n    while (line && *line) {\n        char *nl = strchr(line, '\\n');\n        if (nl) *nl = '\\0';\n        if (strncmp(line, \"CHUNK \", 6) == 0) {\n            char *p = line + 6;\n            (void)strtol(p, &p, 10);\n            int count = (int)strtol(p, &p, 10);\n            (void)strtol(p, &p, 10);\n            for (int i = 0; i < count && total_found < MAX_NUMBERS; i++) {\n                all[total_found++] = (int)strtol(p, &p, 10);\n            }\n        }\n        line = nl ? nl + 1 : NULL;\n    }\n    free(data);\n\n    double t1 = now_seconds();\n\n    printf(\"Число M: %d\\n\", m);\n    printf(\"Диапазон [L, R]: [%d, %d]\\n\", l, r);\n    printf(\"Количество процессов K: %d\\n\", k);\n    printf(\"Общее количество найденных чисел: %d\\n\", total_found);\n    printf(\"Найденные числа:\");\n    for (int i = 0; i < total_found; i++) printf(\" %d\", all[i]);\n    printf(\"\\n\");\n    printf(\"Время работы: %.6f с\\n\", t1 - t0);\n\n    free(all);\n\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03hello-parent.c (Windows)",
+      "label": "windows_hello_parent",
+      "code": "#include <windows.h>\n#include <stdio.h>\n#include <string.h>\n\n#include \"console_ru.h\"\n\n#define PHRASE \"Hello, my dear child!\"\n\nstatic void child_path(char *out, size_t cap)\n{\n    char self[MAX_PATH];\n    GetModuleFileNameA(NULL, self, MAX_PATH);\n    char *slash = strrchr(self, '\\\\');\n    if (slash != NULL) *(slash + 1) = '\\0';\n    else self[0] = '\\0';\n    snprintf(out, cap, \"%sLab-03hello-child.exe\", self);\n}\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(void)\n{\n    int pause = should_pause();\n\n    char child[MAX_PATH];\n    child_path(child, sizeof(child));\n\n    printf(\"Родитель: передаю дочернему процессу через STARTUPINFO строку:\\n\");\n    printf(\"          \\\"%s\\\"\\n\", PHRASE);\n\n    /* Фраза уходит в поле lpTitle; Windows применяет его как заголовок окна\n       только при создании новой консоли (CREATE_NEW_CONSOLE). */\n    STARTUPINFOA si = {0};\n    si.cb = sizeof(si);\n    si.lpTitle = (LPSTR)PHRASE;\n\n    PROCESS_INFORMATION pi = {0};\n\n    if (!CreateProcessA(child, NULL, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {\n        fprintf(stderr, \"Ошибка: CreateProcess (%lu)\\n\", GetLastError());\n        return 1;\n    }\n\n    printf(\"Родитель: дочерний процесс создан, PID=%lu\\n\", (unsigned long)pi.dwProcessId);\n    printf(\"Родитель: фраза передана через STARTUPINFO (lpTitle).\\n\");\n\n    CloseHandle(pi.hProcess);\n    CloseHandle(pi.hThread);\n\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "Lab-03hello-child.c (Windows)",
+      "label": "windows_hello_child",
+      "code": "#include <windows.h>\n#include <stdio.h>\n\n#include \"console_ru.h\"\n\nstatic int should_pause(void)\n{\n    return GetEnvironmentVariableA(\"PAUSE_ON_EXIT\", NULL, 0) != 0;\n}\n\nstatic void pause_before_exit(void)\n{\n    printf(\"PID=%lu: нажмите Enter для выхода...\\n\", (unsigned long)GetCurrentProcessId());\n    fflush(stdout);\n    getchar();\n}\n\nint main(void)\n{\n    int pause = should_pause();\n\n    /* Единственный источник данных – заголовок консоли, который родитель\n       задал через STARTUPINFO.lpTitle. */\n    char title[256];\n    DWORD n = GetConsoleTitleA(title, sizeof(title));\n\n    if (n == 0) {\n        fprintf(stderr, \"Дочерний процесс: не удалось прочитать заголовок консоли (%lu)\\n\", GetLastError());\n        return 1;\n    }\n\n    printf(\"Дочерний процесс (PID=%lu): получено через STARTUPINFO: %s\\n\",\n           (unsigned long)GetCurrentProcessId(), title);\n    fflush(stdout);\n\n    Sleep(4000);\n\n    if (pause) pause_before_exit();\n    return 0;\n}\n"
+    },
+    {
+      "title": "console_ru.h (Windows)",
+      "label": "windows_console",
+      "code": "/*\n * console_ru.h – корректный вывод кириллицы в консоль cmd (Windows).\n *\n * Исходные файлы хранятся в UTF-8 и собираются с ключом /utf-8, поэтому\n * строковые литералы в программе – UTF-8. Консоль cmd работает в OEM-кодировке\n * (866), поэтому весь вывод перекодируется из UTF-8 в 866 через\n * MultiByteToWideChar + WideCharToMultiByte.\n *\n * Подключается после <stdio.h>. Заменяет printf/fprintf на варианты\n * rprintf/rfprintf, которые перекодируют уже сформированную строку вывода.\n * ASCII-данные (пути, идентификаторы, числа) при перекодировке не меняются.\n */\n#ifndef CONSOLE_RU_H\n#define CONSOLE_RU_H\n\n#include <windows.h>\n#include <stdio.h>\n#include <stdarg.h>\n\n/* UTF-8 -> OEM-кодировка консоли (866); буферы чередуются между вызовами */\nstatic const char *utf8_to_oem(const char *src)\n{\n    static char buf[4][4096];\n    static int idx = 0;\n    char *out = buf[idx];\n    idx = (idx + 1) & 3;\n\n    int wlen = MultiByteToWideChar(CP_UTF8, 0, src, -1, NULL, 0);\n    if (wlen <= 0 || wlen > 4096) {\n        return src; /* на случай неожиданных данных */\n    }\n    wchar_t wbuf[4096];\n    MultiByteToWideChar(CP_UTF8, 0, src, -1, wbuf, wlen);\n    int olen = WideCharToMultiByte(866, 0, wbuf, -1, out, 4096, NULL, NULL);\n    if (olen <= 0) {\n        return src;\n    }\n    return out;\n}\n\nstatic int rprintf(const char *fmt, ...)\n{\n    char tmp[4096];\n    va_list ap;\n    va_start(ap, fmt);\n    vsnprintf(tmp, sizeof(tmp), fmt, ap);\n    va_end(ap);\n    fputs(utf8_to_oem(tmp), stdout);\n    fflush(stdout);\n    return 0;\n}\n\nstatic int rfprintf(FILE *stream, const char *fmt, ...)\n{\n    char tmp[4096];\n    va_list ap;\n    va_start(ap, fmt);\n    vsnprintf(tmp, sizeof(tmp), fmt, ap);\n    va_end(ap);\n    fputs(utf8_to_oem(tmp), stream);\n    fflush(stream);\n    return 0;\n}\n\n#define printf  rprintf\n#define fprintf rfprintf\n\n#endif /* CONSOLE_RU_H */\n"
+    }
+  ],
+  "appendix_title": "Исходные тексты программ",
+  "meta": {
+    "created": "2026-10-25T20:44:45.863605+03:00",
+    "modified": "2026-10-25T20:44:45.863605+03:00"
+  }
 }
