@@ -1,200 +1,240 @@
 {
-  "lab": "ЛР4, Windows-часть",
-  "run": "2026-11-08",
-  "machine": "Windows 11 ARM64 (VMware), MSVC 18, сборка в C:\\lab4",
-  "note": "Имена task01–task12 — по заданию lab4/windows/ТЕХДОЛГ_СКРИНЫ.md (совпадают с report.json на Mac), task13–task21 — дополнительные кадры того же прогона. Консольные кадры сняты драйвером C:\\lab4_sync\\run_lab.ps1 либо с окна conhost (апскейл до 2100 px), кадры Process Explorer — вручную пользователем (PE с вводом не автоматизируется). task19 переснят: оба среза потоков Lab-04c в одном кадре, второй поток исчезает после TerminateThread.",
-  "items": [
-    {
-      "file": "скрины/windows/уровень_4-5/task01_powershell_threads_a.png",
-      "status": "новый",
-      "content": "PowerShell: (Get-Process Lab-04a).Threads → три потока (TID), Wait/ExecutionDelay",
-      "size": 148016,
-      "px": "2100x1253",
-      "sha256": "6505f5583cf9739d"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task02_procexp_threads_a.png",
-      "status": "новый",
-      "content": "Process Explorer, фильтр Lab, Lab-04a, нижняя панель Threads: три потока (5644 Wait:UserRequest, 5636 Wait:DelayExecution, 560 Wait:WrQueue)",
-      "size": 153087,
-      "px": "4112x2484",
-      "sha256": "bedea0397b5ea4eb"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task03_lab04d_threads.png",
-      "status": "новый",
-      "content": "Lab-04d: PID, TID, приоритет, «Всего потоков в процессе: 1»",
-      "size": 60058,
-      "px": "2100x1253",
-      "sha256": "bfcc86fe05dfe93e"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task13_lab04a_первые_итерации.png",
-      "status": "новый",
-      "content": "Lab-04a: шапка и первые итерации трёх потоков (PID - TID - № - символ - символ)",
-      "size": 229031,
-      "px": "2100x1253",
-      "sha256": "20d50e2269899858"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task14_lab04a_завершение.png",
-      "status": "новый",
-      "content": "Lab-04a: последние итерации и «Все потоки завершены.»",
-      "size": 133426,
-      "px": "2100x1253",
-      "sha256": "1d2eca52bbb82f14"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task15_lab04b_поток_suspended_powershell.png",
-      "status": "новый",
-      "content": "PowerShell: потоки Lab-04b, один в состоянии Wait/Suspended",
-      "size": 150928,
-      "px": "2100x1253",
-      "sha256": "706d113b2e7f7f90"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task16_lab04b_пауза_возобновление.png",
-      "status": "новый",
-      "content": "Строки Lab-04b: приостановлен на 30/40, возобновлён на 70 / после цикла главного",
-      "size": 185399,
-      "px": "2100x1253",
-      "sha256": "f2e0028bda6d3af4"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task17_lab04c_потоки_после.png",
-      "status": "новый",
-      "content": "PowerShell: потоки Lab-04c после TerminateThread — две строки",
-      "size": 138982,
-      "px": "2100x1253",
-      "sha256": "df35c7aca7b7c4a5"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task18_lab04c_завершение_потока.png",
-      "status": "новый",
-      "content": "Строка «Поток 2 завершён принудительно на итерации 50 (последняя итерация потока: 49)»",
-      "size": 144417,
-      "px": "2100x1253",
-      "sha256": "68549b7bee322aa4"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task19_lab04c_потоки_до_и_после.png",
-      "status": "новый",
-      "content": "Один кадр, два среза PowerShell: до TerminateThread три потока (6696, 9524, 1548), после — два (6696, 9524); ниже строка о принудительном завершении",
-      "size": 69464,
-      "px": "1838x1020",
-      "sha256": "75d1dedd8cb0b2d5"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task21_lab4_сборка.png",
-      "status": "новый",
-      "content": "cmd /c C:\\lab4\\build.cmd → === BUILD OK ===, 7 exe",
-      "size": 163270,
-      "px": "2100x1253",
-      "sha256": "c5e0277e5d554083"
-    },
-    {
-      "file": "скрины/windows/уровень_7-8/task08_lab04p_4.png",
-      "status": "новый",
-      "content": "Lab-04p 4 1 200000: 4 потока, 17984 простых числа, время, список",
-      "size": 329752,
-      "px": "2100x1253",
-      "sha256": "e27dee3d2ac00a28"
-    },
-    {
-      "file": "скрины/windows/уровень_7-8/task09_lab04p2_4.png",
-      "status": "новый",
-      "content": "Lab-04p2 4 1 200000: те же 17984 числа через __declspec(thread)",
-      "size": 331248,
-      "px": "2100x1253",
-      "sha256": "6d72d70e3fac650f"
-    },
-    {
-      "file": "скрины/windows/уровень_7-8/task10_bench.png",
-      "status": "новый",
-      "content": "Таблица замеров bench_win.csv: Lab-04p и Lab-04p2, N = 1, 2, 4, 8, 12, диапазоны 1–1048576 и 1–2097152 (82025 и 155611 простых)",
-      "size": 98289,
-      "px": "4078x2439",
-      "sha256": "04ad19c43c952138"
-    },
-    {
-      "file": "скрины/windows/уровень_9-10/task11_lab04pi_ctrlc.png",
-      "status": "новый",
-      "content": "Lab-04pi после Ctrl+C: приближение 3.141592653332681, эталон, погрешность 2.571117e-10, exit=0",
-      "size": 210186,
-      "px": "2100x1253",
-      "sha256": "b7d7209c35172780"
-    },
-    {
-      "file": "скрины/windows/уровень_9-10/task12_pi_chunks.png",
-      "status": "новый",
-      "content": "Подбор chunk для Lab-04pi при фиксированном времени 3 с на конфигурацию: chunk 500…50000, время 3,45–3,53 с, слагаемых 1,86e10…3,28e10, производительность 5,26e9…9,45e9 слагаемых/с (растёт с chunk — меньше переключений волокон), погрешность 6,6e-10…2,3e-3 определяется моментом останова, а не размером chunk",
-      "size": 66994,
-      "px": "4078x2439",
-      "sha256": "e8a5ef57461b7780"
-    },
-    {
-      "file": "скрины/windows/уровень_9-10/task20_lab04pi_волокна.png",
-      "status": "новый",
-      "content": "Lab-04pi 4 2000: работающие волокна — раунды, слагаемые, приближение",
-      "size": 437160,
-      "px": "2100x1253",
-      "sha256": "c3c52ca04cdfc545"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task04_procexp_b_suspended1.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04b, нижняя панель Threads, снимок на 17-й секунде прогона: поток 1 в состоянии Suspended",
-      "size": 80252,
-      "px": "2350x1225",
-      "sha256": "b9f154f356dea09c"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task05_procexp_b_suspended2.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04b, нижняя панель Threads, снимок на 22-й секунде: оба дочерних потока в состоянии Suspended",
-      "size": 77532,
-      "px": "2350x1225",
-      "sha256": "e736c994dbf20cb2"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task22_lab04b_старт_3_потока.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04b, начало прогона (8-я секунда): три потока активны",
-      "size": 82161,
-      "px": "2350x1225",
-      "sha256": "8f9b93d94d2db372"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task23_lab04b_поток2_suspended.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04b, 32-я секунда: поток 1 уже возобновлён, поток 2 остаётся Suspended",
-      "size": 79332,
-      "px": "2350x1225",
-      "sha256": "c173e56bfa5cfdb0"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task24_lab04b_возобновление_обоих.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04b, 44-я секунда: оба потока возобновлены",
-      "size": 81292,
-      "px": "2350x1225",
-      "sha256": "447a1713f8be7161"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task06_procexp_c_before.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04c, нижняя панель Threads, 5-я секунда прогона: три потока",
-      "size": 68227,
-      "px": "2350x1225",
-      "sha256": "bc1c5d9e76b7b89e"
-    },
-    {
-      "file": "скрины/windows/уровень_4-5/task07_procexp_c_after.png",
-      "status": "новый",
-      "content": "Process Explorer, Lab-04c, нижняя панель Threads, 25-я секунда: два потока после TerminateThread",
-      "size": 78689,
-      "px": "2350x1225",
-      "sha256": "92572b389e5ef904"
-    }
-  ]
+ "lab": "ЛР4, Windows-часть",
+ "run": "2026-11-08",
+ "machine": "Windows 11 ARM64 (VMware), MSVC 18, сборка в C:\\lab4",
+ "note": "Имена task01–task12 — по заданию lab4/windows/ТЕХДОЛГ_СКРИНЫ.md (совпадают с report.json на Mac), task13–task21 — дополнительные кадры того же прогона. Консольные кадры сняты драйвером C:\\lab4_sync\\run_lab.ps1 либо с окна conhost (апскейл до 2100 px), кадры Process Explorer — вручную пользователем (PE с вводом не автоматизируется). task19 переснят: оба среза потоков Lab-04c в одном кадре, второй поток исчезает после TerminateThread.",
+ "items": [
+  {
+   "file": "скрины/windows/уровень_4-5/task01_powershell_threads_a.png",
+   "status": "новый",
+   "content": "PowerShell: (Get-Process Lab-04a).Threads → три потока (TID), Wait/ExecutionDelay",
+   "size": 148016,
+   "px": "2100x1253",
+   "sha256": "6505f5583cf9739d"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task02_procexp_threads_a.png",
+   "status": "новый",
+   "content": "Process Explorer, фильтр Lab, Lab-04a, нижняя панель Threads: три потока (5644 Wait:UserRequest, 5636 Wait:DelayExecution, 560 Wait:WrQueue)",
+   "size": 153087,
+   "px": "4112x2484",
+   "sha256": "bedea0397b5ea4eb"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task03_lab04d_threads.png",
+   "status": "новый",
+   "content": "Lab-04d: PID, TID, приоритет, «Всего потоков в процессе: 1»",
+   "size": 60058,
+   "px": "2100x1253",
+   "sha256": "bfcc86fe05dfe93e"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task13_lab04a_первые_итерации.png",
+   "status": "новый",
+   "content": "Lab-04a: шапка и первые итерации трёх потоков (PID - TID - № - символ - символ)",
+   "size": 229031,
+   "px": "2100x1253",
+   "sha256": "20d50e2269899858"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task14_lab04a_завершение.png",
+   "status": "новый",
+   "content": "Lab-04a: последние итерации и «Все потоки завершены.»",
+   "size": 133426,
+   "px": "2100x1253",
+   "sha256": "1d2eca52bbb82f14"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task15_lab04b_поток_suspended_powershell.png",
+   "status": "новый",
+   "content": "PowerShell: потоки Lab-04b, один в состоянии Wait/Suspended",
+   "size": 150928,
+   "px": "2100x1253",
+   "sha256": "706d113b2e7f7f90"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task16_lab04b_пауза_возобновление.png",
+   "status": "новый",
+   "content": "Строки Lab-04b: приостановлен на 30/40, возобновлён на 70 / после цикла главного",
+   "size": 185399,
+   "px": "2100x1253",
+   "sha256": "f2e0028bda6d3af4"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task17_lab04c_потоки_после.png",
+   "status": "новый",
+   "content": "PowerShell: потоки Lab-04c после TerminateThread — две строки",
+   "size": 138982,
+   "px": "2100x1253",
+   "sha256": "df35c7aca7b7c4a5"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task18_lab04c_завершение_потока.png",
+   "status": "новый",
+   "content": "Строка «Поток 2 завершён принудительно на итерации 50 (последняя итерация потока: 49)»",
+   "size": 144417,
+   "px": "2100x1253",
+   "sha256": "68549b7bee322aa4"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task19_lab04c_потоки_до_и_после.png",
+   "status": "новый",
+   "content": "Один кадр, два среза PowerShell: до TerminateThread три потока (6696, 9524, 1548), после — два (6696, 9524); ниже строка о принудительном завершении",
+   "size": 69464,
+   "px": "1838x1020",
+   "sha256": "75d1dedd8cb0b2d5"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task21_lab4_сборка.png",
+   "status": "новый",
+   "content": "cmd /c C:\\lab4\\build.cmd → === BUILD OK ===, 7 exe",
+   "size": 163270,
+   "px": "2100x1253",
+   "sha256": "c5e0277e5d554083"
+  },
+  {
+   "file": "скрины/windows/уровень_7-8/task08_lab04p_4.png",
+   "status": "новый",
+   "content": "Lab-04p 4 1 200000: 4 потока, 17984 простых числа, время, список",
+   "size": 329752,
+   "px": "2100x1253",
+   "sha256": "e27dee3d2ac00a28"
+  },
+  {
+   "file": "скрины/windows/уровень_7-8/task09_lab04p2_4.png",
+   "status": "новый",
+   "content": "Lab-04p2 4 1 200000: те же 17984 числа через __declspec(thread)",
+   "size": 331248,
+   "px": "2100x1253",
+   "sha256": "6d72d70e3fac650f"
+  },
+  {
+   "file": "скрины/windows/уровень_7-8/task10_bench.png",
+   "status": "новый",
+   "content": "Таблица замеров bench_win.csv: Lab-04p и Lab-04p2, N = 1, 2, 4, 8, 12, диапазоны 1–1048576 и 1–2097152 (82025 и 155611 простых)",
+   "size": 98289,
+   "px": "4078x2439",
+   "sha256": "04ad19c43c952138"
+  },
+  {
+   "file": "скрины/windows/уровень_9-10/task11_lab04pi_ctrlc.png",
+   "status": "новый",
+   "content": "Lab-04pi после Ctrl+C: приближение 3.141592653332681, эталон, погрешность 2.571117e-10, exit=0",
+   "size": 210186,
+   "px": "2100x1253",
+   "sha256": "b7d7209c35172780"
+  },
+  {
+   "file": "скрины/windows/уровень_9-10/task12_pi_chunks.png",
+   "status": "новый",
+   "content": "Подбор chunk для Lab-04pi при фиксированном времени 3 с на конфигурацию: chunk 500…50000, время 3,45–3,53 с, слагаемых 1,86e10…3,28e10, производительность 5,26e9…9,45e9 слагаемых/с (растёт с chunk — меньше переключений волокон), погрешность 6,6e-10…2,3e-3 определяется моментом останова, а не размером chunk",
+   "size": 66994,
+   "px": "4078x2439",
+   "sha256": "e8a5ef57461b7780"
+  },
+  {
+   "file": "скрины/windows/уровень_9-10/task20_lab04pi_волокна.png",
+   "status": "новый",
+   "content": "Lab-04pi 4 2000: работающие волокна — раунды, слагаемые, приближение",
+   "size": 437160,
+   "px": "2100x1253",
+   "sha256": "c3c52ca04cdfc545"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task04_procexp_b_suspended1.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04b, нижняя панель Threads, снимок на 17-й секунде прогона: поток 1 в состоянии Suspended",
+   "size": 80252,
+   "px": "2350x1225",
+   "sha256": "b9f154f356dea09c"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task05_procexp_b_suspended2.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04b, нижняя панель Threads, снимок на 22-й секунде: оба дочерних потока в состоянии Suspended",
+   "size": 77532,
+   "px": "2350x1225",
+   "sha256": "e736c994dbf20cb2"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task22_lab04b_старт_3_потока.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04b, начало прогона (8-я секунда): три потока активны",
+   "size": 82161,
+   "px": "2350x1225",
+   "sha256": "8f9b93d94d2db372"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task23_lab04b_поток2_suspended.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04b, 32-я секунда: поток 1 уже возобновлён, поток 2 остаётся Suspended",
+   "size": 79332,
+   "px": "2350x1225",
+   "sha256": "c173e56bfa5cfdb0"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task24_lab04b_возобновление_обоих.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04b, 44-я секунда: оба потока возобновлены",
+   "size": 81292,
+   "px": "2350x1225",
+   "sha256": "447a1713f8be7161"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task06_procexp_c_before.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04c, нижняя панель Threads, 5-я секунда прогона: три потока",
+   "size": 68227,
+   "px": "2350x1225",
+   "sha256": "bc1c5d9e76b7b89e"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task07_procexp_c_after.png",
+   "status": "новый",
+   "content": "Process Explorer, Lab-04c, нижняя панель Threads, 25-я секунда: два потока после TerminateThread",
+   "size": 78689,
+   "px": "2350x1225",
+   "sha256": "92572b389e5ef904"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task26_lab04c_потоки_powershell_до.png",
+   "status": "новый",
+   "content": "PowerShell: потоки Lab-04c до TerminateThread — три строки (главный + два дочерних)",
+   "size": 151467,
+   "px": "4112x2484",
+   "sha256": "a394e08c99add6ec"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task27_lab04c_потоки_powershell_после.png",
+   "status": "новый",
+   "content": "PowerShell: потоки Lab-04c после TerminateThread — две строки",
+   "size": 266540,
+   "px": "4112x2484",
+   "sha256": "eb17661cfbb37443"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task28_lab04c_procexp_1.png",
+   "status": "новый",
+   "content": "Process Explorer: Lab-04c, нижняя панель Threads — кадр 1 из трёх подряд",
+   "size": 50604,
+   "px": "2350x1225",
+   "sha256": "a1b4755e97d55e32"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task29_lab04c_procexp_2.png",
+   "status": "новый",
+   "content": "Process Explorer: Lab-04c, нижняя панель Threads — кадр 2 из трёх подряд",
+   "size": 66323,
+   "px": "2350x1225",
+   "sha256": "d8d399048e756bd9"
+  },
+  {
+   "file": "скрины/windows/уровень_4-5/task30_lab04c_procexp_3.png",
+   "status": "новый",
+   "content": "Process Explorer: Lab-04c, нижняя панель Threads — кадр 3 из трёх подряд",
+   "size": 82533,
+   "px": "2350x1225",
+   "sha256": "ba83fa16278e95b3"
+  }
+ ]
 }
