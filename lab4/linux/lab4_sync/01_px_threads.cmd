@@ -1,0 +1,1 @@
+./Lab-04px > /tmp/px.out 2>&1 & echo $! > /tmp/px.pid; sleep 2; echo "PID=$(cat /tmp/px.pid)"; ps -L -p $(cat /tmp/px.pid); echo; grep Threads /proc/$(cat /tmp/px.pid)/status; echo; ls /proc/$(cat /tmp/px.pid)/task
