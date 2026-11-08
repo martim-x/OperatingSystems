@@ -179,6 +179,22 @@
       "size": 81292,
       "px": "2350x1225",
       "sha256": "447a1713f8be7161"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task06_procexp_c_before.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04c, нижняя панель Threads, 5-я секунда прогона: три потока",
+      "size": 68227,
+      "px": "2350x1225",
+      "sha256": "bc1c5d9e76b7b89e"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task07_procexp_c_after.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04c, нижняя панель Threads, 25-я секунда: два потока после TerminateThread",
+      "size": 78689,
+      "px": "2350x1225",
+      "sha256": "92572b389e5ef904"
     }
   ]
 }
