@@ -40,10 +40,8 @@
 | `g16_handles.png` | то же, дескрипторы процессов не видны |
 | `p_tree.png`, `p_handles.png`, `q_tree.png`, `q_handles.png`, `v_tree.png`, `v_handles.png`, `w_tree.png`, `w_handles.png` | серия попыток настроить нижнюю панель и фокус; ни одна не дала нужной строки `File`/`Process` |
 
-## Чего здесь нет
+## Досъёмка 2026-10-29
 
-7 кадров, которые остались плейсхолдерами в репозитории, — их ещё предстоит снять:
-`уровень_4-5/task09_cmd.png`, `task10_taskmgr.png`, `task11_three_proc.png`, `task15_procexp_pipe.png`,
-`task16_procexp_handles.png` и `уровень_7-8/task15_procexp_pipe.png`, `task16_procexp_handles.png`.
-
-Задание на досъёмку — `lab3/windows/ТЕХДОЛГ_СКРИНЫ.md`.
+7 кадров из первой партии пришли плейсхолдерами и были пересняты прогоном 2026-10-29;
+их источник — `C:\lab3_sync\shots\`, новые копии лежат в `lab3/build/скрины/windows/уровень_*/`
+по манифесту `lab3/windows/СКРИНЫ_МАНИФЕСТ.json`. Долг закрыт, задание на досъёмку удалено.
