@@ -5,20 +5,15 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-static const char *utf8_to_oem(const char *src)
+static const char *utf8_to_oem(const char *src, char *out, int cap)
 {
-    static char buf[4][4096];
-    static int idx = 0;
-    char *out = buf[idx];
-    idx = (idx + 1) & 3;
-
     int wlen = MultiByteToWideChar(CP_UTF8, 0, src, -1, NULL, 0);
     if (wlen <= 0 || wlen > 4096) {
         return src;
     }
     wchar_t wbuf[4096];
     MultiByteToWideChar(CP_UTF8, 0, src, -1, wbuf, wlen);
-    int olen = WideCharToMultiByte(866, 0, wbuf, -1, out, 4096, NULL, NULL);
+    int olen = WideCharToMultiByte(866, 0, wbuf, -1, out, cap, NULL, NULL);
     if (olen <= 0) {
         return src;
     }
@@ -28,11 +23,12 @@ static const char *utf8_to_oem(const char *src)
 static int rprintf(const char *fmt, ...)
 {
     char tmp[4096];
+    char conv[4096];
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(tmp, sizeof(tmp), fmt, ap);
     va_end(ap);
-    fputs(utf8_to_oem(tmp), stdout);
+    fputs(utf8_to_oem(tmp, conv, sizeof(conv)), stdout);
     fflush(stdout);
     return 0;
 }
@@ -40,11 +36,12 @@ static int rprintf(const char *fmt, ...)
 static int rfprintf(FILE *stream, const char *fmt, ...)
 {
     char tmp[4096];
+    char conv[4096];
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(tmp, sizeof(tmp), fmt, ap);
     va_end(ap);
-    fputs(utf8_to_oem(tmp), stream);
+    fputs(utf8_to_oem(tmp, conv, sizeof(conv)), stream);
     fflush(stream);
     return 0;
 }
