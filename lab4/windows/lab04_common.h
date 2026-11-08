@@ -11,7 +11,7 @@
 #define USER_NAME "User-6d4ec851"
 
 static const char *FIO_CHARS[] = {
-    "\xd0\x9c", "\xd0\xb0", "\xd1\x80", "\xd1\x83", "\xd1\x81", "\xd0\xba", "\xd0\xbe",
+    "\xd0\x9c", "\xd0\xb0", "\xd1\x80", "\xd1\x83", "\xd1\x88", "\xd0\xba", "\xd0\xbe",
     "\xd0\xa2", "\xd0\xb8", "\xd0\xbc", "\xd0\xbe", "\xd1\x84", "\xd0\xb5", "\xd0\xb9"
 };
 #define FIO_LEN ((int)(sizeof(FIO_CHARS) / sizeof(FIO_CHARS[0])))
