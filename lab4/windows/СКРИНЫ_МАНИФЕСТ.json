@@ -2,23 +2,23 @@
   "lab": "ЛР4, Windows-часть",
   "run": "2026-11-08",
   "machine": "Windows 11 ARM64 (VMware), MSVC 18, сборка в C:\\lab4",
-  "note": "Имена task01–task12 — по заданию lab4/windows/ТЕХДОЛГ_СКРИНЫ.md (совпадают с report.json на Mac); task13–task21 — дополнительные кадры того же прогона. Консольные кадры сняты драйвером C:\\lab4_sync\\run_lab.ps1 (очередь в cp866, снимок клиентской области консоли, апскейл до 2100 px). Кадры Process Explorer (task02, task04–task07) снимаются отдельно: PE, нижняя панель Threads.",
+  "note": "Имена task01–task12 — по заданию lab4/windows/ТЕХДОЛГ_СКРИНЫ.md (совпадают с report.json на Mac), task13–task21 — дополнительные кадры того же прогона. Консольные кадры сняты драйвером C:\\lab4_sync\\run_lab.ps1 либо с окна conhost (апскейл до 2100 px), кадры Process Explorer — вручную пользователем (PE с вводом не автоматизируется). task19 переснят: оба среза потоков Lab-04c в одном кадре, второй поток исчезает после TerminateThread.",
   "items": [
-    {
-      "file": "скрины/windows/уровень_4-5/task21_lab4_сборка.png",
-      "status": "новый",
-      "content": "cmd /c C:\\lab4\\build.cmd → === BUILD OK ===, 7 exe",
-      "size": 163270,
-      "px": "2100x1253",
-      "sha256": "c5e0277e5d554083"
-    },
     {
       "file": "скрины/windows/уровень_4-5/task01_powershell_threads_a.png",
       "status": "новый",
-      "content": "Get-Process Lab-04a → Threads: три потока, TID, Wait/ExecutionDelay",
+      "content": "PowerShell: (Get-Process Lab-04a).Threads → три потока (TID), Wait/ExecutionDelay",
       "size": 148016,
       "px": "2100x1253",
       "sha256": "6505f5583cf9739d"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task02_procexp_threads_a.png",
+      "status": "новый",
+      "content": "Process Explorer, фильтр Lab, Lab-04a, нижняя панель Threads: три потока (5644 Wait:UserRequest, 5636 Wait:DelayExecution, 560 Wait:WrQueue)",
+      "size": 153087,
+      "px": "4112x2484",
+      "sha256": "bedea0397b5ea4eb"
     },
     {
       "file": "скрины/windows/уровень_4-5/task03_lab04d_threads.png",
@@ -47,7 +47,7 @@
     {
       "file": "скрины/windows/уровень_4-5/task15_lab04b_поток_suspended_powershell.png",
       "status": "новый",
-      "content": "Потоки Lab-04b: один в состоянии Wait/Suspended",
+      "content": "PowerShell: потоки Lab-04b, один в состоянии Wait/Suspended",
       "size": 150928,
       "px": "2100x1253",
       "sha256": "706d113b2e7f7f90"
@@ -63,7 +63,7 @@
     {
       "file": "скрины/windows/уровень_4-5/task17_lab04c_потоки_после.png",
       "status": "новый",
-      "content": "Потоки Lab-04c после TerminateThread — две строки",
+      "content": "PowerShell: потоки Lab-04c после TerminateThread — две строки",
       "size": 138982,
       "px": "2100x1253",
       "sha256": "df35c7aca7b7c4a5"
@@ -71,7 +71,7 @@
     {
       "file": "скрины/windows/уровень_4-5/task18_lab04c_завершение_потока.png",
       "status": "новый",
-      "content": "Строка «Поток 2 завершён принудительно на итерации 50»",
+      "content": "Строка «Поток 2 завершён принудительно на итерации 50 (последняя итерация потока: 49)»",
       "size": 144417,
       "px": "2100x1253",
       "sha256": "68549b7bee322aa4"
@@ -79,15 +79,23 @@
     {
       "file": "скрины/windows/уровень_4-5/task19_lab04c_потоки_до_и_после.png",
       "status": "новый",
-      "content": "Потоки Lab-04c до (3 TID) и после (2 TID) TerminateThread",
-      "size": 221839,
+      "content": "Один кадр, два среза PowerShell: до TerminateThread три потока (6696, 9524, 1548), после — два (6696, 9524); ниже строка о принудительном завершении",
+      "size": 69464,
+      "px": "1838x1020",
+      "sha256": "75d1dedd8cb0b2d5"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task21_lab4_сборка.png",
+      "status": "новый",
+      "content": "cmd /c C:\\lab4\\build.cmd → === BUILD OK ===, 7 exe",
+      "size": 163270,
       "px": "2100x1253",
-      "sha256": "76d1c0cec061eddc"
+      "sha256": "c5e0277e5d554083"
     },
     {
       "file": "скрины/windows/уровень_7-8/task08_lab04p_4.png",
       "status": "новый",
-      "content": "Lab-04p 4 1 200000: 17984 простых числа, время, список",
+      "content": "Lab-04p 4 1 200000: 4 потока, 17984 простых числа, время, список",
       "size": 329752,
       "px": "2100x1253",
       "sha256": "e27dee3d2ac00a28"
@@ -95,23 +103,39 @@
     {
       "file": "скрины/windows/уровень_7-8/task09_lab04p2_4.png",
       "status": "новый",
-      "content": "Lab-04p2 4 1 200000: те же 17984 через __declspec(thread)",
+      "content": "Lab-04p2 4 1 200000: те же 17984 числа через __declspec(thread)",
       "size": 331248,
       "px": "2100x1253",
       "sha256": "6d72d70e3fac650f"
     },
     {
+      "file": "скрины/windows/уровень_7-8/task10_bench.png",
+      "status": "новый",
+      "content": "Таблица замеров bench_win.csv: Lab-04p и Lab-04p2, N = 1, 2, 4, 8, 12, диапазоны 1–1048576 и 1–2097152 (82025 и 155611 простых)",
+      "size": 98289,
+      "px": "4078x2439",
+      "sha256": "04ad19c43c952138"
+    },
+    {
       "file": "скрины/windows/уровень_9-10/task11_lab04pi_ctrlc.png",
       "status": "новый",
-      "content": "Lab-04pi после Ctrl+C: приближение 3.141592653332681, погрешность 2.57e-10, exit=0",
+      "content": "Lab-04pi после Ctrl+C: приближение 3.141592653332681, эталон, погрешность 2.571117e-10, exit=0",
       "size": 210186,
       "px": "2100x1253",
       "sha256": "b7d7209c35172780"
     },
     {
+      "file": "скрины/windows/уровень_9-10/task12_pi_chunks.png",
+      "status": "новый",
+      "content": "Таблица подбора chunk для Lab-04pi: 500…50000, слагаемых и погрешность",
+      "size": 70143,
+      "px": "4078x2439",
+      "sha256": "b91a659aa8f52905"
+    },
+    {
       "file": "скрины/windows/уровень_9-10/task20_lab04pi_волокна.png",
       "status": "новый",
-      "content": "Lab-04pi 4 2000: работающие волокна, раунды/слагаемые/приближение",
+      "content": "Lab-04pi 4 2000: работающие волокна — раунды, слагаемые, приближение",
       "size": 437160,
       "px": "2100x1253",
       "sha256": "c3c52ca04cdfc545"
