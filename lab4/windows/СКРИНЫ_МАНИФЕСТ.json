@@ -139,6 +139,46 @@
       "size": 437160,
       "px": "2100x1253",
       "sha256": "c3c52ca04cdfc545"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task04_procexp_b_suspended1.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04b, нижняя панель Threads, снимок на 17-й секунде прогона: поток 1 в состоянии Suspended",
+      "size": 80252,
+      "px": "2350x1225",
+      "sha256": "b9f154f356dea09c"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task05_procexp_b_suspended2.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04b, нижняя панель Threads, снимок на 22-й секунде: оба дочерних потока в состоянии Suspended",
+      "size": 77532,
+      "px": "2350x1225",
+      "sha256": "e736c994dbf20cb2"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task22_lab04b_старт_3_потока.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04b, начало прогона (8-я секунда): три потока активны",
+      "size": 82161,
+      "px": "2350x1225",
+      "sha256": "8f9b93d94d2db372"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task23_lab04b_поток2_suspended.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04b, 32-я секунда: поток 1 уже возобновлён, поток 2 остаётся Suspended",
+      "size": 79332,
+      "px": "2350x1225",
+      "sha256": "c173e56bfa5cfdb0"
+    },
+    {
+      "file": "скрины/windows/уровень_4-5/task24_lab04b_возобновление_обоих.png",
+      "status": "новый",
+      "content": "Process Explorer, Lab-04b, 44-я секунда: оба потока возобновлены",
+      "size": 81292,
+      "px": "2350x1225",
+      "sha256": "447a1713f8be7161"
     }
   ]
 }
