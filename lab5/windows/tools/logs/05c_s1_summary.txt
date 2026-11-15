@@ -1,0 +1,17 @@
+серия: 05c_s1
+команда: Lab-05c.exe 63 Normal Normal Normal
+маска (двоично): 111111
+процесс: PID 3860, код 0
+TID на момент b_ps: 9796, 5528, 3600
+первым завершился TID: 0
+ожидание после c_mid, с: 26.5
+
+кадры:
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_a_start.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_b_ps.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_c_mid.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_d_first_finish.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_d2_after_exit.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_e_finish.png
+
+разница итераций двух потоков видна на d_first_finish (оба потока ещё в кадре)

@@ -187,6 +187,7 @@ dump.rdb
 # === Логи и временные файлы ===
 *.log
 logs/
+!/lab5/windows/tools/logs/
 *.tmp
 *.temp
 *.bak

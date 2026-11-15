@@ -1,0 +1,44 @@
+
+=== Lab-05b, серия 05b_s2 ===
+команда: Lab-05b.exe 63 BelowNormal High   (P1 all -> маска 111111)
+число логических процессоров: 6
+родительский процесс: PID 3004
+  дочерний процесс: PID 7236  Lab-05x.exe
+  дочерний процесс: PID 10712  Lab-05x.exe
+[i] окно PID 3004 -> x=2056 y=0 2056x645
+[i] окно PID 7236 -> x=2056 y=645 2056x919
+[i] окно PID 10712 -> x=2056 y=1564 2056x920
+[i] старт серии, кадр a_start через 3 с
+
+--- состояние процессов (эквивалент ps) ---
+PID     PPID    Имя              Класс        Потоков  База   Маска родственности (двоично)
+3004    10724   Lab-05b          Normal       2        8      111111
+7236    3004    Lab-05x          BelowNormal  1        6      111111
+10712   3004    Lab-05x          High         1        13     111111
+число логических процессоров: 6
+[i] пауза 1.2 с, чтобы текст успел попасть в консоль драйвера
+[i] промежуточный кадр через 10 с
+
+[!] первым завершился дочерний процесс PID 7236 в 20:24:32.331 (кадров в буфере: 0)
+
+серия: 05b_s2
+команда: Lab-05b.exe 63 BelowNormal High
+маска (двоично): 111111
+родитель: PID 3004, код 0
+дети: 7236, 10712
+первым завершился: 7236
+время: 2026-11-15 20:24:32.331
+ожидание после c_mid, с: 3.5
+
+кадры:
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s2_a_start.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s2_b_ps.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s2_c_mid.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s2_d_first_finish.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s2_d2_after_exit.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s2_e_finish.png
+
+расхождение итераций видно на d_first_finish (= кадр до выхода) и d2_after_exit:
+  завершившийся процесс на d_first_finish показывает свою последнюю итерацию,
+  выживший - текущую; разницу фиксируем в отчёте.
+[i] сводка: C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\logs\05b_s2_summary.txt

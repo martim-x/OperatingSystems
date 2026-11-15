@@ -1,0 +1,20 @@
+серия: 05b_s1
+команда: Lab-05b.exe 63 Normal Normal
+маска (двоично): 111111
+родитель: PID 11704, код 0
+дети: 9024, 10888
+первым завершился: 9024
+время: 2026-11-15 20:23:28.559
+ожидание после c_mid, с: 3
+
+кадры:
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s1_a_start.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s1_b_ps.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s1_c_mid.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s1_d_first_finish.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s1_d2_after_exit.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05b_s1_e_finish.png
+
+расхождение итераций видно на d_first_finish (= кадр до выхода) и d2_after_exit:
+  завершившийся процесс на d_first_finish показывает свою последнюю итерацию,
+  выживший - текущую; разницу фиксируем в отчёте.

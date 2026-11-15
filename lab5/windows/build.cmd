@@ -5,6 +5,10 @@ rem
 rem Кодировка: UTF-8 БЕЗ BOM + chcp 65001 (cmd.exe не пропускает BOM и портит
 rem первую строку файла). PowerShell-скрипты, наоборот, в UTF-8 WITH BOM.
 rem
+rem ВАЖНО: ни одна кириллическая строка не должна стоять внутри блока ( ... ),
+rem иначе cmd.exe при коде страницы 65001 теряет байты и падает с
+rem ") was unexpected at this time." Поэтому все ветвления - через goto.
+rem
 rem Исходники ищутся рядом с этим файлом (lab5\windows\), затем в src\.
 rem Имена: Lab-05a.c или Lab_05a.c (оба варианта), Lab-05x.c, Lab-05b.c, Lab-05c.c.
 rem Исходники lab5\linux - POSIX (pthreads, sched.h), MSVC их НЕ собирает:
@@ -49,12 +53,14 @@ exit /b 1
 :have_vcvars
 echo [i] vcvarsall: %VCVARS%
 call "%VCVARS%" arm64 >nul
-if errorlevel 1 (
-    echo BUILD FAILED: не удалось инициализировать окружение ARM64.
-    exit /b 1
-)
+if errorlevel 1 goto vcvars_failed
 rem vcvarsall/vsdevcmd могут сменить текущий каталог - возвращаемся к своему.
 cd /d "%~dp0"
+goto build
+
+:vcvars_failed
+echo BUILD FAILED: не удалось инициализировать окружение ARM64.
+exit /b 1
 
 rem --- 2. Сборка --------------------------------------------------------------
 
@@ -65,17 +71,18 @@ set "BUILT=0"
 
 for %%F in (Lab-05a Lab-05x Lab-05b Lab-05c) do call :build_one %%F
 
-if defined FAILED (
-    echo.
-    echo === BUILD FAILED ===
-    exit /b 1
-)
+if defined FAILED goto build_failed
 if "%BUILT%"=="0" goto no_sources
 
 echo.
 echo === BUILD OK ===
 dir /b tools\*.exe
 exit /b 0
+
+:build_failed
+echo.
+echo === BUILD FAILED ===
+exit /b 1
 
 rem --- подпрограммы -----------------------------------------------------------
 
@@ -87,28 +94,29 @@ if exist "%NAME%.c" set "SRC=%NAME%.c"
 if not defined SRC if exist "src\%NAME%.c" set "SRC=src\%NAME%.c"
 if not defined SRC if exist "%NAME:_=-%.c" set "SRC=%NAME:_=-%.c"
 if not defined SRC if exist "src\%NAME:_=-%.c" set "SRC=src\%NAME:_=-%.c"
-if not defined SRC (
-    echo [FAIL] нет исходника %NAME%.c ^(искал в "%~dp0" и "%~dp0src\")^
-)
-if not defined SRC (
-    set "FAILED=1"
-    goto :eof
-)
+if not defined SRC goto one_missing
+
 echo.
 echo === %SRC% ===
 cl /nologo /utf-8 /O2 /W4 /Fo:tools\ /Fd:tools\ /Fe:tools\%NAME%.exe "%SRC%"
-if errorlevel 1 (
-    echo BUILD FAILED: %SRC%
-    set "FAILED=1"
-    goto :eof
-)
+if errorlevel 1 goto one_failed
 set /a BUILT+=1
+goto :eof
+
+:one_missing
+echo [FAIL] нет исходника %NAME%.c - искал рядом и в src\
+set "FAILED=1"
+goto :eof
+
+:one_failed
+echo BUILD FAILED: %SRC%
+set "FAILED=1"
 goto :eof
 
 :no_sources
 echo BUILD FAILED: не найдено ни одного исходника Lab-05*.c
-echo Искал: "%~dp0" и "%~dp0src\" (Lab-05a.c или Lab_05a.c, Lab-05x.c, Lab-05b.c, Lab-05c.c).
-echo Исходники lab5\linux - POSIX ^(pthreads/sched.h^), MSVC их не собирает:
+echo Искал: "%~dp0" и "%~dp0src\" - Lab-05a.c или Lab_05a.c, Lab-05x.c, Lab-05b.c, Lab-05c.c.
+echo Исходники lab5\linux - POSIX (pthreads/sched.h), MSVC их не собирает:
 echo для Windows нужны версии на Win32 API в lab5\windows\.
 exit /b 1
 

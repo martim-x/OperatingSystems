@@ -1,0 +1,18 @@
+серия: 05c_s3
+команда: Lab-05c.exe 1 Normal Lowest Highest
+маска (двоично): 000001
+процесс: PID 11144, код 0
+TID на момент b_ps: 9972, 6508
+первым завершился TID: 6508
+время: 2026-11-15 20:29:01.505
+ожидание после c_mid, с: 75.1
+
+кадры:
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s3_a_start.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s3_b_ps.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s3_c_mid.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s3_d_first_finish.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s3_d2_after_exit.png
+  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s3_e_finish.png
+
+разница итераций двух потоков видна на d_first_finish (оба потока ещё в кадре)
