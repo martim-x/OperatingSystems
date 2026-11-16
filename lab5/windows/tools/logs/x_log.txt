@@ -1,7 +1,7 @@
 ﻿step=x
-18:08:45.477 area: 0,0 3440x1392
-18:08:46.540 started Lab-05x.exe  shell pid 5880
-18:08:46.598 Lab-05x pid 3000
-18:09:04.708 shot 03_x_mid.png 2117x1376
-18:09:38.044 shot 03_x.png 2117x1376
-18:09:38.045 Lab-05x finished
+19:58:53.725 area: 0,0 3440x1392
+19:58:54.947 started Lab-05x.exe  shell pid 22900
+19:58:55.019 Lab-05x pid 35880
+19:59:13.138 shot 03_x_mid.png 2117x1376
+19:59:47.873 shot 03_x.png 2117x1376
+19:59:47.893 Lab-05x finished

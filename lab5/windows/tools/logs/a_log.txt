@@ -1,4 +1,4 @@
 ﻿step=a
-18:07:36.428 area: 0,0 3440x1392
-18:07:37.477 started Lab-05a.exe  shell pid 20836
-18:07:38.765 shot 02_a.png 2117x1376
+19:58:50.815 area: 0,0 3440x1392
+19:58:52.040 started Lab-05a.exe  shell pid 4336
+19:58:53.367 shot 02_a.png 2117x1376
