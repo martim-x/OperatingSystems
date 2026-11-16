@@ -117,22 +117,22 @@ Show-LabProcessTable -ProcessId @($proc.Id)
 $threadTitle = '(P3=' + $P3 + ', P4=' + $P4 + ')'
 Show-LabThreadTable -ProcessId $proc.Id -Title $threadTitle
 
-# Рабочие потоки ищем по приоритету: их уровень равен P3 или P4. Если таких
-# не нашлось (например .c выставил другие уровни), следим за всеми потоками.
-$workerTids = @()
-$procNow = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
-if ($procNow) {
-    foreach ($t in $procNow.Threads) {
-        $lvl = ''
-        try { $lvl = [string]$t.PriorityLevel } catch { }
-        if ($lvl -eq $P3 -or $lvl -eq $P4) { $workerTids += [int]$t.Id }
-    }
+# Выбираем ровно два worker по приоритету и исключаем главный поток
+# (обычно Normal/Wait). Не подменяем неоднозначный выбор списком всех TID.
+$workerSelection = [pscustomobject]@{ ThreadIds = @(); Error = 'процесс завершился до выбора рабочих TID' }
+for ($attempt = 0; $attempt -lt 20; $attempt++) {
+    $procNow = Get-Process -Id $proc.Id -ErrorAction SilentlyContinue
+    if (-not $procNow) { break }
+    $workerSelection = Select-LabWorkerThreadIds -Threads @($procNow.Threads) -P3 $P3 -P4 $P4
+    if ($workerSelection.ThreadIds.Count -eq 2 -and -not $workerSelection.Error) { break }
+    Start-Sleep -Milliseconds 100
 }
-if ($workerTids.Count -lt 2) {
-    Write-LabLine '[i] потоков с приоритетами P3/P4 не нашлось - следим за всеми TID процесса'
-    $workerTids = @(Get-LabThreadIds -ProcessId $proc.Id)
+$workerTids = @($workerSelection.ThreadIds)
+if ($workerSelection.Error) {
+    Write-LabLine ('[!] невозможно однозначно выбрать два рабочих TID: ' + $workerSelection.Error)
+} else {
+    Write-LabLine ('[i] выбраны рабочие TID: ' + ($workerTids -join ', ') + ' - ждём исчезновения одного из них')
 }
-Write-LabLine ('[i] снимок TID: ' + ($workerTids -join ', ') + ' - ждём исчезновения первого')
 Write-LabLine '[i] пауза 1.2 с, чтобы текст успел попасть в консоль драйвера'
 Start-Sleep -Milliseconds 1200
 try { $null = Save-LabScreenshot -Path (Join-Path $shotsDir ($Tag + '_b_ps.png')) } catch { Write-LabLine ('[!] кадр b_ps: ' + $_.Exception.Message) }
@@ -150,45 +150,64 @@ try { $null = Save-LabScreenshot -Path (Join-Path $shotsDir ($Tag + '_c_mid.png'
 $ringLast = Join-Path $shotsDir ('_ring_' + $Tag + '.png')
 $ringTmp = Join-Path $shotsDir ('_ring_' + $Tag + '.tmp.png')
 $firstGoneTid = 0
+$remainingWorkerTids = @()
 $firstGoneAt = $null
 $seriesFailed = $false
 $failReason = ''
 $waitStart = Get-Date
 
-$ring = Invoke-LabRingLoop -Probe {
-    $now = @(Get-LabThreadIds -ProcessId $proc.Id)
-    if ($now.Count -eq 0) { return -1 }
-    foreach ($tid in $workerTids) {
-        if ($now -notcontains $tid) { return [int]$tid }
+if ($workerSelection.Error) {
+    $ring = [pscustomobject]@{ Frames = 0; Failures = 0; DeadFrames = 0; LastFrameAt = $null; LastError = $workerSelection.Error; Stopped = 'selection-error'; FirstGone = 0; RemainingTids = @(); ElapsedSec = 0 }
+    foreach ($stale in @($ringTmp, $ringLast)) { if (Test-Path -LiteralPath $stale) { Remove-Item -LiteralPath $stale -Force -ErrorAction SilentlyContinue } }
+} else {
+    $ring = Invoke-LabRingLoop -Probe {
+        $now = @(Get-LabThreadIds -ProcessId $proc.Id)
+        if ($now.Count -eq 0) { return -2 }
+        $snapshot = Get-LabWorkerExitSnapshot -WorkerTids $workerTids -CurrentTids $now
+        if ($snapshot.Status -eq 'first') {
+            return [pscustomobject]@{ Code = 1; FirstGone = $snapshot.FirstGone; RemainingTids = @($snapshot.RemainingTids) }
+        }
+        if ($snapshot.Status -eq 'ambiguous') {
+            return [pscustomobject]@{ Code = -2; FirstGone = 0; RemainingTids = @($snapshot.RemainingTids) }
+        }
+        return [pscustomobject]@{ Code = 0; FirstGone = 0; RemainingTids = @($snapshot.RemainingTids) }
+    } -Capture {
+        param($FramePath)
+        $null = Save-LabScreenshot -Path $FramePath -DelayMs 0
+    } -TmpPath $ringTmp -LastPath $ringLast -TimeoutSec $RunTimeoutSec -PollMs 150 -OnLog {
+        param($Text)
+        Write-LabLine $Text
     }
-    return 0
-} -Capture {
-    param($FramePath)
-    $null = Save-LabScreenshot -Path $FramePath -DelayMs 0
-} -TmpPath $ringTmp -LastPath $ringLast -TimeoutSec $RunTimeoutSec -PollMs 150 -OnLog {
-    param($Text)
-    Write-LabLine $Text
 }
 
 Write-LabLine ('[i] кольцевой буфер: кадров в буфере ' + $ring.Frames + ', сбоев ' + $ring.Failures + ', отброшено (процесс уже завершился) ' + $ring.DeadFrames + ', за ' + $ring.ElapsedSec + ' с')
 
 if ($ring.Stopped -eq 'first') {
     $firstGoneTid = [int]$ring.FirstGone
+    $remainingWorkerTids = @($ring.RemainingTids)
     $firstGoneAt = Get-Date
     Write-LabLine ''
     Write-LabLine ('[!] первым завершился поток TID ' + $firstGoneTid + ' в ' + $firstGoneAt.ToString('HH:mm:ss.fff') + ' (кадров в буфере: ' + $ring.Frames + ', сбоев: ' + $ring.Failures + ')')
-    Write-LabLine ('[i] остались TID: ' + ((Get-LabThreadIds -ProcessId $proc.Id) -join ', '))
+    Write-LabLine ('[i] остались worker TID: ' + ($remainingWorkerTids -join ', '))
 } elseif ($ring.Stopped -eq 'probe-error') {
     Write-LabLine ('[!] опрос цели упал: ' + $ring.LastError)
+} elseif ($ring.Stopped -eq 'ambiguous') {
+    Write-LabLine ('[!] несколько worker исчезли между опросами; первый TID неоднозначен, оставшиеся: ' + ($ring.RemainingTids -join ', '))
+} elseif ($ring.Stopped -eq 'selection-error') {
+    Write-LabLine ('[!] наблюдение не начато: ' + $ring.LastError)
+} elseif ($ring.Stopped -eq 'timeout') {
+    Write-LabLine ('[!] первый рабочий поток не завершился за ' + $RunTimeoutSec + ' с')
 } elseif ($ring.Stopped -eq 'owner') {
     Write-LabLine '[!] процесс завершился раньше, чем пропал отдельный поток - момент выхода потока не зафиксирован'
 } else {
-    Write-LabLine ('[!] первый поток не завершился за ' + $RunTimeoutSec + ' с')
+    Write-LabLine ('[!] останов ожидания: ' + $ring.Stopped)
 }
 
 $firstShot = Join-Path $shotsDir ($Tag + '_d_first_finish.png')
 if ($firstGoneTid -le 0) {
-    $failReason = 'завершение первого потока не зафиксировано - кадра "до выхода" быть не может'
+    if ($workerSelection.Error) { $failReason = $workerSelection.Error }
+    elseif ($ring.Stopped -eq 'ambiguous') { $failReason = 'между опросами завершились несколько рабочих потоков - первый TID неоднозначен' }
+    else { $failReason = 'завершение первого потока не зафиксировано - кадра "до выхода" быть не может' }
 } else {
     if ($ring.Frames -le 0) {
         $failReason = 'в кольцевом буфере нет ни одного кадра, снятого при живом процессе'
@@ -215,6 +234,7 @@ if ($failReason) {
     $ringDiag += 'кадров в буфере: ' + $ring.Frames + ', сбоев: ' + $ring.Failures + ', отброшено: ' + $ring.DeadFrames + "`r`n"
     $ringDiag += 'останов: ' + $ring.Stopped + "`r`n"
     if ($ring.FirstGone -gt 0) { $ringDiag += 'первым завершился TID: ' + $ring.FirstGone + "`r`n" }
+    if ($remainingWorkerTids.Count -gt 0) { $ringDiag += 'оставшийся worker TID на том же опросе: ' + ($remainingWorkerTids -join ', ') + "`r`n" }
     if ($ring.LastFrameAt) { $ringDiag += 'начало последнего кадра буфера: ' + $ring.LastFrameAt.ToString('yyyy-MM-dd HH:mm:ss.fff') + "`r`n" }
     if ($ring.LastError) { $ringDiag += 'ошибка: ' + $ring.LastError + "`r`n" }
     $missingPath = Join-Path $shotsDir ($Tag + '_d_first_finish_MISSING.txt')
@@ -253,6 +273,7 @@ $summary += 'маска (двоично): ' + $maskText + "`r`n"
 $summary += 'процесс: PID ' + $proc.Id + ', код ' + $exitCodeText + "`r`n"
 $summary += 'TID на момент b_ps: ' + ($workerTids -join ', ') + "`r`n"
 $summary += 'первым завершился TID: ' + $firstGoneTid + "`r`n"
+if ($remainingWorkerTids.Count -gt 0) { $summary += 'оставшийся worker TID на том же опросе: ' + ($remainingWorkerTids -join ', ') + "`r`n" }
 if ($firstGoneAt) { $summary += 'время: ' + $firstGoneAt.ToString('yyyy-MM-dd HH:mm:ss.fff') + "`r`n" }
 $summary += 'ожидание после c_mid, с: ' + $elapsed + "`r`n"
 $summary += 'кольцевой буфер: кадров ' + $ring.Frames + ', сбоев ' + $ring.Failures + ', отброшено ' + $ring.DeadFrames + "`r`n"

@@ -308,6 +308,71 @@ function Test-LabRingFrameUsable {
     return ''
 }
 
+function Select-LabWorkerThreadIds {
+    param(
+        [Parameter(Mandatory = $true)][object[]]$Threads,
+        [Parameter(Mandatory = $true)][string]$P3,
+        [Parameter(Mandatory = $true)][string]$P4
+    )
+
+    $matches = @($Threads | Where-Object {
+        ([string]$_.PriorityLevel -eq $P3 -or [string]$_.PriorityLevel -eq $P4) -and
+        [string]$_.ThreadState -ne 'Wait'
+    })
+    $ids = @()
+    $errorText = ''
+    if ($P3 -eq $P4) {
+        if ($matches.Count -eq 2) {
+            $ids = @($matches | ForEach-Object { [int]$_.Id })
+        } else {
+            $errorText = 'ожидалось ровно два потока уровня ' + $P3 + ' вне состояния Wait, найдено ' + $matches.Count
+        }
+    } else {
+        $first = @($matches | Where-Object { [string]$_.PriorityLevel -eq $P3 })
+        $second = @($matches | Where-Object { [string]$_.PriorityLevel -eq $P4 })
+        if ($first.Count -eq 1 -and $second.Count -eq 1) {
+            $ids = @([int]$first[0].Id, [int]$second[0].Id)
+        } else {
+            $errorText = 'ожидался один worker P3=' + $P3 + ' и один P4=' + $P4 + '; найдено ' + $first.Count + '/' + $second.Count
+        }
+    }
+    return [pscustomobject]@{ ThreadIds = @($ids); Error = $errorText }
+}
+
+function Get-LabWorkerExitSnapshot {
+    param(
+        [Parameter(Mandatory = $true)][int[]]$WorkerTids,
+        [Parameter(Mandatory = $true)][int[]]$CurrentTids
+    )
+
+    $exited = @($WorkerTids | Where-Object { $CurrentTids -notcontains $_ })
+    $remaining = @($WorkerTids | Where-Object { $CurrentTids -contains $_ })
+    $status = 'none'
+    if ($exited.Count -eq 1) { $status = 'first' }
+    elseif ($exited.Count -gt 1) { $status = 'ambiguous' }
+    return [pscustomobject]@{
+        Status = $status
+        ExitedTids = @($exited)
+        RemainingTids = @($remaining)
+        FirstGone = $(if ($exited.Count -eq 1) { [int]$exited[0] } else { 0 })
+    }
+}
+
+function ConvertTo-LabProbeResult {
+    param([Parameter(Mandatory = $true)]$Value)
+
+    if ($Value -is [int] -or $Value -is [long]) {
+        return [pscustomobject]@{ Code = [int]$Value; FirstGone = 0; RemainingTids = @() }
+    }
+    $code = 0
+    $firstGone = 0
+    $remaining = @()
+    if ($Value.PSObject.Properties['Code']) { $code = [int]$Value.Code }
+    if ($Value.PSObject.Properties['FirstGone']) { $firstGone = [int]$Value.FirstGone }
+    if ($Value.PSObject.Properties['RemainingTids']) { $remaining = @($Value.RemainingTids | ForEach-Object { [int]$_ }) }
+    return [pscustomobject]@{ Code = $code; FirstGone = $firstGone; RemainingTids = @($remaining) }
+}
+
 function Invoke-LabRingLoop {
     param(
         [Parameter(Mandatory = $true)][scriptblock]$Probe,
@@ -327,6 +392,7 @@ function Invoke-LabRingLoop {
         LastFrameAt = $null
         Stopped     = ''
         FirstGone   = 0
+        RemainingTids = @()
         ElapsedSec  = 0
     }
     # Хвосты прошлого (аварийно прерванного) прогона не должны мешать захвату:
@@ -340,16 +406,22 @@ function Invoke-LabRingLoop {
     $deadline = $start.AddSeconds([math]::Max(1, $TimeoutSec))
 
     while ($true) {
-        $gone = 0
+        $probeResult = $null
         $probeError = ''
-        try { $gone = [int](& $Probe) } catch { $probeError = $_.Exception.Message }
+        try { $probeResult = ConvertTo-LabProbeResult -Value (& $Probe) } catch { $probeError = $_.Exception.Message }
         if ($probeError) {
             $state.Stopped = 'probe-error'
             $state.LastError = ('опрос цели: ' + $probeError)
             break
         }
-        if ($gone -gt 0) { $state.Stopped = 'first'; $state.FirstGone = $gone; break }
-        if ($gone -lt 0) { $state.Stopped = 'owner'; break }
+        if ($probeResult.Code -gt 0) {
+            $state.Stopped = 'first'
+            $state.FirstGone = $(if ($probeResult.FirstGone -gt 0) { $probeResult.FirstGone } else { $probeResult.Code })
+            $state.RemainingTids = @($probeResult.RemainingTids)
+            break
+        }
+        if ($probeResult.Code -eq -2) { $state.Stopped = 'ambiguous'; $state.RemainingTids = @($probeResult.RemainingTids); break }
+        if ($probeResult.Code -lt 0) { $state.Stopped = 'owner'; break }
 
         $frame = Save-LabRingFrame -Path $TmpPath -Capture $Capture
         if (-not $frame.Ok) {
@@ -359,9 +431,9 @@ function Invoke-LabRingLoop {
                 try { & $OnLog ('[!] кольцевой кадр не снят (' + $state.Failures + '): ' + $frame.Error) } catch { }
             }
         } else {
-            $after = 0
+            $afterResult = $null
             $afterError = ''
-            try { $after = [int](& $Probe) } catch { $afterError = $_.Exception.Message }
+            try { $afterResult = ConvertTo-LabProbeResult -Value (& $Probe) } catch { $afterError = $_.Exception.Message }
             if ($afterError) {
                 $state.Failures++
                 $state.Stopped = 'probe-error'
@@ -371,7 +443,7 @@ function Invoke-LabRingLoop {
                 }
                 break
             }
-            if ($after -eq 0) {
+            if ($afterResult.Code -eq 0) {
                 $moved = $false
                 try {
                     Move-Item -LiteralPath $TmpPath -Destination $LastPath -Force -ErrorAction Stop
@@ -391,8 +463,14 @@ function Invoke-LabRingLoop {
                 if (Test-Path -LiteralPath $TmpPath) {
                     try { Remove-Item -LiteralPath $TmpPath -Force -ErrorAction SilentlyContinue } catch { }
                 }
-                if ($after -gt 0) { $state.Stopped = 'first'; $state.FirstGone = $after }
-                else { $state.Stopped = 'owner' }
+                if ($afterResult.Code -gt 0) {
+                    $state.Stopped = 'first'
+                    $state.FirstGone = $(if ($afterResult.FirstGone -gt 0) { $afterResult.FirstGone } else { $afterResult.Code })
+                    $state.RemainingTids = @($afterResult.RemainingTids)
+                } elseif ($afterResult.Code -eq -2) {
+                    $state.Stopped = 'ambiguous'
+                    $state.RemainingTids = @($afterResult.RemainingTids)
+                } else { $state.Stopped = 'owner' }
                 break
             }
         }

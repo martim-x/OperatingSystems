@@ -164,6 +164,48 @@ Assert-True -Condition $threw -Name 'Resolve-LabRoot: без queue бросае�
 
 Assert-True -Condition ([bool](Get-Command -Name Clear-LabResults -ErrorAction SilentlyContinue)) -Name 'Clear-LabResults существует в lab_common.ps1'
 
+Write-Host ''
+Write-Host '=== 3b. Выбор рабочих TID без главного потока ==='
+
+$selectWorkerCommand = Get-Command -Name Select-LabWorkerThreadIds -ErrorAction SilentlyContinue
+Assert-True -Condition ([bool]$selectWorkerCommand) -Name 'Select-LabWorkerThreadIds определена'
+$exitSnapshotCommand = Get-Command -Name Get-LabWorkerExitSnapshot -ErrorAction SilentlyContinue
+Assert-True -Condition ([bool]$exitSnapshotCommand) -Name 'Get-LabWorkerExitSnapshot определена'
+
+if ($selectWorkerCommand -and $exitSnapshotCommand) {
+    $normalThreads = @(
+        [pscustomobject]@{ Id = 111; PriorityLevel = 'Normal'; ThreadState = 'Wait' },
+        [pscustomobject]@{ Id = 222; PriorityLevel = 'Normal'; ThreadState = 'Running' },
+        [pscustomobject]@{ Id = 333; PriorityLevel = 'Normal'; ThreadState = 'Ready' }
+    )
+    $normalSelection = Select-LabWorkerThreadIds -Threads $normalThreads -P3 'Normal' -P4 'Normal'
+    Assert-Equal -Actual ($normalSelection.ThreadIds -join ',') -Expected '222,333' -Name 'Lab-05c c1: из трёх Normal TID выбираются два рабочих, главный Wait исключён'
+    Assert-Equal -Actual $normalSelection.Error -Expected '' -Name 'Lab-05c c1: выбор двух рабочих TID однозначен'
+
+    $unequalThreads = @(
+        [pscustomobject]@{ Id = 444; PriorityLevel = 'Normal'; ThreadState = 'Wait' },
+        [pscustomobject]@{ Id = 555; PriorityLevel = 'Lowest'; ThreadState = 'Ready' },
+        [pscustomobject]@{ Id = 666; PriorityLevel = 'Highest'; ThreadState = 'Running' }
+    )
+    $unequalSelection = Select-LabWorkerThreadIds -Threads $unequalThreads -P3 'Lowest' -P4 'Highest'
+    Assert-Equal -Actual ($unequalSelection.ThreadIds -join ',') -Expected '555,666' -Name 'Lab-05c c2/c3: рабочие TID выбираются по P3/P4'
+
+    $ambiguousThreads = @(
+        [pscustomobject]@{ Id = 777; PriorityLevel = 'Normal'; ThreadState = 'Running' },
+        [pscustomobject]@{ Id = 888; PriorityLevel = 'Normal'; ThreadState = 'Ready' },
+        [pscustomobject]@{ Id = 999; PriorityLevel = 'Normal'; ThreadState = 'Running' }
+    )
+    $ambiguousSelection = Select-LabWorkerThreadIds -Threads $ambiguousThreads -P3 'Normal' -P4 'Normal'
+    Assert-Equal -Actual $ambiguousSelection.ThreadIds.Count -Expected 0 -Name 'Lab-05c: неоднозначный набор не превращается в список всех TID'
+    Assert-True -Condition ([bool]$ambiguousSelection.Error) -Name 'Lab-05c: неоднозначный выбор возвращает причину провала'
+
+    $exitSnapshot = Get-LabWorkerExitSnapshot -WorkerTids @(222, 333) -CurrentTids @(111, 333)
+    Assert-Equal -Actual ($exitSnapshot.ExitedTids -join ',') -Expected '222' -Name 'Lab-05c: snapshot определяет ровно один исчезнувший worker'
+    Assert-Equal -Actual ($exitSnapshot.RemainingTids -join ',') -Expected '333' -Name 'Lab-05c: snapshot сохраняет живой worker из того же опроса'
+    $bothGoneSnapshot = Get-LabWorkerExitSnapshot -WorkerTids @(222, 333) -CurrentTids @(111)
+    Assert-Equal -Actual $bothGoneSnapshot.ExitedTids.Count -Expected 2 -Name 'Lab-05c: одновременное исчезновение двух workers распознаётся как неоднозначное'
+}
+
 if (Get-Command -Name Clear-LabResults -ErrorAction SilentlyContinue) {
     $w = New-TestDir 'lab5clean'
     Write-TextFile -Path (Join-Path $w 'queue\01_x.cmd') -Text 'echo x'
@@ -438,6 +480,29 @@ Assert-Equal -Actual (Test-LabRingFrameUsable -Path $ringFile -LastFrameAt (Get-
 Assert-True -Condition ((Test-LabRingFrameUsable -Path $ringFile -LastFrameAt (Get-Date).AddSeconds(-30) -MaxStaleSec 5) -ne '') -Name 'Test-LabRingFrameUsable: устаревший кадр не годится'
 Assert-True -Condition ((Test-LabRingFrameUsable -Path (Join-Path $ringDir 'none.png') -LastFrameAt (Get-Date)) -ne '') -Name 'Test-LabRingFrameUsable: отсутствующий кадр не годится'
 Assert-True -Condition ((Test-LabRingFrameUsable -Path $ringFile -LastFrameAt $null) -ne '') -Name 'Test-LabRingFrameUsable: без отметки времени кадр не годится'
+
+$probeWorker = @{ Calls = 0 }
+$loopWorker = Invoke-LabRingLoop -Probe {
+    $probeWorker.Calls++
+    if ($probeWorker.Calls -ge 3) {
+        return [pscustomobject]@{ Code = 1; FirstGone = 222; RemainingTids = @(333) }
+    }
+    return [pscustomobject]@{ Code = 0; FirstGone = 0; RemainingTids = @(222, 333) }
+} -Capture $okCapture -TmpPath (Join-Path $ringDir 'workers.tmp.png') -LastPath (Join-Path $ringDir 'workers.png') -TimeoutSec 10 -PollMs 1
+Assert-Equal -Actual $loopWorker.Stopped -Expected 'first' -Name 'кольцо worker: завершение одного TID распознано'
+Assert-Equal -Actual $loopWorker.FirstGone -Expected 222 -Name 'кольцо worker: ID завершившегося потока сохранён'
+Assert-Equal -Actual ($loopWorker.RemainingTids -join ',') -Expected '333' -Name 'кольцо worker: оставшийся TID того же snapshot сохранён'
+
+$probeAmbiguous = @{ Calls = 0 }
+$loopAmbiguous = Invoke-LabRingLoop -Probe {
+    $probeAmbiguous.Calls++
+    if ($probeAmbiguous.Calls -ge 3) {
+        return [pscustomobject]@{ Code = -2; FirstGone = 0; RemainingTids = @() }
+    }
+    return [pscustomobject]@{ Code = 0; FirstGone = 0; RemainingTids = @(222, 333) }
+} -Capture $okCapture -TmpPath (Join-Path $ringDir 'ambiguous.tmp.png') -LastPath (Join-Path $ringDir 'ambiguous.png') -TimeoutSec 10 -PollMs 1
+Assert-Equal -Actual $loopAmbiguous.Stopped -Expected 'ambiguous' -Name 'кольцо worker: одновременное исчезновение помечено неоднозначным'
+Assert-Equal -Actual $loopAmbiguous.FirstGone -Expected 0 -Name 'кольцо worker: неоднозначный результат не придумывает первый TID'
 
 $probePlain = @{ Calls = 0 }
 $loopFirst = Invoke-LabRingLoop -Probe { $probePlain.Calls++; if ($probePlain.Calls -ge 3) { return 4242 }; return 0 } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l1.tmp.png') -LastPath (Join-Path $ringDir 'l1.png') -TimeoutSec 10 -PollMs 1
