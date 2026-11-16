@@ -17,9 +17,11 @@
 #      <Tag>_e_finish (после завершения родителя).
 #
 # Про кадр "момент выхода": консольное окно процесса исчезает вместе с
-# процессом, поэтому кадр d_first_finish - это последний снятый кадр ДО
-# обнаружения выхода (отставание <= ~0.7 с), а d2_after_exit - кадр сразу
-# после. Подробности в README.
+# процессом, поэтому d_first_finish берётся из кольцевого буфера - это
+# последний ПРОВЕРЕННЫЙ кадр, снятый при живом процессе. Если буфер пуст,
+# устарел или кадр не записался, скрипт НЕ подставляет снимок уже закрытого
+# окна: пишет <Tag>_d_first_finish_MISSING.txt с причиной и завершается
+# кодом 5, чтобы провал был виден драйверу и оператору.
 # ============================================================================
 
 [CmdletBinding()]
@@ -32,7 +34,8 @@ param(
     [ValidateSet('right', 'full')][string]$Layout = 'right',
     [int]$StartDelaySec = 3,
     [int]$MidDelaySec = 10,
-    [int]$ParentTimeoutSec = 240
+    [int]$ParentTimeoutSec = 240,
+    [int]$RingMaxStaleSec = 5
 )
 
 $ErrorActionPreference = 'Stop'
@@ -159,47 +162,86 @@ Start-Sleep -Seconds $MidDelaySec
 try { $null = Save-LabScreenshot -Path (Join-Path $shotsDir ($Tag + '_c_mid.png')) } catch { Write-LabLine ('[!] кадр c_mid: ' + $_.Exception.Message) }
 
 # --- 5. ожидание выхода первого дочернего процесса ---------------------------
-# Пока ждём, каждые ~0.6 с снимаем кадр в shots\_ring_<Tag>.png (одно и то же
-# имя). Последний такой кадр и есть "момент выхода": окно завершившегося
-# процесса на нём ещё видно.
+# Пока ждём, кольцевой буфер пишет кадры в shots\_ring_<Tag>.png. В
+# d_first_finish копируется последний ПРОВЕРЕННЫЙ кадр, снятый при живом
+# процессе; если буфера нет, серия помечается провалом (код 5) и кадр не
+# подменяется снимком уже закрытого окна.
 
 $ringLast = Join-Path $shotsDir ('_ring_' + $Tag + '.png')
 $ringTmp = Join-Path $shotsDir ('_ring_' + $Tag + '.tmp.png')
 $firstGone = 0
 $firstGoneAt = $null
-$ringCount = 0
+$seriesFailed = $false
+$failReason = ''
 $waitStart = Get-Date
-$deadline = $waitStart.AddSeconds($ParentTimeoutSec)
 
-while ((Get-Date) -lt $deadline) {
+$ring = Invoke-LabRingLoop -Probe {
     foreach ($cid in $childIds) {
-        if (-not (Test-LabProcessAlive -ProcessId $cid)) { $firstGone = $cid; break }
+        if (-not (Test-LabProcessAlive -ProcessId $cid)) { return [int]$cid }
     }
-    if ($firstGone -gt 0) { break }
-    if (-not (Test-LabProcessAlive -ProcessId $proc.Id)) { break }
-    try {
-        $null = Save-LabScreenshot -Path $ringTmp -DelayMs 0
-        Move-Item -LiteralPath $ringTmp -Destination $ringLast -Force
-        $ringCount++
-    } catch { }
-    Start-Sleep -Milliseconds 150
+    if (-not (Test-LabProcessAlive -ProcessId $proc.Id)) { return -1 }
+    return 0
+} -Capture {
+    param($FramePath)
+    $null = Save-LabScreenshot -Path $FramePath -DelayMs 0
+} -TmpPath $ringTmp -LastPath $ringLast -TimeoutSec $ParentTimeoutSec -PollMs 150 -OnLog {
+    param($Text)
+    Write-LabLine $Text
+}
+
+Write-LabLine ('[i] кольцевой буфер: кадров в буфере ' + $ring.Frames + ', сбоев ' + $ring.Failures + ', отброшено (цель уже завершилась) ' + $ring.DeadFrames + ', за ' + $ring.ElapsedSec + ' с')
+
+if ($ring.Stopped -eq 'first') {
+    $firstGone = [int]$ring.FirstGone
+    $firstGoneAt = Get-Date
+    Write-LabLine ''
+    Write-LabLine ('[!] первым завершился дочерний процесс PID ' + $firstGone + ' в ' + $firstGoneAt.ToString('HH:mm:ss.fff') + ' (кадров в буфере: ' + $ring.Frames + ', сбоев: ' + $ring.Failures + ')')
+} elseif ($ring.Stopped -eq 'probe-error') {
+    Write-LabLine ('[!] опрос цели упал: ' + $ring.LastError)
+} elseif ($ring.Stopped -eq 'owner') {
+    Write-LabLine '[!] родительский процесс завершился раньше первого дочернего - момент выхода не зафиксирован'
+} else {
+    Write-LabLine ('[!] первый дочерний процесс не завершился за ' + $ParentTimeoutSec + ' с')
 }
 
 $firstShot = Join-Path $shotsDir ($Tag + '_d_first_finish.png')
-if ($firstGone -gt 0) {
-    $firstGoneAt = Get-Date
-    Write-LabLine ''
-    Write-LabLine ('[!] первым завершился дочерний процесс PID ' + $firstGone + ' в ' + $firstGoneAt.ToString('HH:mm:ss.fff') + ' (кадров в буфере: ' + $ringCount + ')')
-    if (Test-Path -LiteralPath $ringLast) {
-        try { Copy-Item -LiteralPath $ringLast -Destination $firstShot -Force } catch { Write-LabLine ('[!] копия кадра: ' + $_.Exception.Message) }
-    } else {
-        try { $null = Save-LabScreenshot -Path $firstShot -DelayMs 0 } catch { }
-    }
+if ($firstGone -le 0) {
+    $failReason = 'первый дочерний процесс не зафиксирован - кадра "до выхода" быть не может'
 } else {
-    Write-LabLine '[!] первый дочерний процесс не зафиксирован (родитель завершился раньше или таймаут)'
-    try { $null = Save-LabScreenshot -Path $firstShot -DelayMs 0 } catch { }
+    if ($ring.Frames -le 0) {
+        $failReason = 'в кольцевом буфере нет ни одного кадра, снятого при живом процессе'
+    } else {
+        $failReason = Test-LabRingFrameUsable -Path $ringLast -LastFrameAt $ring.LastFrameAt -MaxStaleSec $RingMaxStaleSec
+    }
 }
-try { $null = Save-LabScreenshot -Path (Join-Path $shotsDir ($Tag + '_d2_after_exit.png')) -DelayMs 120 } catch { }
+
+if (-not $failReason) {
+    try {
+        Copy-Item -LiteralPath $ringLast -Destination $firstShot -Force -ErrorAction Stop
+        if (-not (Test-LabFrameFile -Path $firstShot)) { throw 'скопированный кадр пуст' }
+        Write-LabLine ('[i] ключевой кадр d_first_finish: из буфера, снят в ' + $ring.LastFrameAt.ToString('HH:mm:ss.fff') + ' (захват начат за ' + [math]::Round(((Get-Date) - $ring.LastFrameAt).TotalSeconds, 1) + ' с)')
+    } catch {
+        $failReason = 'не удалось сохранить кадр из буфера: ' + $_.Exception.Message
+    }
+}
+
+if ($failReason) {
+    $seriesFailed = $true
+    if (Test-Path -LiteralPath $firstShot) { try { Remove-Item -LiteralPath $firstShot -Force } catch { } }
+    $ringDiag = 'серия: ' + $Tag + "`r`n"
+    $ringDiag += 'причина: ' + $failReason + "`r`n"
+    $ringDiag += 'кадров в буфере: ' + $ring.Frames + ', сбоев: ' + $ring.Failures + ', отброшено: ' + $ring.DeadFrames + "`r`n"
+    $ringDiag += 'останов: ' + $ring.Stopped + "`r`n"
+    if ($ring.FirstGone -gt 0) { $ringDiag += 'первым завершился PID: ' + $ring.FirstGone + "`r`n" }
+    if ($ring.LastFrameAt) { $ringDiag += 'начало последнего кадра буфера: ' + $ring.LastFrameAt.ToString('yyyy-MM-dd HH:mm:ss.fff') + "`r`n" }
+    if ($ring.LastError) { $ringDiag += 'ошибка: ' + $ring.LastError + "`r`n" }
+    $missingPath = Join-Path $shotsDir ($Tag + '_d_first_finish_MISSING.txt')
+    [System.IO.File]::WriteAllText($missingPath, $ringDiag, $utf8)
+    Write-LabLine ('[!] КЛЮЧЕВОЙ КАДР d_first_finish НЕ СНЯТ: ' + $failReason)
+    Write-LabLine ('[!] диагностика: ' + $missingPath)
+    Write-LabLine '[!] d2_after_exit и e_finish снимаются, но момент выхода не подтверждён: серия вернёт код 5'
+}
+try { $null = Save-LabScreenshot -Path (Join-Path $shotsDir ($Tag + '_d2_after_exit.png')) -DelayMs 120 } catch { Write-LabLine ('[!] кадр d2_after_exit: ' + $_.Exception.Message) }
 
 # --- 6. ожидание завершения родителя ---------------------------------------
 
@@ -231,13 +273,25 @@ $summary += 'дети: ' + ($childIds -join ', ') + "`r`n"
 $summary += 'первым завершился: ' + $firstGone + "`r`n"
 if ($firstGoneAt) { $summary += 'время: ' + $firstGoneAt.ToString('yyyy-MM-dd HH:mm:ss.fff') + "`r`n" }
 $summary += 'ожидание после c_mid, с: ' + $elapsed + "`r`n"
+$summary += 'кольцевой буфер: кадров ' + $ring.Frames + ', сбоев ' + $ring.Failures + ', отброшено ' + $ring.DeadFrames + "`r`n"
+if ($ring.LastFrameAt) { $summary += 'начало последнего кадра буфера: ' + $ring.LastFrameAt.ToString('yyyy-MM-dd HH:mm:ss.fff') + "`r`n" }
+if ($ring.LastError) { $summary += 'ошибка: ' + $ring.LastError + "`r`n" }
+if ($seriesFailed) {
+    $summary += 'ключевой кадр: НЕ СНЯТ - ' + $failReason + "`r`n"
+} else {
+    $summary += 'ключевой кадр: d_first_finish из кольцевого буфера' + "`r`n"
+}
 $summary += "`r`nкадры:`r`n"
 foreach ($suffix in @('a_start', 'b_ps', 'c_mid', 'd_first_finish', 'd2_after_exit', 'e_finish')) {
-    $summary += '  ' + (Join-Path $shotsDir ($Tag + '_' + $suffix + '.png')) + "`r`n"
+    $shotPath = Join-Path $shotsDir ($Tag + '_' + $suffix + '.png')
+    if (Test-Path -LiteralPath $shotPath) { $summary += '  ' + $shotPath + "`r`n" }
+    else { $summary += '  НЕТ: ' + $shotPath + "`r`n" }
 }
-$summary += "`r`nрасхождение итераций видно на d_first_finish (= кадр до выхода) и d2_after_exit:" + "`r`n"
-$summary += '  завершившийся процесс на d_first_finish показывает свою последнюю итерацию,' + "`r`n"
-$summary += '  выживший - текущую; разницу фиксируем в отчёте.' + "`r`n"
+if (-not $seriesFailed) {
+    $summary += "`r`nрасхождение итераций видно на d_first_finish (= кадр до выхода) и d2_after_exit:" + "`r`n"
+    $summary += '  завершившийся процесс на d_first_finish показывает свою последнюю итерацию,' + "`r`n"
+    $summary += '  выживший - текущую; разницу фиксируем в отчёте.' + "`r`n"
+}
 
 $summaryPath = Join-Path $logsDir ($Tag + '_summary.txt')
 [System.IO.File]::WriteAllText($summaryPath, $summary, $utf8)
@@ -254,3 +308,9 @@ Write-LabLine ('[i] сводка: ' + $summaryPath)
 if ($script:OriginalTitle) {
     try { $Host.UI.RawUI.WindowTitle = $script:OriginalTitle } catch { }
 }
+
+if ($seriesFailed) {
+    Write-LabLine ('[!] серия ' + $Tag + ' ПРОВАЛЕНА: ' + $failReason)
+    exit 5
+}
+exit 0

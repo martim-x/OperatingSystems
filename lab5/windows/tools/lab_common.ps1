@@ -228,6 +228,183 @@ function Save-LabScreenshot {
     return $Path
 }
 
+# --- кольцевой буфер кадров --------------------------------------------------
+# Кадр "до выхода" обязан быть снят до исчезновения окна, поэтому харнесс держит
+# буфер: пока ждём событие, в один и тот же файл пишется свежий кадр. Каждый
+# кадр проверяется (файл существует и не пуст), ошибка захвата не глотается, а
+# запоминается и печатается; кадр, снятый уже после исчезновения цели, в буфер
+# не попадает. Пустой буфер - это провал серии, а не повод снять кадр "после".
+
+function Test-LabPngFile {
+    param([string]$Path)
+
+    $bytes = $null
+    try { $bytes = [System.IO.File]::ReadAllBytes($Path) } catch { return $false }
+    if (-not $bytes -or $bytes.Length -lt 20) { return $false }
+    $signature = @(137, 80, 78, 71, 13, 10, 26, 10)
+    for ($i = 0; $i -lt $signature.Count; $i++) {
+        if ($bytes[$i] -ne $signature[$i]) { return $false }
+    }
+    $tail = [System.Text.Encoding]::ASCII.GetString($bytes, $bytes.Length - 8, 4)
+    return ($tail -eq 'IEND')
+}
+
+function Test-LabFrameFile {
+    param([string]$Path)
+
+    if (-not $Path) { return $false }
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    $item = Get-Item -LiteralPath $Path -ErrorAction SilentlyContinue
+    if (-not $item -or $item.Length -le 0) { return $false }
+    if ($item.Extension -ne '.png') { return $true }
+    return (Test-LabPngFile -Path $Path)
+}
+
+function Save-LabRingFrame {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][scriptblock]$Capture
+    )
+
+    $result = [pscustomobject]@{
+        Ok      = $false
+        Error   = ''
+        Bytes   = [int64]0
+        At      = $null
+        StartedAt = $null
+        Seconds = 0
+    }
+    $result.StartedAt = Get-Date
+    $watch = [System.Diagnostics.Stopwatch]::StartNew()
+    try {
+        $dir = Split-Path -Parent $Path
+        if ($dir -and -not (Test-Path -LiteralPath $dir)) { $null = New-Item -ItemType Directory -Path $dir -Force }
+        $null = & $Capture $Path
+        if (-not (Test-LabFrameFile -Path $Path)) { throw ('кадр не записан или повреждён: ' + $Path) }
+        $item = Get-Item -LiteralPath $Path -ErrorAction Stop
+        $result.Ok = $true
+        $result.Bytes = [int64]$item.Length
+        $result.At = $item.LastWriteTime
+    } catch {
+        $result.Error = $_.Exception.Message
+        if (Test-Path -LiteralPath $Path) {
+            try { Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue } catch { }
+        }
+    }
+    $watch.Stop()
+    $result.Seconds = [math]::Round($watch.Elapsed.TotalSeconds, 3)
+    return $result
+}
+
+function Test-LabRingFrameUsable {
+    param([string]$Path, $LastFrameAt, [int]$MaxStaleSec = 5, $Now = (Get-Date))
+
+    if (-not $LastFrameAt) { return 'в буфере нет ни одного кадра' }
+    if (-not (Test-LabFrameFile -Path $Path)) { return ('файла последнего кадра нет или он пуст: ' + $Path) }
+    $age = ($Now - [datetime]$LastFrameAt).TotalSeconds
+    if ($age -gt $MaxStaleSec) {
+        return ('последний кадр буфера старше ' + $MaxStaleSec + ' с (возраст ' + [math]::Round($age, 1) + ' с) - он не подтверждает последнюю итерацию')
+    }
+    return ''
+}
+
+function Invoke-LabRingLoop {
+    param(
+        [Parameter(Mandatory = $true)][scriptblock]$Probe,
+        [Parameter(Mandatory = $true)][scriptblock]$Capture,
+        [Parameter(Mandatory = $true)][string]$TmpPath,
+        [Parameter(Mandatory = $true)][string]$LastPath,
+        [int]$TimeoutSec = 240,
+        [int]$PollMs = 150,
+        [scriptblock]$OnLog = $null
+    )
+
+    $state = [pscustomobject]@{
+        Frames      = 0
+        DeadFrames  = 0
+        Failures    = 0
+        LastError   = ''
+        LastFrameAt = $null
+        Stopped     = ''
+        FirstGone   = 0
+        ElapsedSec  = 0
+    }
+    # Хвосты прошлого (аварийно прерванного) прогона не должны мешать захвату:
+    # иначе Save-LabScreenshot пишет поверх занятого файла, а копия берёт старый кадр.
+    foreach ($stale in @($TmpPath, $LastPath)) {
+        if (Test-Path -LiteralPath $stale) {
+            try { Remove-Item -LiteralPath $stale -Force -ErrorAction SilentlyContinue } catch { }
+        }
+    }
+    $start = Get-Date
+    $deadline = $start.AddSeconds([math]::Max(1, $TimeoutSec))
+
+    while ($true) {
+        $gone = 0
+        $probeError = ''
+        try { $gone = [int](& $Probe) } catch { $probeError = $_.Exception.Message }
+        if ($probeError) {
+            $state.Stopped = 'probe-error'
+            $state.LastError = ('опрос цели: ' + $probeError)
+            break
+        }
+        if ($gone -gt 0) { $state.Stopped = 'first'; $state.FirstGone = $gone; break }
+        if ($gone -lt 0) { $state.Stopped = 'owner'; break }
+
+        $frame = Save-LabRingFrame -Path $TmpPath -Capture $Capture
+        if (-not $frame.Ok) {
+            $state.Failures++
+            if (-not $state.LastError) { $state.LastError = $frame.Error }
+            if ($OnLog -and $state.Failures -le 3) {
+                try { & $OnLog ('[!] кольцевой кадр не снят (' + $state.Failures + '): ' + $frame.Error) } catch { }
+            }
+        } else {
+            $after = 0
+            $afterError = ''
+            try { $after = [int](& $Probe) } catch { $afterError = $_.Exception.Message }
+            if ($afterError) {
+                $state.Failures++
+                $state.Stopped = 'probe-error'
+                $state.LastError = ('опрос цели после кадра: ' + $afterError)
+                if (Test-Path -LiteralPath $TmpPath) {
+                    try { Remove-Item -LiteralPath $TmpPath -Force -ErrorAction SilentlyContinue } catch { }
+                }
+                break
+            }
+            if ($after -eq 0) {
+                $moved = $false
+                try {
+                    Move-Item -LiteralPath $TmpPath -Destination $LastPath -Force -ErrorAction Stop
+                    $moved = Test-LabFrameFile -Path $LastPath
+                } catch {
+                    $state.Failures++
+                    if (-not $state.LastError) { $state.LastError = $_.Exception.Message }
+                }
+                if ($moved) {
+                    $state.Frames++
+                    $state.LastFrameAt = $frame.StartedAt
+                } elseif (Test-Path -LiteralPath $TmpPath) {
+                    try { Remove-Item -LiteralPath $TmpPath -Force -ErrorAction SilentlyContinue } catch { }
+                }
+            } else {
+                $state.DeadFrames++
+                if (Test-Path -LiteralPath $TmpPath) {
+                    try { Remove-Item -LiteralPath $TmpPath -Force -ErrorAction SilentlyContinue } catch { }
+                }
+                if ($after -gt 0) { $state.Stopped = 'first'; $state.FirstGone = $after }
+                else { $state.Stopped = 'owner' }
+                break
+            }
+        }
+
+        if ((Get-Date) -ge $deadline) { $state.Stopped = 'timeout'; break }
+        Start-Sleep -Milliseconds ([math]::Max(1, $PollMs))
+    }
+
+    $state.ElapsedSec = [math]::Round(((Get-Date) - $start).TotalSeconds, 1)
+    return $state
+}
+
 function Get-LabProcessWindows {
     param([int[]]$ProcessId = @(), [string]$TitleHint = '')
 
@@ -332,9 +509,16 @@ function Clear-LabResults {
 function Test-LabProcessAlive {
     param([int]$ProcessId)
     if ($ProcessId -le 0) { return $false }
-    $p = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue
-    if ($p) { return $true }
-    return $false
+    try {
+        $p = [System.Diagnostics.Process]::GetProcessById($ProcessId)
+        if (-not $p) { return $false }
+        return (-not $p.HasExited)
+    } catch [System.ArgumentException] {
+        return $false
+    } catch {
+        # Ошибка доступа и т.п. - смерть процесса не доказана, молча не считаем его завершённым.
+        return $true
+    }
 }
 
 function Stop-LabTree {
@@ -433,7 +617,11 @@ function Show-LabThreadTable {
 function Get-LabThreadIds {
     param([int]$ProcessId)
 
-    $p = Get-Process -Id $ProcessId -ErrorAction SilentlyContinue
-    if (-not $p) { return @() }
+    try {
+        $p = [System.Diagnostics.Process]::GetProcessById($ProcessId)
+    } catch [System.ArgumentException] {
+        return @()
+    }
+    if (-not $p -or $p.HasExited) { return @() }
     return @($p.Threads | ForEach-Object { [int]$_.Id })
 }

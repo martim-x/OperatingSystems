@@ -11,7 +11,10 @@
 #   4) непротиворечивость таймаутов: драйвер не убивает серию раньше, чем
 #      capture_05b/05c успевают закончить сами;
 #   5) smoke-прогон run_lab.ps1 -NoScreenshot на копии каталога (только там,
-#      где есть sh: cmd.exe эмулируется шимом, реальные exe не нужны).
+#      где есть sh: cmd.exe эмулируется шимом, реальные exe не нужны);
+#   6) кольцевой буфер кадров: целостность PNG, отказ от кадра после выхода,
+#      stale _ring_*.tmp.png, сбой опроса цели, явный провал при пустом буфере,
+#      код 5 в capture_05b/05c и его пометка драйвером (run_lab).
 #
 # Скрипт ничего не пишет в репозиторий: все прогоны идут в отдельном temp.
 # ============================================================================
@@ -283,6 +286,7 @@ exit $?
         '02_fail.cmd'  = "#!/bin/sh`nprintf 'команда с кодом 7\n'`nexit 7`n"
         '03_tail.cmd'  = "#!/bin/sh`nprintf 'хвост без перевода строки'`nexit 0`n"
         '04_slow.cmd'  = "#!/bin/sh`nsleep 20`nprintf 'не должно дойти\n'`nexit 0`n"
+        '05_five.cmd'  = "#!/bin/sh`nprintf 'серия без ключевого кадра\n'`nexit 5`n"
     }
     foreach ($qName in $queueBodies.Keys) {
         Write-TextFile -Path (Join-Path $smokeQueue $qName) -Text $queueBodies[$qName]
@@ -318,6 +322,14 @@ exit $?
         Assert-True -Condition $false -Name 'smoke: done\02.txt создан'
     }
 
+    if (Test-Path -LiteralPath (Join-Path $done '02.done')) {
+        $m2 = [System.IO.File]::ReadAllText((Join-Path $done '02.done'), $script:Utf8)
+        Assert-True -Condition ($m2 -match 'результат: ошибка \(код 7\)') -Name 'smoke: метка .done помечает ненулевой код как ошибку'
+        Assert-True -Condition ($m2 -notmatch 'результат: ок') -Name 'smoke: провал не помечен как успех'
+    } else {
+        Assert-True -Condition $false -Name 'smoke: done\02.done создан'
+    }
+
     if (Test-Path -LiteralPath (Join-Path $done '03.txt')) {
         $t3 = [System.IO.File]::ReadAllText((Join-Path $done '03.txt'), $script:Utf8)
         Assert-True -Condition ($t3 -match 'хвост без перевода строки') -Name 'smoke: неполная последняя строка дописана (-Final)'
@@ -333,6 +345,21 @@ exit $?
         Assert-True -Condition $false -Name 'smoke: done\04.txt создан'
     }
 
+    if (Test-Path -LiteralPath (Join-Path $done '05.txt')) {
+        $t5 = [System.IO.File]::ReadAllText((Join-Path $done '05.txt'), $script:Utf8)
+        Assert-True -Condition ($t5 -match 'код возврата: 5') -Name 'smoke: код 5 (провал серии) записан драйвером'
+    } else {
+        Assert-True -Condition $false -Name 'smoke: done\05.txt создан'
+    }
+
+    if (Test-Path -LiteralPath (Join-Path $done '05.done')) {
+        $m5 = [System.IO.File]::ReadAllText((Join-Path $done '05.done'), $script:Utf8)
+        Assert-True -Condition ($m5 -match 'результат: ошибка \(код 5\)') -Name 'smoke: exit 5 помечен в .done как ошибка'
+        Assert-True -Condition ($m5 -notmatch 'результат: ок') -Name 'smoke: exit 5 не выглядит успехом'
+    } else {
+        Assert-True -Condition $false -Name 'smoke: done\05.done создан'
+    }
+
     $leftovers = @(Get-ChildItem -LiteralPath $done -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^_' })
     Assert-Equal -Actual $leftovers.Count -Expected 0 -Name 'smoke: временные файлы драйвера удалены' -Detail (($leftovers | ForEach-Object { $_.Name }) -join ', ')
 
@@ -341,17 +368,17 @@ exit $?
     Assert-Equal -Actual $pngs.Count -Expected 0 -Name 'smoke: -NoScreenshot не создаёт кадров'
 
     $order = @()
-    foreach ($f in @('01.txt', '02.txt', '03.txt', '04.txt')) {
+    foreach ($f in @('01.txt', '02.txt', '03.txt', '04.txt', '05.txt')) {
         $p = Join-Path $done $f
         if (Test-Path -LiteralPath $p) { $order += $f }
     }
-    Assert-Equal -Actual ($order -join ',') -Expected '01.txt,02.txt,03.txt,04.txt' -Name 'smoke: команды выполнены в порядке имён'
+    Assert-Equal -Actual ($order -join ',') -Expected '01.txt,02.txt,03.txt,04.txt,05.txt' -Name 'smoke: команды выполнены в порядке имён'
 
     # Повторный запуск: выполненные команды пропускаются по меткам .done.
     # Вывод драйвера идёт в [Console]::Out (а не в конвейер), поэтому проверяем
     # по файлам: повторный прогон не должен переписывать готовые done\NN.txt.
     $stamps = @{}
-    foreach ($f in @('01.txt', '02.txt', '03.txt', '04.txt')) {
+    foreach ($f in @('01.txt', '02.txt', '03.txt', '04.txt', '05.txt')) {
         $p = Join-Path $done $f
         if (Test-Path -LiteralPath $p) { $stamps[$f] = (Get-Item -LiteralPath $p).LastWriteTimeUtc.Ticks }
     }
@@ -370,6 +397,121 @@ exit $?
         if ($now -ne $stamps[$f]) { $changed += $f }
     }
     Assert-Equal -Actual ($changed -join ',') -Expected '' -Name 'smoke: повторный запуск не перевыполняет готовые команды'
+}
+
+Write-Host ''
+Write-Host '=== 8. Кольцевой буфер: pre-exit кадры и явный провал ==='
+
+$ringDir = New-TestDir 'lab5ring'
+$pngBytes = [Convert]::FromBase64String('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==')
+$okCapture = { param($FramePath) [System.IO.File]::WriteAllBytes($FramePath, $pngBytes) }
+
+$frameOk = Save-LabRingFrame -Path (Join-Path $ringDir 'ok.png') -Capture $okCapture
+Assert-True -Condition $frameOk.Ok -Name 'Save-LabRingFrame: кадр записан'
+Assert-Equal -Actual $frameOk.Bytes -Expected $pngBytes.Length -Name 'Save-LabRingFrame: размер кадра проверен'
+Assert-True -Condition ($frameOk.At -is [datetime]) -Name 'Save-LabRingFrame: время кадра зафиксировано'
+Assert-True -Condition ($frameOk.Seconds -ge 0) -Name 'Save-LabRingFrame: длительность кадра измерена'
+Assert-True -Condition ($frameOk.StartedAt -is [datetime]) -Name 'Save-LabRingFrame: зафиксировано начало захвата'
+Assert-True -Condition (Test-LabPngFile -Path (Join-Path $ringDir 'ok.png')) -Name 'Test-LabPngFile: целый PNG распознан'
+
+$tornLen = [int][math]::Floor($pngBytes.Length / 2)
+$tornPath = Join-Path $ringDir 'torn.png'
+[System.IO.File]::WriteAllBytes($tornPath, [byte[]]$pngBytes[0..$tornLen])
+Assert-True -Condition (-not (Test-LabPngFile -Path $tornPath)) -Name 'Test-LabPngFile: обрезанный PNG отвергнут'
+Assert-True -Condition (-not (Test-LabFrameFile -Path $tornPath)) -Name 'Test-LabFrameFile: обрезанный PNG не считается кадром'
+$tornFrame = Save-LabRingFrame -Path (Join-Path $ringDir 'torn2.png') -Capture { param($FramePath) [System.IO.File]::WriteAllBytes($FramePath, [byte[]]$pngBytes[0..$tornLen]) }
+Assert-True -Condition (-not $tornFrame.Ok) -Name 'Save-LabRingFrame: повреждённый PNG - провал'
+Assert-True -Condition ($tornFrame.Error -match 'повреждён') -Name 'Save-LabRingFrame: причина повреждения сохранена' -Detail $tornFrame.Error
+
+$frameEmpty = Save-LabRingFrame -Path (Join-Path $ringDir 'empty.png') -Capture { param($FramePath) }
+Assert-True -Condition (-not $frameEmpty.Ok) -Name 'Save-LabRingFrame: пустой кадр - провал'
+Assert-True -Condition ($frameEmpty.Error -match 'не записан') -Name 'Save-LabRingFrame: причина пустого кадра сохранена' -Detail $frameEmpty.Error
+
+$frameThrow = Save-LabRingFrame -Path (Join-Path $ringDir 'throw.png') -Capture { param($FramePath) throw 'CopyFromScreen: The handle is invalid' }
+Assert-True -Condition (-not $frameThrow.Ok) -Name 'Save-LabRingFrame: исключение захвата - провал'
+Assert-True -Condition ($frameThrow.Error -match 'handle is invalid') -Name 'Save-LabRingFrame: текст исключения не проглочен' -Detail $frameThrow.Error
+Assert-True -Condition (-not (Test-Path -LiteralPath (Join-Path $ringDir 'throw.png'))) -Name 'Save-LabRingFrame: битый кадр удалён с диска'
+
+$ringFile = Join-Path $ringDir 'ring.png'
+[System.IO.File]::WriteAllBytes($ringFile, $pngBytes)
+Assert-Equal -Actual (Test-LabRingFrameUsable -Path $ringFile -LastFrameAt (Get-Date)) -Expected '' -Name 'Test-LabRingFrameUsable: свежий непустой кадр годится'
+Assert-True -Condition ((Test-LabRingFrameUsable -Path $ringFile -LastFrameAt (Get-Date).AddSeconds(-30) -MaxStaleSec 5) -ne '') -Name 'Test-LabRingFrameUsable: устаревший кадр не годится'
+Assert-True -Condition ((Test-LabRingFrameUsable -Path (Join-Path $ringDir 'none.png') -LastFrameAt (Get-Date)) -ne '') -Name 'Test-LabRingFrameUsable: отсутствующий кадр не годится'
+Assert-True -Condition ((Test-LabRingFrameUsable -Path $ringFile -LastFrameAt $null) -ne '') -Name 'Test-LabRingFrameUsable: без отметки времени кадр не годится'
+
+$probePlain = @{ Calls = 0 }
+$loopFirst = Invoke-LabRingLoop -Probe { $probePlain.Calls++; if ($probePlain.Calls -ge 3) { return 4242 }; return 0 } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l1.tmp.png') -LastPath (Join-Path $ringDir 'l1.png') -TimeoutSec 10 -PollMs 1
+Assert-Equal -Actual $loopFirst.Stopped -Expected 'first' -Name 'буфер: останов по первому завершению'
+Assert-Equal -Actual $loopFirst.FirstGone -Expected 4242 -Name 'буфер: идентификатор завершившегося сохранён'
+Assert-True -Condition ($loopFirst.Frames -ge 1) -Name ('буфер: кадры до выхода есть (' + $loopFirst.Frames + ')')
+Assert-True -Condition (Test-LabFrameFile -Path (Join-Path $ringDir 'l1.png')) -Name 'буфер: последний кадр на месте'
+Assert-True -Condition (-not (Test-Path -LiteralPath (Join-Path $ringDir 'l1.tmp.png'))) -Name 'буфер: временный кадр убран'
+
+$probePost = @{ Calls = 0 }
+$loopPost = Invoke-LabRingLoop -Probe { $probePost.Calls++; if ($probePost.Calls -ge 2) { return 777 }; return 0 } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l2.tmp.png') -LastPath (Join-Path $ringDir 'l2.png') -TimeoutSec 10 -PollMs 1
+Assert-Equal -Actual $loopPost.Frames -Expected 0 -Name 'буфер: кадр, снятый после выхода, не засчитывается'
+Assert-Equal -Actual $loopPost.DeadFrames -Expected 1 -Name 'буфер: кадр после выхода отброшен'
+Assert-Equal -Actual $loopPost.FirstGone -Expected 777 -Name 'буфер: выход зафиксирован и в этом случае'
+Assert-True -Condition (-not (Test-LabFrameFile -Path (Join-Path $ringDir 'l2.png'))) -Name 'буфер: отброшенный кадр не становится "последним"'
+
+$probeFail = @{ Calls = 0 }
+$loopFail = Invoke-LabRingLoop -Probe { $probeFail.Calls++; if ($probeFail.Calls -ge 3) { return 55 }; return 0 } -Capture { param($FramePath) throw 'boom: capture failed' } -TmpPath (Join-Path $ringDir 'l3.tmp.png') -LastPath (Join-Path $ringDir 'l3.png') -TimeoutSec 10 -PollMs 1
+Assert-Equal -Actual $loopFail.Frames -Expected 0 -Name 'буфер: при сбоях захвата кадров нет'
+Assert-True -Condition ($loopFail.Failures -ge 1) -Name ('буфер: сбои захвата посчитаны (' + $loopFail.Failures + ')')
+Assert-True -Condition ($loopFail.LastError -match 'boom') -Name 'буфер: причина сбоя сохранена' -Detail $loopFail.LastError
+Assert-True -Condition (-not (Test-LabFrameFile -Path (Join-Path $ringDir 'l3.png'))) -Name 'буфер: после сбоев "последнего" кадра нет'
+
+$loopTimeout = Invoke-LabRingLoop -Probe { return 0 } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l4.tmp.png') -LastPath (Join-Path $ringDir 'l4.png') -TimeoutSec 1 -PollMs 20
+Assert-Equal -Actual $loopTimeout.Stopped -Expected 'timeout' -Name 'буфер: таймаут отличим от выхода'
+Assert-True -Condition ($loopTimeout.Frames -ge 1) -Name 'буфер: за время ожидания кадры всё равно сняты'
+
+$loopLog = New-Object System.Collections.ArrayList
+$probeLog = @{ Calls = 0 }
+$null = Invoke-LabRingLoop -Probe { $probeLog.Calls++; return 0 } -Capture { param($FramePath) throw 'boom: ещё раз' } -TmpPath (Join-Path $ringDir 'l5.tmp.png') -LastPath (Join-Path $ringDir 'l5.png') -TimeoutSec 1 -PollMs 20 -OnLog { param($Text) [void]$loopLog.Add([string]$Text) }
+Assert-True -Condition ($loopLog.Count -ge 1 -and [string]$loopLog[0] -match 'не снят') -Name 'буфер: сбой захвата печатается в лог, а не глотается' -Detail (($loopLog -join ' | '))
+
+$stalePath = Join-Path $ringDir 'l6.png'
+[System.IO.File]::WriteAllBytes($stalePath, $pngBytes)
+$loopStale = Invoke-LabRingLoop -Probe { return 9001 } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l6.tmp.png') -LastPath $stalePath -TimeoutSec 5 -PollMs 1
+Assert-Equal -Actual $loopStale.Frames -Expected 0 -Name 'сценарий 05b (0 кадров): кадров нет'
+Assert-Equal -Actual $loopStale.Stopped -Expected 'first' -Name 'сценарий 05b (0 кадров): выход зафиксирован'
+Assert-True -Condition (-not (Test-Path -LiteralPath $stalePath)) -Name 'сценарий 05b (0 кадров): кадр прошлого прогона удалён'
+$staleReason = Test-LabRingFrameUsable -Path $stalePath -LastFrameAt $loopStale.LastFrameAt
+Assert-True -Condition ($staleReason -ne '') -Name 'сценарий 05b (0 кадров): серия обязана упасть с кодом 5, а не подставить кадр' -Detail $staleReason
+
+$staleTmpPath = Join-Path $ringDir 'l7.tmp.png'
+[System.IO.File]::WriteAllBytes($staleTmpPath, $pngBytes)
+$strictCapture = { param($FramePath) if (Test-Path -LiteralPath $FramePath) { throw 'tmp не удалён до захвата' }; [System.IO.File]::WriteAllBytes($FramePath, $pngBytes) }
+$probeAgain = @{ Calls = 0 }
+$loopAgain = Invoke-LabRingLoop -Probe { $probeAgain.Calls++; if ($probeAgain.Calls -ge 3) { return 31337 }; return 0 } -Capture $strictCapture -TmpPath $staleTmpPath -LastPath (Join-Path $ringDir 'l7.png') -TimeoutSec 10 -PollMs 1
+Assert-Equal -Actual $loopAgain.Failures -Expected 0 -Name 'повторный запуск: старый _ring_*.tmp.png не мешает захвату'
+Assert-Equal -Actual $loopAgain.Frames -Expected 1 -Name 'повторный запуск: кадр снят и засчитан'
+Assert-Equal -Actual $loopAgain.FirstGone -Expected 31337 -Name 'повторный запуск: выход зафиксирован'
+Assert-True -Condition (-not (Test-Path -LiteralPath $staleTmpPath)) -Name 'повторный запуск: tmp убран после кадра'
+
+$loopProbeError = Invoke-LabRingLoop -Probe { throw 'probe: access denied' } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l8.tmp.png') -LastPath (Join-Path $ringDir 'l8.png') -TimeoutSec 5 -PollMs 1
+Assert-Equal -Actual $loopProbeError.Stopped -Expected 'probe-error' -Name 'буфер: сбой опроса цели отличим от выхода'
+Assert-True -Condition ($loopProbeError.LastError -match 'access denied') -Name 'буфер: причина сбоя опроса сохранена' -Detail $loopProbeError.LastError
+Assert-True -Condition (-not (Test-LabFrameFile -Path (Join-Path $ringDir 'l8.png'))) -Name 'буфер: при сбое опроса "последнего" кадра нет'
+
+$probeAfter = @{ Calls = 0 }
+$loopAfterError = Invoke-LabRingLoop -Probe { $probeAfter.Calls++; if ($probeAfter.Calls -ge 2) { throw 'probe: after capture' }; return 0 } -Capture $okCapture -TmpPath (Join-Path $ringDir 'l9.tmp.png') -LastPath (Join-Path $ringDir 'l9.png') -TimeoutSec 5 -PollMs 1
+Assert-Equal -Actual $loopAfterError.Stopped -Expected 'probe-error' -Name 'буфер: сбой опроса после кадра - провал, а не "выход"'
+Assert-Equal -Actual $loopAfterError.Frames -Expected 0 -Name 'буфер: непроверенный кадр не засчитывается'
+
+Assert-True -Condition (Test-LabProcessAlive -ProcessId $PID) -Name 'Test-LabProcessAlive: текущий процесс жив'
+Assert-True -Condition (-not (Test-LabProcessAlive -ProcessId 999999)) -Name 'Test-LabProcessAlive: несуществующий PID завершён'
+Assert-True -Condition (-not (Test-LabProcessAlive -ProcessId 0)) -Name 'Test-LabProcessAlive: PID 0 не считается живым'
+
+foreach ($capName in @('capture_05b.ps1', 'capture_05c.ps1')) {
+    $capText = [System.IO.File]::ReadAllText((Join-Path $script:Tools $capName), $script:Utf8)
+    Assert-True -Condition ($capText -match 'Invoke-LabRingLoop') -Name ($capName + ': использует общий кольцевой буфер')
+    Assert-True -Condition ($capText -match 'Test-LabRingFrameUsable') -Name ($capName + ': проверяет пригодность кадра из буфера')
+    Assert-True -Condition ($capText -match 'd_first_finish_MISSING') -Name ($capName + ': провал буфера пишет диагностику')
+    Assert-True -Condition ($capText -match 'exit 5') -Name ($capName + ': провал серии возвращает код 5')
+    Assert-True -Condition ($capText -notmatch 'Save-LabScreenshot -Path \$firstShot') -Name ($capName + ': нет подмены d_first_finish кадром после выхода')
+    Assert-True -Condition ($capText -notmatch 'Save-LabScreenshot -Path \$ringTmp') -Name ($capName + ': кольцевой кадр не снимается в пустом try')
+    Assert-True -Condition ($capText -match 'кольцевой буфер: кадров в буфере') -Name ($capName + ': сводка содержит статистику буфера')
 }
 
 if (-not $KeepTemp -or $KeepTemp -eq '') {

@@ -219,7 +219,15 @@ function Invoke-LabQueueCommand {
     $header += "`r`n--- вывод ---`r`n"
     [System.IO.File]::WriteAllText($txtPath, $header + $outText, $utf8)
 
+    $markResult = 'ок'
+    if ($timedOut) { $markResult = 'таймаут' }
+    elseif ($code -ne 0) { $markResult = 'ошибка (код ' + $code + ')' }
+    if ($markResult -ne 'ок') {
+        Write-LabLine ('[!] результат команды: ' + $markResult + ' - ненулевой код не считается успехом серии')
+    }
+
     $mark = 'команда: ' + $name + "`r`n"
+    $mark += 'результат: ' + $markResult + "`r`n"
     $mark += 'код: ' + $codeText + "`r`n"
     $mark += 'длительность, с: ' + [math]::Round($watch.Elapsed.TotalSeconds, 1) + "`r`n"
     $mark += 'вывод: ' + $txtPath + "`r`n"
