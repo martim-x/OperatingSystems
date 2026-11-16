@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     int cpus;
 
     SetConsoleOutputCP(65001);
+    SetConsoleTitleA("Lab-05b.exe");
 
     if (argc < 4) {
         printf("Использование: Lab-05b.exe <маска> <класс P2> <класс P3>\n");

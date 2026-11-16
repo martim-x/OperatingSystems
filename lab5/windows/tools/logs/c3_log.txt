@@ -1,0 +1,57 @@
+﻿step=c3
+19:25:06.568 area: 0,0 3440x1392
+19:25:07.825 started Lab-05c.exe 1 Normal Lowest Highest shell pid 36308
+19:25:07.908 Lab-05c pid 35700 mask 1 Normal Lowest Highest
+19:25:09.942 worker tids 8512, 23148
+19:25:14.661 pe frame done
+19:25:16.773 shot 05c_s3_a_start.png 2048x1376
+19:25:24.834 shot 05c_s3_c_mid.png 2048x1376
+19:25:24.952 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:25.730 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:26.503 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:27.286 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:28.092 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:28.868 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:29.632 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:30.402 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:31.166 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:31.954 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:32.732 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:33.513 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:34.293 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:35.071 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:35.839 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:36.611 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:37.392 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:38.163 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:38.945 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:39.723 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:40.506 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:41.289 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:42.071 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:42.848 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:43.629 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:44.396 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:45.168 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:45.931 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:46.701 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:47.479 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:48.258 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:49.028 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:49.797 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:50.565 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:51.333 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:52.097 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:52.869 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:53.639 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:54.416 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:55.188 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:55.978 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:56.744 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:57.507 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:58.277 shot _ring_05c_s3.tmp.png 2048x1376
+19:25:58.294 ring: frames=43 dead=1 failures=0 stopped=first first=23148 elapsed=33.4
+19:25:58.297 d_first_finish copied from ring
+19:25:58.758 shot 05c_s3_d2_after_exit.png 2048x1376
+19:26:49.495 shot 05c_s3_e_finish.png 2048x1376
+19:26:49.497 finished, first gone 23148

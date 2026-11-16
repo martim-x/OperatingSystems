@@ -1,0 +1,54 @@
+﻿step=b2
+19:40:00.578 area: 0,0 3440x1392
+19:40:01.811 started Lab-05b.exe 65535 BelowNormal High shell pid 32664
+19:40:01.882 Lab-05b pid 35604 mask 65535 BelowNormal/High
+19:40:01.949 children 33268, 27952
+19:40:10.509 pe frame done
+19:40:14.585 shot 05b_s2_a_start.png 3440x1392
+19:40:23.653 shot 05b_s2_c_mid.png 1720x1392
+19:40:23.756 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:24.524 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:25.293 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:26.071 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:26.835 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:27.594 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:28.371 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:29.132 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:29.885 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:30.633 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:31.391 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:32.147 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:32.918 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:33.686 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:34.443 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:35.209 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:35.975 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:36.732 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:37.490 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:38.260 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:39.022 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:39.787 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:40.544 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:41.306 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:42.072 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:42.837 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:43.598 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:44.353 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:45.148 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:45.912 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:46.675 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:47.440 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:48.203 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:48.961 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:49.730 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:50.487 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:51.239 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:51.999 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:52.761 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:53.523 shot _ring_05b_s2.tmp.png 1720x1392
+19:40:54.248 ring: frames=40 dead=0 failures=0 stopped=first first=33268 elapsed=30.6
+19:40:54.252 d_first_finish copied from ring
+19:40:54.955 shot 05b_s2_d2_after_exit.png 1720x1392
+19:40:55.911 shot 05b_s2_e_finish.png 1720x1392
+19:40:55.911 e_finish region 1720x1392
+19:40:55.920 parent finished, first gone 33268 at 19:40:54.248

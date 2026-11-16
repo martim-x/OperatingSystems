@@ -22,6 +22,16 @@ setlocal
 chcp 65001 >nul
 cd /d "%~dp0"
 
+rem --- 0. Архитектура цели -----------------------------------------------------
+rem По умолчанию берется архитектура хоста (ARM64 -> arm64, иначе x64).
+rem Переопределение: set LAB5_ARCH=x64 (или arm64) до вызова build.cmd.
+
+if defined LAB5_ARCH goto arch_ready
+if /i "%PROCESSOR_ARCHITECTURE%"=="ARM64" set "LAB5_ARCH=arm64"
+if defined LAB5_ARCH goto arch_ready
+set "LAB5_ARCH=x64"
+:arch_ready
+
 rem --- 1. Окружение компилятора ---------------------------------------------
 
 where cl >nul 2>&1
@@ -52,7 +62,7 @@ exit /b 1
 
 :have_vcvars
 echo [i] vcvarsall: %VCVARS%
-call "%VCVARS%" arm64 >nul
+call "%VCVARS%" %LAB5_ARCH% >nul
 if errorlevel 1 goto vcvars_failed
 rem vcvarsall/vsdevcmd могут сменить текущий каталог - возвращаемся к своему.
 cd /d "%~dp0"

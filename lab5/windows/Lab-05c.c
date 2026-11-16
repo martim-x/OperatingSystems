@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     HANDLE thread2;
 
     SetConsoleOutputCP(65001);
+    SetConsoleTitleA("Lab-05c.exe");
 
     if (argc < 5) {
         printf("Использование: Lab-05c.exe <маска> <класс процесса> <приоритет P3> <приоритет P4>\n");

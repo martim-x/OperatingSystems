@@ -273,7 +273,8 @@ Write-Host '=== 6. build.cmd: контракт сборки ==='
 $buildPath = Join-Path $script:WindowsDir 'build.cmd'
 $buildText = [System.IO.File]::ReadAllText($buildPath, $script:Utf8)
 Assert-True -Condition ($buildText -match 'BUILD FAILED: не найдено ни одного исходника') -Name 'build.cmd падает, если нет ни одного .c'
-Assert-True -Condition ($buildText -match 'vcvarsall\.bat.*arm64|call "%VCVARS%" arm64') -Name 'build.cmd вызывает vcvarsall arm64'
+Assert-True -Condition ($buildText -match 'call "%VCVARS%" %LAB5_ARCH%') -Name 'build.cmd вызывает vcvarsall с выбранной архитектурой'
+Assert-True -Condition ($buildText -match 'LAB5_ARCH=arm64' -and $buildText -match 'LAB5_ARCH=x64') -Name 'build.cmd выбирает архитектуру по хосту (arm64/x64)'
 Assert-True -Condition ($buildText -match 'src\\') -Name 'build.cmd ищет исходники и в src\'
 
 $srcCandidates = @(Get-ChildItem -LiteralPath $script:WindowsDir -Filter '*.c' -ErrorAction SilentlyContinue)

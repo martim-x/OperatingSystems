@@ -1,0 +1,6 @@
+﻿19:09:16.631 filter Lab-05
+19:09:16.739 shot 05c_s1_f_procexp.png 3456x1408
+19:09:16.739 done
+19:23:26.621 filter Lab-05
+19:23:27.480 shot 05c_s1_f_procexp.png 1150x690
+19:23:27.481 done

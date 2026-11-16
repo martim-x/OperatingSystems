@@ -1,0 +1,19 @@
+﻿19:08:20.670 filter Lab-05
+19:08:20.787 shot 05b_s3_f_procexp.png 3456x1408
+19:08:20.787 done
+19:22:19.452 filter Lab-05
+19:22:20.327 shot 05b_s3_f_procexp.png 1150x690
+19:22:21.153 shot 05b_s3_f_procexp2.png 1150x690
+19:22:21.153 done
+19:29:19.160 filter Lab-05
+19:29:20.022 shot 05b_s3_f_procexp.png 1150x690
+19:29:20.842 shot 05b_s3_f_procexp2.png 1150x690
+19:29:20.843 done
+19:36:29.337 filter Lab-05
+19:36:30.200 shot 05b_s3_f_procexp.png 1150x690
+19:36:31.040 shot 05b_s3_f_procexp2.png 1150x690
+19:36:31.041 done
+19:41:04.507 filter Lab-05
+19:41:05.391 shot 05b_s3_f_procexp.png 1150x690
+19:41:06.219 shot 05b_s3_f_procexp2.png 1150x690
+19:41:06.220 done

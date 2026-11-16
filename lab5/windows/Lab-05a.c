@@ -9,6 +9,7 @@ int main(void)
     int cpus;
 
     SetConsoleOutputCP(65001);
+    SetConsoleTitleA("Lab-05a.exe");
     cpus = lab_cpu_count();
 
     if (!GetProcessAffinityMask(GetCurrentProcess(), &processMask, &systemMask)) {

@@ -13,6 +13,7 @@
 #define LAB05_REPORT_EVERY 1000
 #define LAB05_DELAY_MS 50
 #define LAB05_FINAL_PAUSE_MS 1500
+#define LAB05_START_PAUSE_MS 1500
 
 const char *lab_class_name(DWORD code)
 {

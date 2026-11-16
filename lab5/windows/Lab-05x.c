@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     double wallSeconds = 0.0;
 
     SetConsoleOutputCP(65001);
+    SetConsoleTitleA("Lab-05x.exe");
 
     if (argc > 1) {
         mask = lab_parse_mask(argv[1]);
@@ -27,6 +28,8 @@ int main(int argc, char *argv[])
            LAB05_ITERATIONS,
            LAB05_DELAY_MS);
     fflush(stdout);
+
+    Sleep(LAB05_START_PAUSE_MS);
 
     if (QueryPerformanceFrequency(&frequency)) {
         QueryPerformanceCounter(&start);
