@@ -2,40 +2,46 @@
 === Lab-05c, серия 05c_s1 ===
 команда: Lab-05c.exe 63 Normal Normal Normal   (P1 all -> маска 111111)
 число логических процессоров: 6
-процесс: PID 3860
-[i] окно PID 3860 -> x=1727 y=0 2385x2484
+процесс: PID 3240
+[i] окно PID 3240 -> x=1727 y=0 2385x2484
 [i] старт серии, кадр a_start через 3 с
 
 --- состояние процессов (эквивалент ps) ---
 PID     PPID    Имя              Класс        Потоков  База   Маска родственности (двоично)
-3860    7376    Lab-05c          Normal       3        8      111111
+3240    4812    Lab-05c          Normal       3        8      111111
 число логических процессоров: 6
 
---- потоки процесса 3860 (P3=Normal, P4=Normal) ---
+--- потоки процесса 3240 (P3=Normal, P4=Normal) ---
 TID      Уровень          База   Состояние
-9796     Normal           8      Wait
-5528     Normal           8      Running
-3600     Normal           8      Running
-[i] снимок TID: 9796, 5528, 3600 - ждём исчезновения первого
+6168     Normal           8      Wait
+4356     Normal           8      Running
+2344     Normal           8      Running
+[i] снимок TID: 6168, 4356, 2344 - ждём исчезновения первого
 [i] пауза 1.2 с, чтобы текст успел попасть в консоль драйвера
 [i] промежуточный кадр через 10 с
-[!] завершение первого потока не зафиксировано (процесс кончился раньше или таймаут)
+[i] кольцевой буфер: кадров в буфере 56, сбоев 0, отброшено (процесс уже завершился) 1, за 34.3 с
+[!] процесс завершился раньше, чем пропал отдельный поток - момент выхода потока не зафиксирован
+[!] КЛЮЧЕВОЙ КАДР d_first_finish НЕ СНЯТ: завершение первого потока не зафиксировано - кадра "до выхода" быть не может
+[!] диагностика: C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_d_first_finish_MISSING.txt
+[!] d2_after_exit и e_finish снимаются, но момент выхода не подтверждён: серия вернёт код 5
 
 серия: 05c_s1
 команда: Lab-05c.exe 63 Normal Normal Normal
 маска (двоично): 111111
-процесс: PID 3860, код 0
-TID на момент b_ps: 9796, 5528, 3600
+процесс: PID 3240, код 0
+TID на момент b_ps: 6168, 4356, 2344
 первым завершился TID: 0
-ожидание после c_mid, с: 26.5
+ожидание после c_mid, с: 36.2
+кольцевой буфер: кадров 56, сбоев 0, отброшено 1
+начало последнего кадра буфера: 2026-11-16 08:27:31.290
+ключевой кадр: НЕ СНЯТ - завершение первого потока не зафиксировано - кадра "до выхода" быть не может
 
 кадры:
   C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_a_start.png
   C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_b_ps.png
   C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_c_mid.png
-  C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_d_first_finish.png
+  НЕТ: C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_d_first_finish.png
   C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_d2_after_exit.png
   C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\shots\05c_s1_e_finish.png
-
-разница итераций двух потоков видна на d_first_finish (оба потока ещё в кадре)
 [i] сводка: C:\Users\User-6d4ec851\Documents\VisualStudioCodeRepos\OperatingSystems\lab5\windows\tools\logs\05c_s1_summary.txt
+[!] серия 05c_s1 ПРОВАЛЕНА: завершение первого потока не зафиксировано - кадра "до выхода" быть не может
