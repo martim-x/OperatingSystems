@@ -119,7 +119,7 @@
   },
   {
    "type": "p",
-   "text": "Прогоны выполнены на Arch Linux ARM (ядро 7.2.8), доступно шесть логических процессоров. Сборка выполняется сценарием build.sh компилятором GCC 16.1.1 с ключами -O2, -pthread, -Wall и -Wextra; сценарий печатает строку BUILD OK. Общие функции цикла, задержки, маски и приоритета вынесены в заголовок @лист:linux_common, исходные тексты четырёх приложений приведены в листингах @лист:linux_05a, @лист:linux_05x, @лист:linux_05b и @лист:linux_05c."
+   "text": "Прогоны выполнены на Arch Linux ARM (ядро 7.2.8), доступно шесть логических процессоров. Сборка выполняется сценарием build.sh компилятором GCC 16.1.1 с ключами -O2, -pthread, -Wall и -Wextra; сценарий печатает строку BUILD OK. Исходные тексты четырёх приложений приведены в листингах @лист:linux_05a, @лист:linux_05x, @лист:linux_05b и @лист:linux_05c, общие функции цикла, задержки, маски и приоритета вынесены в заголовок @лист:linux_common."
   },
   {
    "type": "p",
@@ -396,16 +396,16 @@
   },
   {
    "type": "p",
-   "text": "Windows-часть собрана командным файлом build.cmd компилятором MSVC для целевой архитектуры ARM64. Собраны четыре исполняемых файла: Lab-05a.exe, Lab-05x.exe, Lab-05b.exe и Lab-05c.exe. Вывод кириллицы выполняется через перекодировку строк в кодовую страницу консоли; общие функции вынесены в заголовок @лист:win_common, исходные тексты приведены в листингах @лист:lst_win_05a, @лист:lst_win_05x, @лист:win_05b и @лист:win_05c."
+   "text": "Windows-часть собрана командным файлом build.cmd компилятором MSVC для архитектуры x64. Собраны четыре исполняемых файла: Lab-05a.exe, Lab-05x.exe, Lab-05b.exe и Lab-05c.exe. Вывод кириллицы выполняется через кодовую страницу консоли; исходные тексты четырёх приложений приведены в листингах @лист:lst_win_05a, @лист:lst_win_05x, @лист:win_05b и @лист:win_05c, общие функции вынесены в заголовок @лист:win_common."
   },
   {
    "type": "p",
-   "text": "Сборка завершилась сообщением BUILD OK; список собранных файлов показан на рисунке @рис:win_build. Полный журнал компилятора в материалы не сохранён, поэтому версия компилятора и отсутствие предупреждений по снимку не устанавливаются."
+   "text": "Повторная сборка в каталоге C:\\Users\\User-6d4ec851\\OS5\\lab5\\windows завершилась сообщением BUILD OK. На рисунке @рис:win_build показаны четыре созданных исполняемых файла. Полный журнал компилятора не сохранён, поэтому отсутствие предупреждений по одному кадру не устанавливается."
   },
   {
    "type": "figure",
    "file": "../windows/tools/shots/01_build.png",
-   "caption": "Сборка Windows-приложений: сообщение BUILD OK и список исполняемых файлов",
+   "caption": "Сборка Windows-приложений в целевом каталоге: сообщение BUILD OK и четыре файла",
    "label": "win_build",
    "width_cm": 14.0
   },
@@ -423,7 +423,7 @@
   },
   {
    "type": "p",
-   "text": "На рисунке @рис:win_05a приведён вывод программы: PID 12152, TID 8384, класс приоритета Normal (8), приоритет потока 0 (Normal), приведённый приоритет 8, маска родственности процесса 111111 (63), системная маска 111111 (63), доступно шесть процессоров, текущий поток выполняется на процессоре 2. Совпадение масок означает, что процессу разрешены все процессоры системы."
+   "text": "На рисунке @рис:win_05a приведён вывод программы: PID 10056, TID 36336, класс процесса Normal (8), приоритет потока Normal (0), приведённый приоритет 8, маска процесса и системная маска 1111111111111111 (65535), доступны 16 логических процессоров. Совпадение масок означает, что процессу разрешены все процессоры системы."
   },
   {
    "type": "figure",
@@ -477,62 +477,73 @@
    "rows": [
     [
      "b1",
-     "111111",
+     "65535 (1111111111111111)",
      "Normal / Normal",
-     "1004",
-     "10328, 6448",
-     "10328"
+     "33400",
+     "27132 (Normal), 10344 (Normal)",
+     "27132"
     ],
     [
      "b2",
-     "111111",
+     "65535 (1111111111111111)",
      "Below Normal / High",
-     "9832",
-     "8760, 5832",
-     "8760"
+     "35604",
+     "33268 (BelowNormal), 27952 (High)",
+     "33268"
     ],
     [
      "b3",
-     "000001",
+     "1 (0000000000000001)",
      "Below Normal / High",
-     "9236",
-     "9400, 1852",
-     "1852"
+     "24604",
+     "30676 (BelowNormal), 32496 (High)",
+     "32496"
     ]
    ]
   },
   {
    "type": "p",
-   "text": "Состояние процессов с приоритетами и маской родственности показано на рисунке @рис:win_b3_ps: для серии b3 таблица содержит родителя и оба дочерних процесса с классами Below Normal и High и маской 000001."
+   "text": "Дерево процессов b3 и нижняя панель Threads в Process Explorer показаны на рисунке @рис:win_b3_pe. В кадре видны родитель PID 24604, дочерние процессы PID 30676 и 32496, а для потока TID 22748 выбранного процесса отображается Base Pri 6."
   },
   {
    "type": "figure",
-   "file": "../windows/tools/shots/05b_s3_b_ps.png",
-   "caption": "Серия b3: таблица процессов с классами приоритета и маской родственности",
-   "label": "win_b3_ps",
+   "file": "../windows/tools/shots/05b_s3_f_procexp2.png",
+   "caption": "Серия b3: дерево процессов и Base Pri потока BelowNormal в Process Explorer",
+   "label": "win_b3_pe",
    "width_cm": 15.0
   },
   {
    "type": "p",
-   "text": "Обязательный кадр момента завершения первого дочернего процесса в сериях b1 и b2 в текущем наборе отсутствует: файлы были удалены при чистке набора. Места этих кадров отмечены на рисунках @рис:ph_b1 и @рис:ph_b2 заглушками, которые не являются доказательством и должны быть заменены реальными снимками."
+   "text": "Кадры последних опросов b1 и b2 показаны на рисунках @рис:win_b1_first и @рис:win_b2_first. В обоих случаях на консолях видны миллион итераций; журнал кольцевого опроса первым отмечает PID 27132 в b1 и PID 33268 в b2."
   },
   {
    "type": "figure",
-   "file": "заглушки/zaglushka_05b_b1_d_first_finish.png",
-   "caption": "ЗАГЛУШКА: кадр завершения первого процесса серии b1 не получен и не является доказательством",
-   "label": "ph_b1",
-   "width_cm": 12.0
+   "file": "../windows/tools/shots/05b_s1_d_first_finish.png",
+   "caption": "Серия b1: последние значения обоих процессов перед фиксацией первого выхода",
+   "label": "win_b1_first",
+   "width_cm": 15.0
   },
   {
    "type": "figure",
-   "file": "заглушки/zaglushka_05b_b2_d_first_finish.png",
-   "caption": "ЗАГЛУШКА: кадр завершения первого процесса серии b2 не получен и не является доказательством",
-   "label": "ph_b2",
-   "width_cm": 12.0
+   "file": "../windows/tools/shots/05b_s2_d_first_finish.png",
+   "caption": "Серия b2: последние значения процессов High и BelowNormal перед фиксацией первого выхода",
+   "label": "win_b2_first",
+   "width_cm": 15.0
   },
   {
    "type": "p",
-   "text": "Для серии b3 сохранился снимок, на котором виден продолжающийся вывод процесса PID 11704 класса Below Normal и параметры запуска, однако он относится к предыдущему прогону: актуальный протокол серии описывает родителя PID 9236 и детей 9400 и 1852. Использовать этот кадр как доказательство текущей серии нельзя, поэтому он приведён только как иллюстрация наблюдаемого эффекта, а серия требует повторной съёмки."
+   "text": "В серии b3 маска ограничивает выполнение одним процессором. На рисунке @рис:win_b3_first процесс PID 32496 класса High завершил миллион итераций, пока дочерний процесс PID 30676 класса BelowNormal продолжал вывод на значении 72 000. Журнал b3 подтверждает эти PID и фиксирует первым выход PID 32496."
+  },
+  {
+   "type": "figure",
+   "file": "../windows/tools/shots/05b_s3_d_first_finish.png",
+   "caption": "Серия b3: High завершил миллион итераций, BelowNormal продолжает работу",
+   "label": "win_b3_first",
+   "width_cm": 15.0
+  },
+  {
+   "type": "p",
+   "text": "Таким образом, при маске всех процессоров b1 и b2 оба процесса доходят до миллиона почти одновременно по наблюдаемым кадрам; при маске одного процессора в b3 преимущество High выражено наглядно."
   },
   {
    "type": "h2",
@@ -540,27 +551,34 @@
   },
   {
    "type": "p",
-   "text": "Lab-05c запускает два потока с заданными приоритетами внутри одного процесса. Выполнены три серии. В серии c1, где оба потока имеют уровень Normal, приложение не смогло отличить рабочие потоки от главного потока процесса, поэтому момент завершения первого потока не зафиксирован: в протоколе указано значение 0, а обязательный кадр отсутствует. Его место отмечено заглушкой на рисунке @рис:ph_c1."
+   "text": "Lab-05c запускает два рабочих потока внутри одного процесса. В серии c1 процесс PID 31640, рабочие TID 10208 и 14468, оба с приоритетом Normal. Кадр @рис:win_c1_first показывает их последние значения; кольцевой журнал завершился со статусом owner и не определил единственный первый TID."
   },
   {
    "type": "figure",
-   "file": "заглушки/zaglushka_05c_c1_d_first_finish.png",
-   "caption": "ЗАГЛУШКА: кадр завершения первого потока серии c1 не получен и не является доказательством",
-   "label": "ph_c1",
-   "width_cm": 12.0
+   "file": "../windows/tools/shots/05c_s1_d_first_finish.png",
+   "caption": "Серия c1: оба потока Normal у финальных итераций, уникальный первый TID не установлен",
+   "label": "win_c1_first",
+   "width_cm": 15.0
   },
   {
    "type": "p",
-   "text": "В серии c2 протокол фиксирует первым завершившийся поток TID 9580, но список оставшихся потоков пуст. Сохранённый снимок относится к другому прогону: на нём PID 12228, потоки 2896 класса Lowest и 6436 класса Highest. Этот кадр показывает, что поток 6436 завершил миллион итераций, после чего поток 2896 продолжил вывод и также дошёл до миллиона; разница во времени завершения видна, но идентификаторы не совпадают с актуальным протоколом, поэтому кадр не может подтверждать текущую серию."
+   "text": "В серии c2 процесс PID 36356 запустил рабочие TID 20408 с приоритетом Lowest и 16256 с приоритетом Highest. Кадр @рис:win_c2_first показывает оба потока у миллиона итераций. Кольцевой журнал отметил одновременное исчезновение потоков в одном опросе, поэтому уникальный первый TID не заявляется."
+  },
+  {
+   "type": "figure",
+   "file": "../windows/tools/shots/05c_s2_d_first_finish.png",
+   "caption": "Серия c2: Lowest и Highest достигли миллиона, порядок завершения неоднозначен",
+   "label": "win_c2_first",
+   "width_cm": 15.0
   },
   {
    "type": "p",
-   "text": "В серии c3 маска ограничивает выполнение одним процессором, и различие приоритетов проявляется наиболее наглядно. На рисунке @рис:win_c3_first поток 6508 класса Highest завершает миллион итераций, после чего поток 9972 класса Lowest продолжает вывод и к моменту снятия кадра выполняет около 23 тысяч итераций. Протокол серии подтверждает, что первым завершился поток 7716, а оставшимися были 11076 и 2884; идентификаторы кадра относятся к предыдущему прогону, что отмечено в разделе ограничений."
+   "text": "В серии c3 маска ограничивает выполнение одним процессором. В новом прогоне PID 40848 рабочий TID 32080 с приоритетом Highest завершил миллион итераций; на кадре @рис:win_c3_first поток TID 34524 с приоритетом Lowest продолжает вывод на значении 32 000. Журнал фиксирует первым завершившийся TID 32080. Финальный кадр показывает завершение TID 34524 после миллиона итераций."
   },
   {
    "type": "figure",
    "file": "../windows/tools/shots/05c_s3_d_first_finish.png",
-   "caption": "Серия c3: завершение высокоприоритетного потока и продолжающаяся работа низкоприоритетного",
+   "caption": "Серия c3: Highest завершил миллион итераций, Lowest продолжает работу",
    "label": "win_c3_first",
    "width_cm": 15.0
   },
@@ -574,18 +592,18 @@
   },
   {
    "type": "p",
-   "text": "Требование задания о наблюдении приоритетов в Process Explorer выполнено на ручных запусках: на рисунке @рис:win_pe видны процесс Lab-05b с двумя дочерними процессами Lab-05x и панель потоков с базовым и динамическим приоритетом. Идентификаторы этих процессов (2052, 10020, 2168) не совпадают с идентификаторами автоматических серий, поэтому кадр подтверждает корректность классов приоритета, но не состояние конкретной серии."
+   "text": "Для c3 Process Explorer снят во время того же прогона, что и консольные кадры. На рисунке @рис:win_pe_c видны PID 40848 и нижняя панель Threads: рабочий TID 32080 имеет Base Pri 10, TID 34524 имеет Base Pri 6, главный поток TID 44520 имеет Base Pri 8. Для b3 дерево процессов и Base Pri 6 рабочего потока BelowNormal показаны на рисунке @рис:win_b3_pe."
   },
   {
    "type": "figure",
-   "file": "../windows/tools/shots/05b_s3_f_procexp_do_1.png",
-   "caption": "Process Explorer: дерево процессов Lab-05b и Lab-05x и панель потоков выбранного процесса",
-   "label": "win_pe",
+   "file": "../windows/tools/shots/05c_s3_f_procexp.png",
+   "caption": "Серия c3: PID процесса, TID рабочих потоков и Base Pri в Process Explorer",
+   "label": "win_pe_c",
    "width_cm": 15.0
   },
   {
    "type": "p",
-   "text": "Для полного соответствия заданию такие кадры необходимо снимать во время тех же прогонов, что и серии, чтобы идентификаторы процессов и потоков совпадали с протоколами."
+   "text": "Классы процессов BelowNormal и High видны в консольных выводах b3. В Process Explorer зафиксированы соответствующие дерево процессов и базовый приоритет потока; отдельный столбец Priority Class в сохранённом кадре не отображается."
   },
   {
    "type": "h2",
@@ -598,17 +616,16 @@
   {
    "type": "enum",
    "items": [
-    "в реализациях используется интервал 50 мс вместо 200 мс; письменного подтверждения поправки в материалах нет;",
-    "в Windows-сериях b1, b2 и c1 отсутствуют обязательные кадры момента завершения первого участника; их места отмечены заглушками;",
-    "часть сохранённых Windows-кадров (b3, c2, c3) относится к предыдущим прогонам и не совпадает по идентификаторам с актуальными протоколами серий;",
-    "полные журналы выполнения девяти команд Windows в репозитории отсутствуют, поэтому сборку и коды возврата нельзя проверить независимо;",
-    "в Linux-сериях b1, b2, c1 и c2 участники завершаются почти одновременно, поэтому отдельный кадр состояния «первый завершился, второй ещё работает» для них не получен;",
-    "заглушки, включённые в отчёт, не являются доказательствами и подлежат замене реальными снимками."
+    "в исходном задании указана задержка 200 мс, а Windows-реализация и указание владельца используют 50 мс; письменное подтверждение изменения в репозитории отсутствует;",
+    "в сериях b1 и b2 кадры показывают оба процесса на миллионе итераций; кольцевой журнал определяет первый выход процесса, а не точный порядок достижения последней итерации, поскольку после цикла предусмотрена финальная пауза;",
+    "в сериях c1 и c2 журнал не определил единственный первый рабочий TID; результат описан как одновременный либо неоднозначный;",
+    "Process Explorer показывает дерево процессов и базовые приоритеты потоков; классы процессов BelowNormal и High приведены в согласованных консольных кадрах, отдельный столбец Priority Class в сохранённых кадрах PE не включён;",
+    "для уровней 7–8 и 9–10 реализация не выполнялась и описана отдельным разделом отчёта."
    ]
   },
   {
    "type": "p",
-   "text": "Перечисленные пункты зафиксированы в файле BACKLOG.md с указанием конкретных действий и критериев готовности. До их выполнения раздел Windows нельзя считать закрытым, а отчёт – готовым к сдаче."
+   "text": "Раздел Windows содержит проверенные кадры и журналы серий уровня 4–5. Перед сдачей требуется согласовать расхождение интервала задержки с первичным заданием; уровни 7–8 и 9–10 остаются невыполненными."
   },
   {
    "type": "h2",
@@ -616,7 +633,7 @@
   },
   {
    "type": "p",
-   "text": "Windows-реализация повторяет поведение Linux-версии: при маске на все процессоры классы приоритета почти не влияют на результат, а при маске на один процессор поток или процесс класса High завершает работу существенно раньше низкоприоритетного. При этом обязательная доказательная база Windows-части неполна, поэтому раздел требует повторной съёмки ключевых кадров и сохранения полных журналов выполнения."
+   "text": "Проверенные Windows-серии показывают почти одновременное продвижение задач при маске всех процессоров и явное преимущество High и Highest при ограничении одним процессором. PID и TID в принятых кадрах совпадают с журналами b3 и c3. Серии c1 и c2 не дают уникального первого TID, что отражено в результатах. Перед сдачей остаётся согласовать применение задержки 50 мс вместо 200 мс из первичного задания."
   },
   {
    "type": "h1",
@@ -756,7 +773,7 @@
   },
   {
    "type": "p",
-   "text": "Работа требует доработки перед сдачей: необходимо согласовать интервал задержки, переснять отсутствующие Windows-кадры и связать кадры Process Explorer с автоматическими сериями, сохранить полные журналы выполнения команд, а затем реализовать задания уровней 7–8 и 9–10. Перечень конкретных действий и критериев готовности приведён в файле BACKLOG.md репозитория."
+   "text": "Перед сдачей необходимо согласовать интервал задержки: в первичном задании указано 200 мс, а Windows-реализация использует 50 мс. Задания уровней 7–8 и 9–10 в рамках текущей работы не выполнялись."
   }
  ],
  "listings": [
@@ -788,27 +805,27 @@
   {
    "title": "Lab-05a.c (Windows)",
    "label": "lst_win_05a",
-   "code": "#include \"lab05win_common.h\"\n\nint main(void)\n{\n    DWORD_PTR processMask = 0;\n    DWORD_PTR systemMask = 0;\n    char processMaskText[80];\n    char systemMaskText[80];\n    int cpus;\n\n    SetConsoleOutputCP(65001);\n    cpus = lab_cpu_count();\n\n    if (!GetProcessAffinityMask(GetCurrentProcess(), &processMask, &systemMask)) {\n        printf(\"Ошибка GetProcessAffinityMask: %lu\\n\", (unsigned long)GetLastError());\n        return 1;\n    }\n    lab_mask_to_binary(processMask, cpus, processMaskText, (int)sizeof(processMaskText));\n    lab_mask_to_binary(systemMask, cpus, systemMaskText, (int)sizeof(systemMaskText));\n\n    printf(\"=== Lab-05a: диспетчеризация и планирование ===\\n\");\n    printf(\"Идентификатор процесса: %lu\\n\", (unsigned long)GetCurrentProcessId());\n    printf(\"Идентификатор потока: %lu\\n\", (unsigned long)GetCurrentThreadId());\n    printf(\"Класс приоритета процесса: %s (%d)\\n\",\n           lab_class_name(GetPriorityClass(GetCurrentProcess())),\n           lab_class_base(GetPriorityClass(GetCurrentProcess())));\n    printf(\"Приоритет потока: %d (%s)\\n\",\n           GetThreadPriority(GetCurrentThread()),\n           lab_thread_name(GetThreadPriority(GetCurrentThread())));\n    printf(\"Приведённый приоритет потока: %d\\n\",\n           lab_priority_value(GetCurrentProcess(), GetCurrentThread()));\n    printf(\"Маска родственности процесса: %s (%llu)\\n\",\n           processMaskText,\n           (unsigned long long)processMask);\n    printf(\"Системная маска родственности: %s (%llu)\\n\",\n           systemMaskText,\n           (unsigned long long)systemMask);\n    printf(\"Количество процессоров, доступных процессу: %d\\n\", lab_popcount(processMask));\n    printf(\"Количество логических процессоров: %d\\n\", cpus);\n    printf(\"Номер процессора, назначенного потоку: %lu\\n\",\n           (unsigned long)GetCurrentProcessorNumber());\n\n    return 0;\n}\n"
+   "code": "#include \"lab05win_common.h\"\n\nint main(void)\n{\n    DWORD_PTR processMask = 0;\n    DWORD_PTR systemMask = 0;\n    char processMaskText[80];\n    char systemMaskText[80];\n    int cpus;\n\n    SetConsoleOutputCP(65001);\n    SetConsoleTitleA(\"Lab-05a.exe\");\n    cpus = lab_cpu_count();\n\n    if (!GetProcessAffinityMask(GetCurrentProcess(), &processMask, &systemMask)) {\n        printf(\"Ошибка GetProcessAffinityMask: %lu\\n\", (unsigned long)GetLastError());\n        return 1;\n    }\n    lab_mask_to_binary(processMask, cpus, processMaskText, (int)sizeof(processMaskText));\n    lab_mask_to_binary(systemMask, cpus, systemMaskText, (int)sizeof(systemMaskText));\n\n    printf(\"=== Lab-05a: диспетчеризация и планирование ===\\n\");\n    printf(\"Идентификатор процесса: %lu\\n\", (unsigned long)GetCurrentProcessId());\n    printf(\"Идентификатор потока: %lu\\n\", (unsigned long)GetCurrentThreadId());\n    printf(\"Класс приоритета процесса: %s (%d)\\n\",\n           lab_class_name(GetPriorityClass(GetCurrentProcess())),\n           lab_class_base(GetPriorityClass(GetCurrentProcess())));\n    printf(\"Приоритет потока: %d (%s)\\n\",\n           GetThreadPriority(GetCurrentThread()),\n           lab_thread_name(GetThreadPriority(GetCurrentThread())));\n    printf(\"Приведённый приоритет потока: %d\\n\",\n           lab_priority_value(GetCurrentProcess(), GetCurrentThread()));\n    printf(\"Маска родственности процесса: %s (%llu)\\n\",\n           processMaskText,\n           (unsigned long long)processMask);\n    printf(\"Системная маска родственности: %s (%llu)\\n\",\n           systemMaskText,\n           (unsigned long long)systemMask);\n    printf(\"Количество процессоров, доступных процессу: %d\\n\", lab_popcount(processMask));\n    printf(\"Количество логических процессоров: %d\\n\", cpus);\n    printf(\"Номер процессора, назначенного потоку: %lu\\n\",\n           (unsigned long)GetCurrentProcessorNumber());\n\n    return 0;\n}\n"
   },
   {
    "title": "Lab-05x.c (Windows)",
    "label": "lst_win_05x",
-   "code": "#include \"lab05win_common.h\"\n\nint main(int argc, char *argv[])\n{\n    DWORD_PTR mask;\n    LARGE_INTEGER frequency;\n    LARGE_INTEGER start;\n    LARGE_INTEGER finish;\n    double wallSeconds = 0.0;\n\n    SetConsoleOutputCP(65001);\n\n    if (argc > 1) {\n        mask = lab_parse_mask(argv[1]);\n        if (mask != 0 && !SetProcessAffinityMask(GetCurrentProcess(), mask)) {\n            printf(\"Ошибка SetProcessAffinityMask(%llu): %lu\\n\",\n                   (unsigned long long)mask,\n                   (unsigned long)GetLastError());\n            return 1;\n        }\n    }\n\n    printf(\"=== Lab-05x: PID %lu, TID %lu, класс %s, итераций %d, задержка %d мс ===\\n\",\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId(),\n           lab_class_name(GetPriorityClass(GetCurrentProcess())),\n           LAB05_ITERATIONS,\n           LAB05_DELAY_MS);\n    fflush(stdout);\n\n    if (QueryPerformanceFrequency(&frequency)) {\n        QueryPerformanceCounter(&start);\n    } else {\n        start.QuadPart = 0;\n        frequency.QuadPart = 0;\n    }\n\n    lab_worker_body();\n\n    if (frequency.QuadPart != 0) {\n        QueryPerformanceCounter(&finish);\n        wallSeconds = (double)(finish.QuadPart - start.QuadPart) / (double)frequency.QuadPart;\n    }\n    printf(\"Стенное время: %.3f с\\n\", wallSeconds);\n    fflush(stdout);\n\n    Sleep(LAB05_FINAL_PAUSE_MS);\n    return 0;\n}\n"
+   "code": "#include \"lab05win_common.h\"\n\nint main(int argc, char *argv[])\n{\n    DWORD_PTR mask;\n    LARGE_INTEGER frequency;\n    LARGE_INTEGER start;\n    LARGE_INTEGER finish;\n    double wallSeconds = 0.0;\n\n    SetConsoleOutputCP(65001);\n    SetConsoleTitleA(\"Lab-05x.exe\");\n\n    if (argc > 1) {\n        mask = lab_parse_mask(argv[1]);\n        if (mask != 0 && !SetProcessAffinityMask(GetCurrentProcess(), mask)) {\n            printf(\"Ошибка SetProcessAffinityMask(%llu): %lu\\n\",\n                   (unsigned long long)mask,\n                   (unsigned long)GetLastError());\n            return 1;\n        }\n    }\n\n    printf(\"=== Lab-05x: PID %lu, TID %lu, класс %s, итераций %d, задержка %d мс ===\\n\",\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId(),\n           lab_class_name(GetPriorityClass(GetCurrentProcess())),\n           LAB05_ITERATIONS,\n           LAB05_DELAY_MS);\n    fflush(stdout);\n\n    Sleep(LAB05_START_PAUSE_MS);\n\n    if (QueryPerformanceFrequency(&frequency)) {\n        QueryPerformanceCounter(&start);\n    } else {\n        start.QuadPart = 0;\n        frequency.QuadPart = 0;\n    }\n\n    lab_worker_body();\n\n    if (frequency.QuadPart != 0) {\n        QueryPerformanceCounter(&finish);\n        wallSeconds = (double)(finish.QuadPart - start.QuadPart) / (double)frequency.QuadPart;\n    }\n    printf(\"Стенное время: %.3f с\\n\", wallSeconds);\n    fflush(stdout);\n\n    Sleep(LAB05_FINAL_PAUSE_MS);\n    return 0;\n}\n"
   },
   {
    "title": "Lab-05b.c (Windows)",
    "label": "win_05b",
-   "code": "#include \"lab05win_common.h\"\n\nstatic void build_x_path(char *path, int size)\n{\n    char *slash;\n    GetModuleFileNameA(NULL, path, (DWORD)size);\n    slash = strrchr(path, '\\\\');\n    if (slash != NULL) {\n        strcpy(slash + 1, \"Lab-05x.exe\");\n    } else {\n        strcpy(path, \"Lab-05x.exe\");\n    }\n}\n\nstatic HANDLE spawn_child(const char *exePath, DWORD priorityClass, DWORD *childPid)\n{\n    STARTUPINFOA startup;\n    PROCESS_INFORMATION process;\n    char commandLine[MAX_PATH + 8];\n\n    ZeroMemory(&startup, sizeof(startup));\n    startup.cb = sizeof(startup);\n    snprintf(commandLine, sizeof(commandLine), \"\\\"%s\\\"\", exePath);\n\n    if (!CreateProcessA(NULL, commandLine, NULL, NULL, FALSE,\n                        CREATE_NEW_CONSOLE | CREATE_SUSPENDED, NULL, NULL,\n                        &startup, &process)) {\n        printf(\"Ошибка CreateProcessA: %lu\\n\", (unsigned long)GetLastError());\n        return NULL;\n    }\n    if (!SetPriorityClass(process.hProcess, priorityClass)) {\n        printf(\"Ошибка SetPriorityClass: %lu\\n\", (unsigned long)GetLastError());\n        TerminateProcess(process.hProcess, 1);\n        CloseHandle(process.hThread);\n        CloseHandle(process.hProcess);\n        return NULL;\n    }\n    ResumeThread(process.hThread);\n    CloseHandle(process.hThread);\n    *childPid = process.dwProcessId;\n    return process.hProcess;\n}\n\nint main(int argc, char *argv[])\n{\n    DWORD_PTR mask;\n    DWORD class1;\n    DWORD class2;\n    DWORD child1Pid = 0;\n    DWORD child2Pid = 0;\n    HANDLE child1;\n    HANDLE child2;\n    char exePath[MAX_PATH];\n    char maskText[80];\n    int cpus;\n\n    SetConsoleOutputCP(65001);\n\n    if (argc < 4) {\n        printf(\"Использование: Lab-05b.exe <маска> <класс P2> <класс P3>\\n\");\n        return 2;\n    }\n\n    cpus = lab_cpu_count();\n    mask = lab_parse_mask(argv[1]);\n    class1 = lab_class_from_name(argv[2]);\n    class2 = lab_class_from_name(argv[3]);\n    if (class1 == 0 || class2 == 0) {\n        printf(\"Неизвестный класс приоритета: %s / %s\\n\", argv[2], argv[3]);\n        return 2;\n    }\n    if (mask == 0) {\n        printf(\"Маска не задана\\n\");\n        return 2;\n    }\n\n    lab_mask_to_binary(mask, cpus, maskText, (int)sizeof(maskText));\n\n    printf(\"=== Lab-05b: два процесса с приоритетами (серия P1=%llu P2=%s P3=%s) ===\\n\",\n           (unsigned long long)mask, argv[2], argv[3]);\n    printf(\"Маска родственности: %s (%llu), процессов доступно: %d\\n\",\n           maskText, (unsigned long long)mask, lab_popcount(mask));\n    printf(\"Класс приоритета процесса 1: %s (%d)\\n\", lab_class_name(class1), lab_class_base(class1));\n    printf(\"Класс приоритета процесса 2: %s (%d)\\n\", lab_class_name(class2), lab_class_base(class2));\n    printf(\"PID родителя %lu, TID родителя %lu\\n\",\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId());\n    fflush(stdout);\n\n    if (!SetProcessAffinityMask(GetCurrentProcess(), mask)) {\n        printf(\"Ошибка SetProcessAffinityMask(%llu): %lu\\n\",\n               (unsigned long long)mask, (unsigned long)GetLastError());\n        return 1;\n    }\n\n    build_x_path(exePath, (int)sizeof(exePath));\n    printf(\"Дочерние процессы запускаются: %s\\n\", exePath);\n    fflush(stdout);\n\n    child1 = spawn_child(exePath, class1, &child1Pid);\n    child2 = spawn_child(exePath, class2, &child2Pid);\n    if (child1 == NULL || child2 == NULL) {\n        return 1;\n    }\n    printf(\"Запущен процесс 1: PID %lu, класс %s\\n\", (unsigned long)child1Pid, lab_class_name(class1));\n    printf(\"Запущен процесс 2: PID %lu, класс %s\\n\", (unsigned long)child2Pid, lab_class_name(class2));\n    fflush(stdout);\n\n    WaitForSingleObject(child1, INFINITE);\n    Sleep(50);\n    WaitForSingleObject(child2, INFINITE);\n\n    printf(\"Процесс 1 (PID %lu) завершён, код %lu\\n\",\n           (unsigned long)child1Pid, (unsigned long)0);\n    printf(\"Процесс 2 (PID %lu) завершён, код %lu\\n\",\n           (unsigned long)child2Pid, (unsigned long)0);\n    printf(\"Оба дочерних процесса завершены\\n\");\n    fflush(stdout);\n\n    CloseHandle(child1);\n    CloseHandle(child2);\n    return 0;\n}\n"
+   "code": "#include \"lab05win_common.h\"\n\nstatic void build_x_path(char *path, int size)\n{\n    char *slash;\n    GetModuleFileNameA(NULL, path, (DWORD)size);\n    slash = strrchr(path, '\\\\');\n    if (slash != NULL) {\n        strcpy(slash + 1, \"Lab-05x.exe\");\n    } else {\n        strcpy(path, \"Lab-05x.exe\");\n    }\n}\n\nstatic HANDLE spawn_child(const char *exePath, DWORD priorityClass, DWORD *childPid)\n{\n    STARTUPINFOA startup;\n    PROCESS_INFORMATION process;\n    char commandLine[MAX_PATH + 8];\n\n    ZeroMemory(&startup, sizeof(startup));\n    startup.cb = sizeof(startup);\n    snprintf(commandLine, sizeof(commandLine), \"\\\"%s\\\"\", exePath);\n\n    if (!CreateProcessA(NULL, commandLine, NULL, NULL, FALSE,\n                        CREATE_NEW_CONSOLE | CREATE_SUSPENDED, NULL, NULL,\n                        &startup, &process)) {\n        printf(\"Ошибка CreateProcessA: %lu\\n\", (unsigned long)GetLastError());\n        return NULL;\n    }\n    if (!SetPriorityClass(process.hProcess, priorityClass)) {\n        printf(\"Ошибка SetPriorityClass: %lu\\n\", (unsigned long)GetLastError());\n        TerminateProcess(process.hProcess, 1);\n        CloseHandle(process.hThread);\n        CloseHandle(process.hProcess);\n        return NULL;\n    }\n    ResumeThread(process.hThread);\n    CloseHandle(process.hThread);\n    *childPid = process.dwProcessId;\n    return process.hProcess;\n}\n\nint main(int argc, char *argv[])\n{\n    DWORD_PTR mask;\n    DWORD class1;\n    DWORD class2;\n    DWORD child1Pid = 0;\n    DWORD child2Pid = 0;\n    HANDLE child1;\n    HANDLE child2;\n    char exePath[MAX_PATH];\n    char maskText[80];\n    int cpus;\n\n    SetConsoleOutputCP(65001);\n    SetConsoleTitleA(\"Lab-05b.exe\");\n\n    if (argc < 4) {\n        printf(\"Использование: Lab-05b.exe <маска> <класс P2> <класс P3>\\n\");\n        return 2;\n    }\n\n    cpus = lab_cpu_count();\n    mask = lab_parse_mask(argv[1]);\n    class1 = lab_class_from_name(argv[2]);\n    class2 = lab_class_from_name(argv[3]);\n    if (class1 == 0 || class2 == 0) {\n        printf(\"Неизвестный класс приоритета: %s / %s\\n\", argv[2], argv[3]);\n        return 2;\n    }\n    if (mask == 0) {\n        printf(\"Маска не задана\\n\");\n        return 2;\n    }\n\n    lab_mask_to_binary(mask, cpus, maskText, (int)sizeof(maskText));\n\n    printf(\"=== Lab-05b: два процесса с приоритетами (серия P1=%llu P2=%s P3=%s) ===\\n\",\n           (unsigned long long)mask, argv[2], argv[3]);\n    printf(\"Маска родственности: %s (%llu), процессов доступно: %d\\n\",\n           maskText, (unsigned long long)mask, lab_popcount(mask));\n    printf(\"Класс приоритета процесса 1: %s (%d)\\n\", lab_class_name(class1), lab_class_base(class1));\n    printf(\"Класс приоритета процесса 2: %s (%d)\\n\", lab_class_name(class2), lab_class_base(class2));\n    printf(\"PID родителя %lu, TID родителя %lu\\n\",\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId());\n    fflush(stdout);\n\n    if (!SetProcessAffinityMask(GetCurrentProcess(), mask)) {\n        printf(\"Ошибка SetProcessAffinityMask(%llu): %lu\\n\",\n               (unsigned long long)mask, (unsigned long)GetLastError());\n        return 1;\n    }\n\n    build_x_path(exePath, (int)sizeof(exePath));\n    printf(\"Дочерние процессы запускаются: %s\\n\", exePath);\n    fflush(stdout);\n\n    child1 = spawn_child(exePath, class1, &child1Pid);\n    child2 = spawn_child(exePath, class2, &child2Pid);\n    if (child1 == NULL || child2 == NULL) {\n        return 1;\n    }\n    printf(\"Запущен процесс 1: PID %lu, класс %s\\n\", (unsigned long)child1Pid, lab_class_name(class1));\n    printf(\"Запущен процесс 2: PID %lu, класс %s\\n\", (unsigned long)child2Pid, lab_class_name(class2));\n    fflush(stdout);\n\n    WaitForSingleObject(child1, INFINITE);\n    Sleep(50);\n    WaitForSingleObject(child2, INFINITE);\n\n    printf(\"Процесс 1 (PID %lu) завершён, код %lu\\n\",\n           (unsigned long)child1Pid, (unsigned long)0);\n    printf(\"Процесс 2 (PID %lu) завершён, код %lu\\n\",\n           (unsigned long)child2Pid, (unsigned long)0);\n    printf(\"Оба дочерних процесса завершены\\n\");\n    fflush(stdout);\n\n    CloseHandle(child1);\n    CloseHandle(child2);\n    return 0;\n}\n"
   },
   {
    "title": "Lab-05c.c (Windows)",
    "label": "win_05c",
-   "code": "#include \"lab05win_common.h\"\n\ntypedef struct LAB05_THREAD_PARAM {\n    int index;\n} LAB05_THREAD_PARAM;\n\nstatic DWORD WINAPI thread_body(LPVOID parameter)\n{\n    LAB05_THREAD_PARAM *param = (LAB05_THREAD_PARAM *)parameter;\n    printf(\"=== Lab-05c: поток %d, PID %lu, TID %lu, приоритет %s ===\\n\",\n           param->index,\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId(),\n           lab_thread_name(GetThreadPriority(GetCurrentThread())));\n    fflush(stdout);\n\n    lab_worker_body();\n    Sleep(LAB05_FINAL_PAUSE_MS);\n    return 0;\n}\n\nstatic HANDLE start_thread(LAB05_THREAD_PARAM *param, int priority)\n{\n    HANDLE thread = CreateThread(NULL, 0, thread_body, param, CREATE_SUSPENDED, NULL);\n    if (thread == NULL) {\n        printf(\"Ошибка CreateThread: %lu\\n\", (unsigned long)GetLastError());\n        return NULL;\n    }\n    if (!SetThreadPriority(thread, priority)) {\n        printf(\"Ошибка SetThreadPriority: %lu\\n\", (unsigned long)GetLastError());\n        TerminateThread(thread, 1);\n        CloseHandle(thread);\n        return NULL;\n    }\n    ResumeThread(thread);\n    return thread;\n}\n\nint main(int argc, char *argv[])\n{\n    DWORD_PTR mask;\n    DWORD processClass;\n    int priority1;\n    int priority2;\n    char maskText[80];\n    int cpus;\n    LAB05_THREAD_PARAM param1;\n    LAB05_THREAD_PARAM param2;\n    HANDLE thread1;\n    HANDLE thread2;\n\n    SetConsoleOutputCP(65001);\n\n    if (argc < 5) {\n        printf(\"Использование: Lab-05c.exe <маска> <класс процесса> <приоритет P3> <приоритет P4>\\n\");\n        return 2;\n    }\n\n    cpus = lab_cpu_count();\n    mask = lab_parse_mask(argv[1]);\n    processClass = lab_class_from_name(argv[2]);\n    priority1 = lab_thread_from_name(argv[3]);\n    priority2 = lab_thread_from_name(argv[4]);\n\n    if (processClass == 0) {\n        printf(\"Неизвестный класс процесса: %s\\n\", argv[2]);\n        return 2;\n    }\n    if (priority1 == THREAD_PRIORITY_ERROR_RETURN || priority2 == THREAD_PRIORITY_ERROR_RETURN) {\n        printf(\"Неизвестный приоритет потока: %s / %s\\n\", argv[3], argv[4]);\n        return 2;\n    }\n    if (mask == 0) {\n        printf(\"Маска не задана\\n\");\n        return 2;\n    }\n\n    lab_mask_to_binary(mask, cpus, maskText, (int)sizeof(maskText));\n\n    printf(\"=== Lab-05c: два потока с приоритетами (серия P1=%llu P2=%s P3=%s P4=%s) ===\\n\",\n           (unsigned long long)mask, argv[2], argv[3], argv[4]);\n    printf(\"Маска родственности: %s (%llu), процессов доступно: %d\\n\",\n           maskText, (unsigned long long)mask, lab_popcount(mask));\n    printf(\"Класс приоритета процесса: %s (%d)\\n\",\n           lab_class_name(processClass), lab_class_base(processClass));\n    printf(\"Приоритет потока 1: %s (%d), приведённый: %d\\n\",\n           lab_thread_name(priority1), priority1,\n           lab_class_base(processClass) + priority1);\n    printf(\"Приоритет потока 2: %s (%d), приведённый: %d\\n\",\n           lab_thread_name(priority2), priority2,\n           lab_class_base(processClass) + priority2);\n    printf(\"PID процесса %lu, TID главного потока %lu\\n\",\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId());\n    fflush(stdout);\n\n    if (!SetProcessAffinityMask(GetCurrentProcess(), mask)) {\n        printf(\"Ошибка SetProcessAffinityMask(%llu): %lu\\n\",\n               (unsigned long long)mask, (unsigned long)GetLastError());\n        return 1;\n    }\n    if (!SetPriorityClass(GetCurrentProcess(), processClass)) {\n        printf(\"Ошибка SetPriorityClass: %lu\\n\", (unsigned long)GetLastError());\n        return 1;\n    }\n\n    param1.index = 1;\n    param2.index = 2;\n\n    thread1 = start_thread(&param1, priority1);\n    thread2 = start_thread(&param2, priority2);\n    if (thread1 == NULL || thread2 == NULL) {\n        return 1;\n    }\n\n    WaitForSingleObject(thread1, INFINITE);\n    Sleep(50);\n    WaitForSingleObject(thread2, INFINITE);\n\n    printf(\"Поток 1 завершён\\n\");\n    printf(\"Поток 2 завершён\\n\");\n    printf(\"Оба потока завершены\\n\");\n    fflush(stdout);\n\n    CloseHandle(thread1);\n    CloseHandle(thread2);\n    return 0;\n}\n"
+   "code": "#include \"lab05win_common.h\"\n\ntypedef struct LAB05_THREAD_PARAM {\n    int index;\n} LAB05_THREAD_PARAM;\n\nstatic DWORD WINAPI thread_body(LPVOID parameter)\n{\n    LAB05_THREAD_PARAM *param = (LAB05_THREAD_PARAM *)parameter;\n    printf(\"=== Lab-05c: поток %d, PID %lu, TID %lu, приоритет %s ===\\n\",\n           param->index,\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId(),\n           lab_thread_name(GetThreadPriority(GetCurrentThread())));\n    fflush(stdout);\n\n    lab_worker_body();\n    Sleep(LAB05_FINAL_PAUSE_MS);\n    return 0;\n}\n\nstatic HANDLE start_thread(LAB05_THREAD_PARAM *param, int priority)\n{\n    HANDLE thread = CreateThread(NULL, 0, thread_body, param, CREATE_SUSPENDED, NULL);\n    if (thread == NULL) {\n        printf(\"Ошибка CreateThread: %lu\\n\", (unsigned long)GetLastError());\n        return NULL;\n    }\n    if (!SetThreadPriority(thread, priority)) {\n        printf(\"Ошибка SetThreadPriority: %lu\\n\", (unsigned long)GetLastError());\n        TerminateThread(thread, 1);\n        CloseHandle(thread);\n        return NULL;\n    }\n    ResumeThread(thread);\n    return thread;\n}\n\nint main(int argc, char *argv[])\n{\n    DWORD_PTR mask;\n    DWORD processClass;\n    int priority1;\n    int priority2;\n    char maskText[80];\n    int cpus;\n    LAB05_THREAD_PARAM param1;\n    LAB05_THREAD_PARAM param2;\n    HANDLE thread1;\n    HANDLE thread2;\n\n    SetConsoleOutputCP(65001);\n    SetConsoleTitleA(\"Lab-05c.exe\");\n\n    if (argc < 5) {\n        printf(\"Использование: Lab-05c.exe <маска> <класс процесса> <приоритет P3> <приоритет P4>\\n\");\n        return 2;\n    }\n\n    cpus = lab_cpu_count();\n    mask = lab_parse_mask(argv[1]);\n    processClass = lab_class_from_name(argv[2]);\n    priority1 = lab_thread_from_name(argv[3]);\n    priority2 = lab_thread_from_name(argv[4]);\n\n    if (processClass == 0) {\n        printf(\"Неизвестный класс процесса: %s\\n\", argv[2]);\n        return 2;\n    }\n    if (priority1 == THREAD_PRIORITY_ERROR_RETURN || priority2 == THREAD_PRIORITY_ERROR_RETURN) {\n        printf(\"Неизвестный приоритет потока: %s / %s\\n\", argv[3], argv[4]);\n        return 2;\n    }\n    if (mask == 0) {\n        printf(\"Маска не задана\\n\");\n        return 2;\n    }\n\n    lab_mask_to_binary(mask, cpus, maskText, (int)sizeof(maskText));\n\n    printf(\"=== Lab-05c: два потока с приоритетами (серия P1=%llu P2=%s P3=%s P4=%s) ===\\n\",\n           (unsigned long long)mask, argv[2], argv[3], argv[4]);\n    printf(\"Маска родственности: %s (%llu), процессов доступно: %d\\n\",\n           maskText, (unsigned long long)mask, lab_popcount(mask));\n    printf(\"Класс приоритета процесса: %s (%d)\\n\",\n           lab_class_name(processClass), lab_class_base(processClass));\n    printf(\"Приоритет потока 1: %s (%d), приведённый: %d\\n\",\n           lab_thread_name(priority1), priority1,\n           lab_class_base(processClass) + priority1);\n    printf(\"Приоритет потока 2: %s (%d), приведённый: %d\\n\",\n           lab_thread_name(priority2), priority2,\n           lab_class_base(processClass) + priority2);\n    printf(\"PID процесса %lu, TID главного потока %lu\\n\",\n           (unsigned long)GetCurrentProcessId(),\n           (unsigned long)GetCurrentThreadId());\n    fflush(stdout);\n\n    if (!SetProcessAffinityMask(GetCurrentProcess(), mask)) {\n        printf(\"Ошибка SetProcessAffinityMask(%llu): %lu\\n\",\n               (unsigned long long)mask, (unsigned long)GetLastError());\n        return 1;\n    }\n    if (!SetPriorityClass(GetCurrentProcess(), processClass)) {\n        printf(\"Ошибка SetPriorityClass: %lu\\n\", (unsigned long)GetLastError());\n        return 1;\n    }\n\n    param1.index = 1;\n    param2.index = 2;\n\n    thread1 = start_thread(&param1, priority1);\n    thread2 = start_thread(&param2, priority2);\n    if (thread1 == NULL || thread2 == NULL) {\n        return 1;\n    }\n\n    WaitForSingleObject(thread1, INFINITE);\n    Sleep(50);\n    WaitForSingleObject(thread2, INFINITE);\n\n    printf(\"Поток 1 завершён\\n\");\n    printf(\"Поток 2 завершён\\n\");\n    printf(\"Оба потока завершены\\n\");\n    fflush(stdout);\n\n    CloseHandle(thread1);\n    CloseHandle(thread2);\n    return 0;\n}\n"
   },
   {
    "title": "lab05win_common.h (Windows)",
    "label": "win_common",
-   "code": "#ifndef LAB05WIN_COMMON_H\n#define LAB05WIN_COMMON_H\n\n#define _CRT_SECURE_NO_WARNINGS\n#define WIN32_LEAN_AND_MEAN\n#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <time.h>\n\n#define LAB05_ITERATIONS 1000000\n#define LAB05_REPORT_EVERY 1000\n#define LAB05_DELAY_MS 50\n#define LAB05_FINAL_PAUSE_MS 1500\n\nconst char *lab_class_name(DWORD code)\n{\n    switch (code) {\n    case IDLE_PRIORITY_CLASS: return \"Idle\";\n    case BELOW_NORMAL_PRIORITY_CLASS: return \"BelowNormal\";\n    case NORMAL_PRIORITY_CLASS: return \"Normal\";\n    case ABOVE_NORMAL_PRIORITY_CLASS: return \"AboveNormal\";\n    case HIGH_PRIORITY_CLASS: return \"High\";\n    case REALTIME_PRIORITY_CLASS: return \"RealTime\";\n    default: return \"Unknown\";\n    }\n}\n\nint lab_class_base(DWORD code)\n{\n    switch (code) {\n    case IDLE_PRIORITY_CLASS: return 4;\n    case BELOW_NORMAL_PRIORITY_CLASS: return 6;\n    case NORMAL_PRIORITY_CLASS: return 8;\n    case ABOVE_NORMAL_PRIORITY_CLASS: return 10;\n    case HIGH_PRIORITY_CLASS: return 13;\n    case REALTIME_PRIORITY_CLASS: return 24;\n    default: return 8;\n    }\n}\n\nDWORD lab_class_from_name(const char *name)\n{\n    if (_stricmp(name, \"Idle\") == 0) return IDLE_PRIORITY_CLASS;\n    if (_stricmp(name, \"BelowNormal\") == 0) return BELOW_NORMAL_PRIORITY_CLASS;\n    if (_stricmp(name, \"Normal\") == 0) return NORMAL_PRIORITY_CLASS;\n    if (_stricmp(name, \"AboveNormal\") == 0) return ABOVE_NORMAL_PRIORITY_CLASS;\n    if (_stricmp(name, \"High\") == 0) return HIGH_PRIORITY_CLASS;\n    if (_stricmp(name, \"RealTime\") == 0) return REALTIME_PRIORITY_CLASS;\n    return 0;\n}\n\nconst char *lab_thread_name(int value)\n{\n    switch (value) {\n    case THREAD_PRIORITY_IDLE: return \"Idle\";\n    case THREAD_PRIORITY_LOWEST: return \"Lowest\";\n    case THREAD_PRIORITY_BELOW_NORMAL: return \"BelowNormal\";\n    case THREAD_PRIORITY_NORMAL: return \"Normal\";\n    case THREAD_PRIORITY_ABOVE_NORMAL: return \"AboveNormal\";\n    case THREAD_PRIORITY_HIGHEST: return \"Highest\";\n    case THREAD_PRIORITY_TIME_CRITICAL: return \"TimeCritical\";\n    default: return \"Normal\";\n    }\n}\n\nint lab_thread_from_name(const char *name)\n{\n    if (_stricmp(name, \"Idle\") == 0) return THREAD_PRIORITY_IDLE;\n    if (_stricmp(name, \"Lowest\") == 0) return THREAD_PRIORITY_LOWEST;\n    if (_stricmp(name, \"BelowNormal\") == 0) return THREAD_PRIORITY_BELOW_NORMAL;\n    if (_stricmp(name, \"Normal\") == 0) return THREAD_PRIORITY_NORMAL;\n    if (_stricmp(name, \"AboveNormal\") == 0) return THREAD_PRIORITY_ABOVE_NORMAL;\n    if (_stricmp(name, \"Highest\") == 0) return THREAD_PRIORITY_HIGHEST;\n    if (_stricmp(name, \"TimeCritical\") == 0) return THREAD_PRIORITY_TIME_CRITICAL;\n    return THREAD_PRIORITY_ERROR_RETURN;\n}\n\nint lab_priority_value(HANDLE process, HANDLE thread)\n{\n    int value = lab_class_base(GetPriorityClass(process)) + GetThreadPriority(thread);\n    if (value < 0) value = 0;\n    if (value > 31) value = 31;\n    return value;\n}\n\nDWORD_PTR lab_parse_mask(const char *text)\n{\n    const char *tail;\n    if (text == NULL || text[0] == '\\0') return 0;\n    tail = text;\n    if (text[0] == '0' && (text[1] == 'x' || text[1] == 'X')) {\n        return (DWORD_PTR)_strtoui64(text + 2, NULL, 16);\n    }\n    if (text[0] == '0' && (text[1] == 'b' || text[1] == 'B')) {\n        return (DWORD_PTR)_strtoui64(text + 2, NULL, 2);\n    }\n    return (DWORD_PTR)_strtoui64(tail, NULL, 10);\n}\n\nDWORD_PTR lab_current_mask(void)\n{\n    DWORD_PTR processMask = 0;\n    DWORD_PTR systemMask = 0;\n    if (!GetProcessAffinityMask(GetCurrentProcess(), &processMask, &systemMask)) return 1;\n    return processMask;\n}\n\nint lab_cpu_count(void)\n{\n    SYSTEM_INFO info;\n    GetSystemInfo(&info);\n    return (int)info.dwNumberOfProcessors;\n}\n\nint lab_popcount(DWORD_PTR mask)\n{\n    int count = 0;\n    while (mask) {\n        mask &= (mask - 1);\n        count++;\n    }\n    return count;\n}\n\nvoid lab_mask_to_binary(DWORD_PTR mask, int cpus, char *out, int size)\n{\n    int index;\n    int bits = cpus;\n    if (out == NULL || size <= 1) return;\n    if (bits < 1) bits = 1;\n    if (bits > size - 1) bits = size - 1;\n    if (bits > (int)(8 * sizeof(DWORD_PTR))) bits = (int)(8 * sizeof(DWORD_PTR));\n    for (index = 0; index < bits; index++) {\n        out[index] = (char)(((mask >> (bits - 1 - index)) & (DWORD_PTR)1) ? '1' : '0');\n    }\n    out[bits] = '\\0';\n}\n\nvoid lab_active_delay(DWORD milliseconds)\n{\n    LARGE_INTEGER frequency;\n    LARGE_INTEGER start;\n    LARGE_INTEGER now;\n    double target;\n    if (!QueryPerformanceFrequency(&frequency)) {\n        Sleep(milliseconds);\n        return;\n    }\n    QueryPerformanceCounter(&start);\n    target = (double)milliseconds / 1000.0 * (double)frequency.QuadPart;\n    do {\n        QueryPerformanceCounter(&now);\n    } while ((double)(now.QuadPart - start.QuadPart) < target);\n}\n\nvoid lab_worker_body(void)\n{\n    HANDLE process = GetCurrentProcess();\n    HANDLE thread = GetCurrentThread();\n    DWORD pid = GetCurrentProcessId();\n    DWORD tid = GetCurrentThreadId();\n    int iteration;\n\n    for (iteration = 1; iteration <= LAB05_ITERATIONS; iteration++) {\n        if (iteration % LAB05_REPORT_EVERY == 0) {\n            lab_active_delay(LAB05_DELAY_MS);\n            printf(\"%7d | %6lu | %6lu | %-12s | %-12s | %3d | %2lu\\n\",\n                   iteration,\n                   (unsigned long)pid,\n                   (unsigned long)tid,\n                   lab_class_name(GetPriorityClass(process)),\n                   lab_thread_name(GetThreadPriority(thread)),\n                   lab_priority_value(process, thread),\n                   (unsigned long)GetCurrentProcessorNumber());\n            fflush(stdout);\n        }\n    }\n\n    printf(\"Итераций: %d, PID %lu, TID %lu, время с запуска (clock): %.3f с\\n\",\n           LAB05_ITERATIONS,\n           (unsigned long)pid,\n           (unsigned long)tid,\n           (double)clock() / (double)CLOCKS_PER_SEC);\n    fflush(stdout);\n}\n\n#endif\n"
+   "code": "#ifndef LAB05WIN_COMMON_H\n#define LAB05WIN_COMMON_H\n\n#define _CRT_SECURE_NO_WARNINGS\n#define WIN32_LEAN_AND_MEAN\n#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <time.h>\n\n#define LAB05_ITERATIONS 1000000\n#define LAB05_REPORT_EVERY 1000\n#define LAB05_DELAY_MS 50\n#define LAB05_FINAL_PAUSE_MS 1500\n#define LAB05_START_PAUSE_MS 1500\n\nconst char *lab_class_name(DWORD code)\n{\n    switch (code) {\n    case IDLE_PRIORITY_CLASS: return \"Idle\";\n    case BELOW_NORMAL_PRIORITY_CLASS: return \"BelowNormal\";\n    case NORMAL_PRIORITY_CLASS: return \"Normal\";\n    case ABOVE_NORMAL_PRIORITY_CLASS: return \"AboveNormal\";\n    case HIGH_PRIORITY_CLASS: return \"High\";\n    case REALTIME_PRIORITY_CLASS: return \"RealTime\";\n    default: return \"Unknown\";\n    }\n}\n\nint lab_class_base(DWORD code)\n{\n    switch (code) {\n    case IDLE_PRIORITY_CLASS: return 4;\n    case BELOW_NORMAL_PRIORITY_CLASS: return 6;\n    case NORMAL_PRIORITY_CLASS: return 8;\n    case ABOVE_NORMAL_PRIORITY_CLASS: return 10;\n    case HIGH_PRIORITY_CLASS: return 13;\n    case REALTIME_PRIORITY_CLASS: return 24;\n    default: return 8;\n    }\n}\n\nDWORD lab_class_from_name(const char *name)\n{\n    if (_stricmp(name, \"Idle\") == 0) return IDLE_PRIORITY_CLASS;\n    if (_stricmp(name, \"BelowNormal\") == 0) return BELOW_NORMAL_PRIORITY_CLASS;\n    if (_stricmp(name, \"Normal\") == 0) return NORMAL_PRIORITY_CLASS;\n    if (_stricmp(name, \"AboveNormal\") == 0) return ABOVE_NORMAL_PRIORITY_CLASS;\n    if (_stricmp(name, \"High\") == 0) return HIGH_PRIORITY_CLASS;\n    if (_stricmp(name, \"RealTime\") == 0) return REALTIME_PRIORITY_CLASS;\n    return 0;\n}\n\nconst char *lab_thread_name(int value)\n{\n    switch (value) {\n    case THREAD_PRIORITY_IDLE: return \"Idle\";\n    case THREAD_PRIORITY_LOWEST: return \"Lowest\";\n    case THREAD_PRIORITY_BELOW_NORMAL: return \"BelowNormal\";\n    case THREAD_PRIORITY_NORMAL: return \"Normal\";\n    case THREAD_PRIORITY_ABOVE_NORMAL: return \"AboveNormal\";\n    case THREAD_PRIORITY_HIGHEST: return \"Highest\";\n    case THREAD_PRIORITY_TIME_CRITICAL: return \"TimeCritical\";\n    default: return \"Normal\";\n    }\n}\n\nint lab_thread_from_name(const char *name)\n{\n    if (_stricmp(name, \"Idle\") == 0) return THREAD_PRIORITY_IDLE;\n    if (_stricmp(name, \"Lowest\") == 0) return THREAD_PRIORITY_LOWEST;\n    if (_stricmp(name, \"BelowNormal\") == 0) return THREAD_PRIORITY_BELOW_NORMAL;\n    if (_stricmp(name, \"Normal\") == 0) return THREAD_PRIORITY_NORMAL;\n    if (_stricmp(name, \"AboveNormal\") == 0) return THREAD_PRIORITY_ABOVE_NORMAL;\n    if (_stricmp(name, \"Highest\") == 0) return THREAD_PRIORITY_HIGHEST;\n    if (_stricmp(name, \"TimeCritical\") == 0) return THREAD_PRIORITY_TIME_CRITICAL;\n    return THREAD_PRIORITY_ERROR_RETURN;\n}\n\nint lab_priority_value(HANDLE process, HANDLE thread)\n{\n    int value = lab_class_base(GetPriorityClass(process)) + GetThreadPriority(thread);\n    if (value < 0) value = 0;\n    if (value > 31) value = 31;\n    return value;\n}\n\nDWORD_PTR lab_parse_mask(const char *text)\n{\n    const char *tail;\n    if (text == NULL || text[0] == '\\0') return 0;\n    tail = text;\n    if (text[0] == '0' && (text[1] == 'x' || text[1] == 'X')) {\n        return (DWORD_PTR)_strtoui64(text + 2, NULL, 16);\n    }\n    if (text[0] == '0' && (text[1] == 'b' || text[1] == 'B')) {\n        return (DWORD_PTR)_strtoui64(text + 2, NULL, 2);\n    }\n    return (DWORD_PTR)_strtoui64(tail, NULL, 10);\n}\n\nDWORD_PTR lab_current_mask(void)\n{\n    DWORD_PTR processMask = 0;\n    DWORD_PTR systemMask = 0;\n    if (!GetProcessAffinityMask(GetCurrentProcess(), &processMask, &systemMask)) return 1;\n    return processMask;\n}\n\nint lab_cpu_count(void)\n{\n    SYSTEM_INFO info;\n    GetSystemInfo(&info);\n    return (int)info.dwNumberOfProcessors;\n}\n\nint lab_popcount(DWORD_PTR mask)\n{\n    int count = 0;\n    while (mask) {\n        mask &= (mask - 1);\n        count++;\n    }\n    return count;\n}\n\nvoid lab_mask_to_binary(DWORD_PTR mask, int cpus, char *out, int size)\n{\n    int index;\n    int bits = cpus;\n    if (out == NULL || size <= 1) return;\n    if (bits < 1) bits = 1;\n    if (bits > size - 1) bits = size - 1;\n    if (bits > (int)(8 * sizeof(DWORD_PTR))) bits = (int)(8 * sizeof(DWORD_PTR));\n    for (index = 0; index < bits; index++) {\n        out[index] = (char)(((mask >> (bits - 1 - index)) & (DWORD_PTR)1) ? '1' : '0');\n    }\n    out[bits] = '\\0';\n}\n\nvoid lab_active_delay(DWORD milliseconds)\n{\n    LARGE_INTEGER frequency;\n    LARGE_INTEGER start;\n    LARGE_INTEGER now;\n    double target;\n    if (!QueryPerformanceFrequency(&frequency)) {\n        Sleep(milliseconds);\n        return;\n    }\n    QueryPerformanceCounter(&start);\n    target = (double)milliseconds / 1000.0 * (double)frequency.QuadPart;\n    do {\n        QueryPerformanceCounter(&now);\n    } while ((double)(now.QuadPart - start.QuadPart) < target);\n}\n\nvoid lab_worker_body(void)\n{\n    HANDLE process = GetCurrentProcess();\n    HANDLE thread = GetCurrentThread();\n    DWORD pid = GetCurrentProcessId();\n    DWORD tid = GetCurrentThreadId();\n    int iteration;\n\n    for (iteration = 1; iteration <= LAB05_ITERATIONS; iteration++) {\n        if (iteration % LAB05_REPORT_EVERY == 0) {\n            lab_active_delay(LAB05_DELAY_MS);\n            printf(\"%7d | %6lu | %6lu | %-12s | %-12s | %3d | %2lu\\n\",\n                   iteration,\n                   (unsigned long)pid,\n                   (unsigned long)tid,\n                   lab_class_name(GetPriorityClass(process)),\n                   lab_thread_name(GetThreadPriority(thread)),\n                   lab_priority_value(process, thread),\n                   (unsigned long)GetCurrentProcessorNumber());\n            fflush(stdout);\n        }\n    }\n\n    printf(\"Итераций: %d, PID %lu, TID %lu, время с запуска (clock): %.3f с\\n\",\n           LAB05_ITERATIONS,\n           (unsigned long)pid,\n           (unsigned long)tid,\n           (double)clock() / (double)CLOCKS_PER_SEC);\n    fflush(stdout);\n}\n\n#endif\n"
   }
  ]
 }

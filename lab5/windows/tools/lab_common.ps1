@@ -525,6 +525,13 @@ function Get-LabProcessWindows {
     return $result
 }
 
+function Get-LabPeRowClickY {
+    param([int]$Row)
+
+    if ($Row -lt 1) { throw 'Process Explorer row must be at least 1' }
+    return [int](35 + (($Row - 1) * 19))
+}
+
 function Set-LabWindowRect {
     param([IntPtr]$Handle, [int]$X, [int]$Y, [int]$Width, [int]$Height, [switch]$Foreground)
 

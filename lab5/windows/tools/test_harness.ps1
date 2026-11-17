@@ -165,6 +165,19 @@ Assert-True -Condition $threw -Name 'Resolve-LabRoot: без queue бросае�
 Assert-True -Condition ([bool](Get-Command -Name Clear-LabResults -ErrorAction SilentlyContinue)) -Name 'Clear-LabResults существует в lab_common.ps1'
 
 Write-Host ''
+Write-Host '=== 3c. Process Explorer: центр строки процесса ==='
+
+$peRowYCommand = Get-Command -Name Get-LabPeRowClickY -ErrorAction SilentlyContinue
+Assert-True -Condition ([bool]$peRowYCommand) -Name 'Get-LabPeRowClickY определена'
+if ($peRowYCommand) {
+    Assert-Equal -Actual (Get-LabPeRowClickY -Row 1) -Expected 35 -Name 'Process Explorer: первая строка кликается по центру'
+    Assert-Equal -Actual (Get-LabPeRowClickY -Row 2) -Expected 54 -Name 'Process Explorer: вторая строка имеет шаг 19 px'
+    $badPeRow = $false
+    try { $null = Get-LabPeRowClickY -Row 0 } catch { $badPeRow = $true }
+    Assert-True -Condition $badPeRow -Name 'Process Explorer: нулевой номер строки запрещён'
+}
+
+Write-Host ''
 Write-Host '=== 3b. Выбор рабочих TID без главного потока ==='
 
 $selectWorkerCommand = Get-Command -Name Select-LabWorkerThreadIds -ErrorAction SilentlyContinue

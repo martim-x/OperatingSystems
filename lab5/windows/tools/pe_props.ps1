@@ -1,9 +1,10 @@
-param(
+﻿param(
     [int]$Row = 2,
     [string]$Shot = '',
     [string]$Pe = 'C:\Tools\ProcessExplorer\procexp64.exe'
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'lab_common.ps1')
 Add-Type -AssemblyName System.Drawing
 Add-Type @"
 using System;
@@ -36,15 +37,16 @@ $cb = [PPR+Proc]{
 [void][PPR]::EnumChildWindows($p.MainWindowHandle, $cb, [IntPtr]::Zero)
 if ($script:tree -eq [IntPtr]::Zero) { throw 'tree not found' }
 
-$y = 16 + ($Row - 1) * 19
+$y = Get-LabPeRowClickY -Row $Row
 $lp = [IntPtr](($y -shl 16) -bor (260 -band 0xFFFF))
-foreach ($i in 1..1) {
-    [void][PPR]::SendMessage($script:tree, 0x0201, [IntPtr]1, $lp)
-    Start-Sleep -Milliseconds 60
-    [void][PPR]::SendMessage($script:tree, 0x0202, [IntPtr]0, $lp)
-    Start-Sleep -Milliseconds 120
-}
-Start-Sleep -Milliseconds 1200
+[void][PPR]::SendMessage($script:tree, 0x0201, [IntPtr]1, $lp)
+Start-Sleep -Milliseconds 60
+[void][PPR]::SendMessage($script:tree, 0x0202, [IntPtr]0, $lp)
+Start-Sleep -Milliseconds 90
+[void][PPR]::SendMessage($script:tree, 0x0203, [IntPtr]1, $lp)
+Start-Sleep -Milliseconds 60
+[void][PPR]::SendMessage($script:tree, 0x0202, [IntPtr]0, $lp)
+Start-Sleep -Milliseconds 500
 
 $script:dlg = [IntPtr]::Zero
 $cb2 = [PPR+Proc]{

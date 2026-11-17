@@ -1,4 +1,4 @@
-# capture_clean.ps1 - clean frame capture for OS lab 5 (Windows x64)
+﻿# capture_clean.ps1 - clean frame capture for OS lab 5 (Windows x64)
 # Runs hidden (no console of its own visible). Each measured program gets its own
 # console window titled with the executable name; frames contain only the prompt
 # and the program output.
@@ -206,7 +206,7 @@ if ($Step -like 'b*') {
     L ('children ' + ($kidIds -join ', '))
     if ($WaitPe) {
         Start-Sleep -Seconds 3
-        & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Work 'pe_frame_rows.ps1') -Text 'Lab-05' -RowClick 2 -Shot (Join-Path $shots ($tag + '_f_procexp.png')) -RowClick2 3 -Shot2 (Join-Path $shots ($tag + '_f_procexp2.png')) -LogPath (Join-Path $logs ($tag + '_pe.txt'))
+        & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Work 'pe_frame_rows.ps1') -Text 'Lab-05' -RowClick 1 -Shot (Join-Path $shots ($tag + '_f_procexp.png')) -RowClick2 2 -Shot2 (Join-Path $shots ($tag + '_f_procexp2.png')) -LogPath (Join-Path $logs ($tag + '_pe.txt'))
         L 'pe frame done'
     }
 

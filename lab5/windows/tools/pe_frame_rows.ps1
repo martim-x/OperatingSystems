@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$Text = 'Lab-05',
     [string]$Shot = '',
     [string]$Shot2 = '',
@@ -8,6 +8,7 @@ param(
     [string]$LogPath = ''
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'lab_common.ps1')
 Add-Type -AssemblyName System.Drawing
 Add-Type @"
 using System;
@@ -70,7 +71,7 @@ L ('filter ' + $Text)
 
 function Click-Row([IntPtr]$Tree, [int]$Row) {
     if ($Row -le 0) { return }
-    $y = 16 + ($Row - 1) * 19
+    $y = Get-LabPeRowClickY -Row $Row
     $x = 260
     $lp = [IntPtr](($y -shl 16) -bor ($x -band 0xFFFF))
     [void][PEG]::SendMessage($Tree, 0x0201, [IntPtr]1, $lp)
