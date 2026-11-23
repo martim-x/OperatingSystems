@@ -280,12 +280,13 @@ def format_summary(result: SimulationResult, full: bool = False) -> str:
     ])
     if full:
         lines.extend([
-            "Processes (PID, arrival, execution, waiting, turnaround, I/O, final queue, type):",
+            "Processes (PID, arrival, finish, execution, waiting, turnaround, I/O, final queue, type):",
         ])
         for process in sorted(result.processes.values(), key=lambda item: item.pid):
             kind = process.kind or ("I/O-bound" if process.io_burst is not None else "CPU-bound")
             lines.append(
                 f"PID {process.pid:03d}: arrival={process.arrival} ms, "
+                f"finish={process.completion} ms, "
                 f"execution={process.cpu_time} ms, waiting={process.waiting} ms, "
                 f"turnaround={process.turnaround} ms, io={process.io_time} ms, "
                 f"final=Q{process.final_queue}, type={kind}"

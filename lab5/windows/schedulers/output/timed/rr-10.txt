@@ -1,0 +1,40 @@
+cwd=C:\Users\User-6d4ec851\OS5\lab5\windows\schedulers
+command=python -B lab05_basic.py rr --quantum 10
+exit=0
+completed=2026-11-23T21:17:32.617+03:00
+wall_seconds=0.064289
+INPUT: id  arrival  burst  priority
+       1        0     80         3
+       2       20     45         5
+       3       30     60         2
+       4       50     30         4
+       5       70     90         1
+       6      100     55         3
+       7      120     75         2
+       8      150     40         5
+       9      180     65         4
+      10      200     85         1
+
+Single-quantum run: 10
+RESULTS: id  arrival  burst  prio  start  finish  wait  service  turn
+         1        0     80     3      0     355   275       80   355
+         2       20     45     5     20     235   170       45   215
+         3       30     60     2     40     375   285       60   345
+         4       50     30     4     70     200   120       30   150
+         5       70     90     1    100     590   430       90   520
+         6      100     55     3    140     500   345       55   400
+         7      120     75     2    170     600   405       75   480
+         8      150     40     5    210     445   255       40   295
+         9      180     65     4    245     595   350       65   415
+        10      200     85     1    275     625   340       85   425
+Metrics: average waiting=297.50, average service=62.50, average turnaround=360.00, throughput=0.0160 tasks/time-unit
+Metric formulas: average waiting=mean(finish-arrival-burst); average service=mean(burst); average turnaround=mean(finish-arrival); throughput=task count / elapsed time from t=0 to last finish.
+TIMELINE:
+  0-20:P1 | 20-30:P2 | 30-40:P1 | 40-50:P3 | 50-60:P2 | 60-70:P1 | 70-80:P4 | 80-90:P3 | 90-100:P2 | 100-110:P5
+  110-120:P1 | 120-130:P4 | 130-140:P3 | 140-150:P6 | 150-160:P2 | 160-170:P5 | 170-180:P7 | 180-190:P1 | 190-200:P4 | 200-210:P3
+  210-220:P8 | 220-230:P6 | 230-235:P2 | 235-245:P5 | 245-255:P9 | 255-265:P7 | 265-275:P1 | 275-285:P10 | 285-295:P3 | 295-305:P8
+  305-315:P6 | 315-325:P5 | 325-335:P9 | 335-345:P7 | 345-355:P1 | 355-365:P10 | 365-375:P3 | 375-385:P8 | 385-395:P6 | 395-405:P5
+  405-415:P9 | 415-425:P7 | 425-435:P10 | 435-445:P8 | 445-455:P6 | 455-465:P5 | 465-475:P9 | 475-485:P7 | 485-495:P10 | 495-500:P6
+  500-510:P5 | 510-520:P9 | 520-530:P7 | 530-540:P10 | 540-550:P5 | 550-560:P9 | 560-570:P7 | 570-580:P10 | 580-590:P5 | 590-595:P9
+  595-600:P7 | 600-625:P10
+Simulation completion time: 625 time units

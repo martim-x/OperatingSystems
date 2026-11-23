@@ -1,0 +1,36 @@
+cwd=C:\Users\User-6d4ec851\OS5\lab5\windows\schedulers
+command=python -B lab05_basic.py rr --quantum 30
+exit=0
+completed=2026-11-23T21:17:34.986+03:00
+wall_seconds=0.059733
+INPUT: id  arrival  burst  priority
+       1        0     80         3
+       2       20     45         5
+       3       30     60         2
+       4       50     30         4
+       5       70     90         1
+       6      100     55         3
+       7      120     75         2
+       8      150     40         5
+       9      180     65         4
+      10      200     85         1
+
+Single-quantum run: 30
+RESULTS: id  arrival  burst  prio  start  finish  wait  service  turn
+         1        0     80     3      0     305   225       80   305
+         2       20     45     5     30     165   100       45   145
+         3       30     60     2     60     225   135       60   195
+         4       50     30     4    120     150    70       30   100
+         5       70     90     1    165     550   390       90   480
+         6      100     55     3    225     450   295       55   350
+         7      120     75     2    255     595   400       75   475
+         8      150     40     5    305     490   300       40   340
+         9      180     65     4    335     600   355       65   420
+        10      200     85     1    395     625   340       85   425
+Metrics: average waiting=261.00, average service=62.50, average turnaround=323.50, throughput=0.0160 tasks/time-unit
+Metric formulas: average waiting=mean(finish-arrival-burst); average service=mean(burst); average turnaround=mean(finish-arrival); throughput=task count / elapsed time from t=0 to last finish.
+TIMELINE:
+  0-30:P1 | 30-60:P2 | 60-90:P3 | 90-120:P1 | 120-150:P4 | 150-165:P2 | 165-195:P5 | 195-225:P3 | 225-255:P6 | 255-285:P7
+  285-305:P1 | 305-335:P8 | 335-365:P9 | 365-395:P5 | 395-425:P10 | 425-450:P6 | 450-480:P7 | 480-490:P8 | 490-520:P9 | 520-550:P5
+  550-580:P10 | 580-595:P7 | 595-600:P9 | 600-625:P10
+Simulation completion time: 625 time units

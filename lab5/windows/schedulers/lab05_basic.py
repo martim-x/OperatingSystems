@@ -288,7 +288,7 @@ def _format_timeline(result: Simulation, per_line: int = 10) -> str:
     return "\n".join(lines)
 
 
-def format_report(algorithm: str, jobs: Iterable[Job] = DEFAULT_JOBS) -> str:
+def format_report(algorithm: str, jobs: Iterable[Job] = DEFAULT_JOBS, *, quantum: int | None = None) -> str:
     """Render input/results, schedule, four metrics and RR/CP quantum sweep."""
     items = _validate_jobs(jobs)
     name = algorithm.lower()
@@ -296,13 +296,22 @@ def format_report(algorithm: str, jobs: Iterable[Job] = DEFAULT_JOBS) -> str:
         raise ValueError("algorithm must be sjf, rr, or cp")
     lines = [_format_input(items), ""]
     if name == "sjf":
+        if quantum is not None:
+            raise ValueError("SJF has no quantum")
         result = simulate_sjf(items)
         lines.extend((_format_results(result), _format_metrics(result.metrics),
                       _format_timeline(result)))
         lines.append("Selection criterion: non-preemptive shortest burst; ties by arrival then input order.")
+        lines.append(f"Simulation completion time: {max((row.finish for row in result.rows), default=0)} time units")
         return "\n".join(lines)
 
     simulator = simulate_rr if name == "rr" else simulate_cp
+    if quantum is not None:
+        result = simulator(items, quantum=quantum)
+        lines.extend((f"Single-quantum run: {quantum}", _format_results(result), _format_metrics(result.metrics),
+                      _format_timeline(result)))
+        lines.append(f"Simulation completion time: {max((row.finish for row in result.rows), default=0)} time units")
+        return "\n".join(lines)
     results = tuple(simulator(items, quantum=q) for q in QUANTUM_CANDIDATES)
     chosen = select_quantum(results)
     lines.append("SWEEP: quantum  avg_wait  avg_service  avg_turnaround  throughput  segments")
@@ -317,14 +326,18 @@ def format_report(algorithm: str, jobs: Iterable[Job] = DEFAULT_JOBS) -> str:
     lines.append("Selection criterion: minimum average waiting, then fewer timeline segments, then larger quantum.")
     lines.extend((_format_results(chosen), _format_metrics(chosen.metrics),
                   _format_timeline(chosen)))
+    lines.append(f"Simulation completion time: {max((row.finish for row in chosen.rows), default=0)} time units")
     return "\n".join(lines)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("algorithm", choices=("sjf", "rr", "cp"))
+    parser.add_argument("--quantum", type=int, help="run RR or CP with a single quantum")
     args = parser.parse_args(argv)
-    print(format_report(args.algorithm))
+    if args.quantum is not None and (args.algorithm == "sjf" or args.quantum <= 0):
+        parser.error("--quantum must be positive and is only valid for RR and CP")
+    print(format_report(args.algorithm, quantum=args.quantum))
     return 0
 
 

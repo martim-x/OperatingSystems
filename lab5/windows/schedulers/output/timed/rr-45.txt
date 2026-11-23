@@ -1,0 +1,35 @@
+cwd=C:\Users\User-6d4ec851\OS5\lab5\windows\schedulers
+command=python -B lab05_basic.py rr --quantum 45
+exit=0
+completed=2026-11-23T21:17:36.160+03:00
+wall_seconds=0.061170
+INPUT: id  arrival  burst  priority
+       1        0     80         3
+       2       20     45         5
+       3       30     60         2
+       4       50     30         4
+       5       70     90         1
+       6      100     55         3
+       7      120     75         2
+       8      150     40         5
+       9      180     65         4
+      10      200     85         1
+
+Single-quantum run: 45
+RESULTS: id  arrival  burst  prio  start  finish  wait  service  turn
+         1        0     80     3      0     170    90       80   170
+         2       20     45     5     45      90    25       45    70
+         3       30     60     2     90     350   260       60   320
+         4       50     30     4    170     200   120       30   150
+         5       70     90     1    200     525   365       90   455
+         6      100     55     3    245     535   380       55   435
+         7      120     75     2    290     565   370       75   445
+         8      150     40     5    350     390   200       40   240
+         9      180     65     4    390     585   340       65   405
+        10      200     85     1    435     625   340       85   425
+Metrics: average waiting=249.00, average service=62.50, average turnaround=311.50, throughput=0.0160 tasks/time-unit
+Metric formulas: average waiting=mean(finish-arrival-burst); average service=mean(burst); average turnaround=mean(finish-arrival); throughput=task count / elapsed time from t=0 to last finish.
+TIMELINE:
+  0-45:P1 | 45-90:P2 | 90-135:P3 | 135-170:P1 | 170-200:P4 | 200-245:P5 | 245-290:P6 | 290-335:P7 | 335-350:P3 | 350-390:P8
+  390-435:P9 | 435-480:P10 | 480-525:P5 | 525-535:P6 | 535-565:P7 | 565-585:P9 | 585-625:P10
+Simulation completion time: 625 time units
