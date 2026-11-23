@@ -1,0 +1,10 @@
+command=Lab-06-bar.exe 4 7 3
+cwd=C:\Users\User-6d4ec851\OS5\lab6\parallel
+exit=0
+completed=2026-11-23T21:33:05.008+03:00
+wall_seconds=0.041324
+threads=4 matrices=7 size=3 seed=42
+-204 -1369 -1281
+-6287 110 4869
+969 351 -8548
+serial check: OK

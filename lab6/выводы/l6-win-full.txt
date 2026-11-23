@@ -1,0 +1,176 @@
+command=Lab-06-conds.exe 2 2 7 120 180 --seconds 6
+cwd=C:\Users\User-6d4ec851\OS5\lab6\parallel
+exit=0
+completed=2026-11-23T21:40:31.388+03:00
+wall_seconds=6.472800
+user=User-6d4ec851 buffer=0 capacity=2
+consumer waits (empty)
+added=1 buffer=1
+consumer wakes
+removed=1 buffer=0
+added=2 buffer=1
+added=3 buffer=2
+producer waits (full)
+removed=2 buffer=1
+producer wakes
+added=4 buffer=2
+producer waits (full)
+removed=3 buffer=1
+producer wakes
+added=5 buffer=2
+producer waits (full)
+removed=4 buffer=1
+producer wakes
+added=6 buffer=2
+producer waits (full)
+removed=5 buffer=1
+producer wakes
+added=7 buffer=2
+producer waits (full)
+removed=6 buffer=1
+producer wakes
+added=8 buffer=2
+producer waits (full)
+removed=7 buffer=1
+producer wakes
+added=9 buffer=2
+producer waits (full)
+removed=8 buffer=1
+producer wakes
+added=10 buffer=2
+producer waits (full)
+removed=9 buffer=1
+producer wakes
+added=11 buffer=2
+producer waits (full)
+removed=10 buffer=1
+producer wakes
+added=12 buffer=2
+producer waits (full)
+removed=11 buffer=1
+producer wakes
+added=13 buffer=2
+producer waits (full)
+removed=12 buffer=1
+producer wakes
+added=14 buffer=2
+producer waits (full)
+removed=13 buffer=1
+producer wakes
+added=15 buffer=2
+producer waits (full)
+removed=14 buffer=1
+producer wakes
+added=16 buffer=2
+producer waits (full)
+removed=15 buffer=1
+producer wakes
+added=17 buffer=2
+producer waits (full)
+removed=16 buffer=1
+producer wakes
+added=18 buffer=2
+producer waits (full)
+removed=17 buffer=1
+producer wakes
+added=19 buffer=2
+producer waits (full)
+removed=18 buffer=1
+producer wakes
+added=20 buffer=2
+producer waits (full)
+removed=19 buffer=1
+producer wakes
+added=21 buffer=2
+producer waits (full)
+removed=20 buffer=1
+producer wakes
+added=22 buffer=2
+producer waits (full)
+removed=21 buffer=1
+producer wakes
+added=23 buffer=2
+producer waits (full)
+removed=22 buffer=1
+producer wakes
+added=24 buffer=2
+producer waits (full)
+removed=23 buffer=1
+producer wakes
+added=25 buffer=2
+producer waits (full)
+removed=24 buffer=1
+producer wakes
+added=26 buffer=2
+producer waits (full)
+removed=25 buffer=1
+producer wakes
+added=27 buffer=2
+producer waits (full)
+removed=26 buffer=1
+producer wakes
+added=28 buffer=2
+producer waits (full)
+removed=27 buffer=1
+producer wakes
+added=29 buffer=2
+producer waits (full)
+removed=28 buffer=1
+producer wakes
+added=30 buffer=2
+producer waits (full)
+removed=29 buffer=1
+producer wakes
+added=31 buffer=2
+producer waits (full)
+removed=30 buffer=1
+producer wakes
+added=32 buffer=2
+producer waits (full)
+removed=31 buffer=1
+producer wakes
+added=33 buffer=2
+producer waits (full)
+removed=32 buffer=1
+producer wakes
+added=34 buffer=2
+producer waits (full)
+removed=33 buffer=1
+producer wakes
+added=35 buffer=2
+producer waits (full)
+removed=34 buffer=1
+stats elapsed=5.01s produced=35 consumed=34 buffer=1 fill=50.00%
+  producer count=35 mean_interval_ms=142.60 speed=6.99/s total_s=5.01
+  consumer count=34 mean_processing_ms=151.64 speed=6.79/s total_s=5.01
+producer wakes
+added=36 buffer=2
+producer waits (full)
+removed=35 buffer=1
+producer wakes
+added=37 buffer=2
+producer waits (full)
+removed=36 buffer=1
+producer wakes
+added=38 buffer=2
+producer waits (full)
+removed=37 buffer=1
+producer wakes
+added=39 buffer=2
+producer waits (full)
+removed=38 buffer=1
+producer wakes
+added=40 buffer=2
+producer waits (full)
+removed=39 buffer=1
+producer wakes
+added=41 buffer=2
+producer waits (full)
+removed=40 buffer=1
+producer wakes
+added=42 buffer=2
+producer waits (full)
+producer wakes
+removed=41 buffer=1
+removed=42 buffer=0
+final produced=42 consumed=42 buffer=0

@@ -1,0 +1,8 @@
+command=python -B Lab-06-bank.py
+cwd=C:\Users\User-6d4ec851\OS5\lab6\algorithms
+exit=0
+completed=2026-11-23T21:34:24.952+03:00
+wall_seconds=0.062083
+Lab-06-bank | total A/B/C = (10, 5, 7)
+Safe sequence: P1 -> P3 -> P4 -> P0 -> P2
+Work: -> (3, 3, 2) -> (5, 3, 2) -> (7, 4, 3) -> (7, 4, 5) -> (7, 5, 5) -> (10, 5, 7)

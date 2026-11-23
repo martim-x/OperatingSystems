@@ -1,0 +1,7 @@
+command=python -B Lab-06-bank.py --request 4 3 3 0
+cwd=C:\Users\User-6d4ec851\OS5\lab6\algorithms
+exit=0
+completed=2026-11-23T21:34:26.750+03:00
+wall_seconds=0.062768
+P4 requests (3, 3, 0): unsafe
+Available after decision: (3, 3, 2)

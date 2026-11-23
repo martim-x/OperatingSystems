@@ -1,0 +1,8 @@
+command=python -B Lab-06-bank.py --request 1 1 0 2
+cwd=C:\Users\User-6d4ec851\OS5\lab6\algorithms
+exit=0
+completed=2026-11-23T21:34:25.857+03:00
+wall_seconds=0.057652
+P1 requests (1, 0, 2): granted
+Available after decision: (2, 3, 0)
+Safe sequence: P1 -> P3 -> P4 -> P0 -> P2

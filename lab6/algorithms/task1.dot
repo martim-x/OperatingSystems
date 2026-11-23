@@ -1,0 +1,22 @@
+digraph Lab06Task1 {
+    rankdir=LR;
+    node [shape=ellipse];
+    P1; P2; P3; P4;
+    node [shape=box];
+    RS1 [label="RS1: 2 total, 0 free"];
+    RS2 [label="RS2: 4 total, 1 free"];
+    RS3 [label="RS3: 1 total, 0 free"];
+    RS4 [label="RS4: 4 total, 2 free"];
+    RS5 [label="RS5: 4 total, 1 free"];
+    edge [color="#176446"];
+    RS1 -> P4 [label="2"];
+    RS2 -> P1 [label="1"]; RS2 -> P2 [label="1"]; RS2 -> P4 [label="1"];
+    RS3 -> P1 [label="1"];
+    RS4 -> P1 [label="1"]; RS4 -> P2 [label="1"];
+    RS5 -> P1 [label="2"]; RS5 -> P3 [label="1"];
+    edge [color="#9C2D29",style=dashed];
+    P1 -> RS1 [label="1"]; P1 -> RS2 [label="1"]; P1 -> RS4 [label="2"]; P1 -> RS5 [label="1"];
+    P2 -> RS2 [label="1"]; P2 -> RS4 [label="2"]; P2 -> RS5 [label="1"];
+    P3 -> RS2 [label="2"]; P3 -> RS4 [label="3"]; P3 -> RS5 [label="1"];
+    P4 -> RS2 [label="2"]; P4 -> RS3 [label="1"]; P4 -> RS4 [label="1"];
+}

@@ -1,0 +1,8 @@
+command=python -B Lab-06-bank.py --task2 2
+cwd=C:\Users\User-6d4ec851\OS5\lab6\algorithms
+exit=0
+completed=2026-11-23T21:34:27.646+03:00
+wall_seconds=0.056753
+Task 2: x=2; finishable: D -> C -> B
+The stated fifth-resource maximum of process A is 3; the total is 2, independent of x.
+No nonnegative x makes this state safe.

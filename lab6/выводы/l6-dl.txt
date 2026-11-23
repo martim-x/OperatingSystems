@@ -1,0 +1,14 @@
+command=python -B Lab-06-dl.py
+cwd=C:\Users\User-6d4ec851\OS5\lab6\algorithms
+exit=0
+completed=2026-11-23T21:34:23.996+03:00
+wall_seconds=0.044739
+Lab-06-dl | RS1 RS2 RS3 RS4 RS5
+P1: allocation=(0, 1, 1, 1, 2); request=(1, 1, 0, 2, 1)
+P2: allocation=(0, 1, 0, 1, 0); request=(0, 1, 0, 2, 1)
+P3: allocation=(0, 0, 0, 0, 1); request=(0, 2, 0, 3, 1)
+P4: allocation=(2, 1, 0, 0, 0); request=(0, 2, 1, 1, 0)
+Initial Work = (0, 1, 0, 2, 1)
+P2 finishes; Work = (0, 2, 0, 3, 1)
+P3 finishes; Work = (0, 2, 0, 3, 2)
+Deadlocked: P1, P4

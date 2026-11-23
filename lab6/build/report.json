@@ -1,0 +1,730 @@
+{
+ "title": {
+  "discipline": "Операционные системы",
+  "work_kind": "Лабораторная работа № 6",
+  "work_name": "СИНХРОНИЗАЦИЯ",
+  "checker": "Проверил: Ассистент Савельева М. Г."
+ },
+ "meta": {
+  "title": "Лабораторная работа № 6. Синхронизация"
+ },
+ "blocks": [
+  {
+   "type": "element",
+   "text": "Введение"
+  },
+  {
+   "type": "p",
+   "text": "Цель работы – получить практические навыки синхронизации процессов и потоков в Windows и Linux. Для этого исследованы примитивы взаимного исключения, ожидание событий, ограниченный буфер, параллельное сложение матриц и алгоритмы работы с ресурсами."
+  },
+  {
+   "type": "p",
+   "text": "Консольные прогоны Windows выполнены из рабочего каталога профиля User-6d4ec851. Ubuntu запущена в WSL 2 под Linux-пользователем User-6d4ec851. Результаты показаны на снимках реальных окон и сверены с выводом тех же запусков."
+  },
+  {
+   "type": "h1",
+   "text": "Основы синхронизации"
+  },
+  {
+   "type": "h2",
+   "text": "Взаимное исключение"
+  },
+  {
+   "type": "p",
+   "text": "Критическая секция ограничивает вход потоков одного процесса. Мьютекс с системным именем позволяет нескольким процессам работать с одним объектом. Бинарный семафор выдаёт один разрешающий сигнал; в Linux его счётчик размещён в общей памяти. Событие с ручным сбросом после установки пропускает обоих ожидающих участников."
+  },
+  {
+   "type": "h2",
+   "text": "Условные переменные и барьеры"
+  },
+  {
+   "type": "p",
+   "text": "Условная переменная освобождает блокировку на время ожидания и возвращает её при пробуждении. Предикат буфера проверяется повторно. Барьер удерживает участников до завершения общего этапа, атомарная операция защищает обновление общей суммы. Эти механизмы решают разные задачи: ограничение доступа, ожидание состояния и согласование фаз вычисления."
+  },
+  {
+   "type": "h2",
+   "text": "Выводы по разделу"
+  },
+  {
+   "type": "p",
+   "text": "Для синхронизации необходимо различать взаимное исключение, ожидание состояния и согласование фаз вычисления."
+  },
+  {
+   "type": "h1",
+   "text": "Синхронизация в Windows"
+  },
+  {
+   "type": "h2",
+   "text": "Lab-06a. Критическая секция"
+  },
+  {
+   "type": "p",
+   "text": "Исходный текст приведён в листинге @лист:windows_a."
+  },
+  {
+   "type": "p",
+   "text": "Критическая секция Консольный вывод показан на рисунках @рис:win_a1, @рис:win_a2, @рис:win_a3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-a-frame-01.png",
+   "label": "win_a1",
+   "caption": "Критическая секция: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-a-frame-02.png",
+   "label": "win_a2",
+   "caption": "Критическая секция: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-a-frame-06.png",
+   "label": "win_a3",
+   "caption": "Критическая секция: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Порядок владения интервалом 30–60 по журналу: MAIN, A, B. У каждого участника ровно 100 итераций. Интервалы разных владельцев не пересекаются."
+  },
+  {
+   "type": "h2",
+   "text": "Lab-06b. Именованный мьютекс"
+  },
+  {
+   "type": "p",
+   "text": "Исходный текст приведён в листинге @лист:windows_b."
+  },
+  {
+   "type": "p",
+   "text": "Именованный мьютекс Консольный вывод показан на рисунках @рис:win_b1, @рис:win_b2, @рис:win_b3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-b-frame-01.png",
+   "label": "win_b1",
+   "caption": "Именованный мьютекс: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-b-frame-02.png",
+   "label": "win_b2",
+   "caption": "Именованный мьютекс: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-b-frame-04.png",
+   "label": "win_b3",
+   "caption": "Именованный мьютекс: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Дочерние процессы A и B запущены в отдельных консолях, показанных на рисунках @рис:win_b_child_a и @рис:win_b_child_b."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-b-live-A.png",
+   "label": "win_b_child_a",
+   "caption": "Lab-06b: живое окно дочернего процесса A, PID 19692",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-b-live-B.png",
+   "label": "win_b_child_b",
+   "caption": "Lab-06b: живое окно дочернего процесса B, PID 10296",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Порядок владения интервалом 30–60 по журналу: MAIN, B, A. У каждого участника ровно 100 итераций. Интервалы разных владельцев не пересекаются."
+  },
+  {
+   "type": "h2",
+   "text": "Lab-06c. Бинарный семафор"
+  },
+  {
+   "type": "p",
+   "text": "Исходный текст приведён в листинге @лист:windows_c."
+  },
+  {
+   "type": "p",
+   "text": "Бинарный семафор Консольный вывод показан на рисунках @рис:win_c1, @рис:win_c2, @рис:win_c3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-c-frame-01.png",
+   "label": "win_c1",
+   "caption": "Бинарный семафор: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-c-frame-02.png",
+   "label": "win_c2",
+   "caption": "Бинарный семафор: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-c-frame-04.png",
+   "label": "win_c3",
+   "caption": "Бинарный семафор: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Дочерние процессы A и B запущены в отдельных консолях, показанных на рисунках @рис:win_c_child_a и @рис:win_c_child_b."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-c-live-A.png",
+   "label": "win_c_child_a",
+   "caption": "Lab-06c: живое окно дочернего процесса A, PID 23640",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-c-live-B.png",
+   "label": "win_c_child_b",
+   "caption": "Lab-06c: живое окно дочернего процесса B, PID 3284",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Порядок владения интервалом 30–60 по журналу: MAIN, A, B. У каждого участника ровно 100 итераций. Интервалы разных владельцев не пересекаются."
+  },
+  {
+   "type": "h2",
+   "text": "Lab-06d. Событие с ручным сбросом"
+  },
+  {
+   "type": "p",
+   "text": "Исходный текст приведён в листинге @лист:windows_d."
+  },
+  {
+   "type": "p",
+   "text": "Событие с ручным сбросом Консольный вывод показан на рисунках @рис:win_d1, @рис:win_d2, @рис:win_d3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-d-frame-01.png",
+   "label": "win_d1",
+   "caption": "Событие с ручным сбросом: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-d-frame-02.png",
+   "label": "win_d2",
+   "caption": "Событие с ручным сбросом: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-d-frame-05.png",
+   "label": "win_d3",
+   "caption": "Событие с ручным сбросом: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Дочерние процессы A и B запущены в отдельных консолях, показанных на рисунках @рис:win_d_child_a и @рис:win_d_child_b."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-d-live-A.png",
+   "label": "win_d_child_a",
+   "caption": "Lab-06d: живое окно дочернего процесса A, PID 35008",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-d-live-B.png",
+   "label": "win_d_child_b",
+   "caption": "Lab-06d: живое окно дочернего процесса B, PID 10376",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "До установки события родитель выполнил итерации 1–15. После сигнала родитель, A и B дошли до итерации 1 000. Время выхода родительской программы, включая ожидание дочерних процессов, составило 111,674 с."
+  },
+  {
+   "type": "p",
+   "text": "Общие функции синхронизации и регистрации итераций приведены в листинге @лист:windows_common."
+  },
+  {
+   "type": "h2",
+   "text": "Выводы по разделу"
+  },
+  {
+   "type": "p",
+   "text": "Критическая секция, мьютекс и семафор обеспечили исключительный доступ к интервалу 30–60. Событие задержало дочерние процессы до начала итерации 16 родителя."
+  },
+  {
+   "type": "h1",
+   "text": "Синхронизация в Linux"
+  },
+  {
+   "type": "h2",
+   "text": "Lab-06a. Мьютекс POSIX"
+  },
+  {
+   "type": "p",
+   "text": "Реализация приведена в листинге @лист:linux_a."
+  },
+  {
+   "type": "p",
+   "text": "Общий мьютекс трёх потоков Ubuntu Консольный вывод показан на рисунках @рис:linux_a1, @рис:linux_a2, @рис:linux_a3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-a-frame-01.png",
+   "label": "linux_a1",
+   "caption": "Общий мьютекс трёх потоков Ubuntu: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-a-frame-02.png",
+   "label": "linux_a2",
+   "caption": "Общий мьютекс трёх потоков Ubuntu: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-a-frame-06.png",
+   "label": "linux_a3",
+   "caption": "Общий мьютекс трёх потоков Ubuntu: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Потоки main, A и B имеют один PID и выполняют по 100 итераций. По общему журналу вход в следующий интервал происходит после выхода предыдущего владельца."
+  },
+  {
+   "type": "h2",
+   "text": "Lab-06b. Межпроцессный семафор"
+  },
+  {
+   "type": "p",
+   "text": "Реализация и общие функции приведены в листингах @лист:linux_b и @лист:linux_common."
+  },
+  {
+   "type": "p",
+   "text": "Два дочерних процесса получают отдельные псевдотерминалы. Их вывод виден в двух правых панелях, слева сохраняется полный журнал процесса и дочерних участников. Ход и результат показаны на рисунках @рис:linux_b_start, @рис:linux_b_lock и @рис:linux_b_end."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-tmux-start.png",
+   "label": "linux_b_start",
+   "caption": "Lab-06b: Начало прогона",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-tmux-exclusive.png",
+   "label": "linux_b_lock",
+   "caption": "Lab-06b: Выполнение защищённого интервала",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-tmux-finish.png",
+   "label": "linux_b_end",
+   "caption": "Lab-06b: Завершение трёх процессов",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "В обеих программах задержка после строки итерации составляет 100 мс. Интервал начинается перед итерацией 30 и освобождается после итерации 60."
+  },
+  {
+   "type": "h2",
+   "text": "Выводы по разделу"
+  },
+  {
+   "type": "p",
+   "text": "В Ubuntu мьютекс разделялся потоками одного процесса, а семафор использовался тремя процессами. Вывод дочерних процессов проверен в отдельных псевдотерминалах."
+  },
+  {
+   "type": "h1",
+   "text": "Условные переменные и параллельные вычисления"
+  },
+  {
+   "type": "h2",
+   "text": "Ограниченный буфер"
+  },
+  {
+   "type": "p",
+   "text": "В Windows буфер защищён критической секцией, в Linux мьютексом POSIX. Производитель ждёт свободного места, потребитель ждёт появления элемента. Статистика печатается каждые пять секунд. Исходный текст приведён в листинге @лист:conds."
+  },
+  {
+   "type": "p",
+   "text": "Windows: ожидание производителя на полном буфере Консольный вывод показан на рисунках @рис:win_full1, @рис:win_full2, @рис:win_full3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-full-frame-01.png",
+   "label": "win_full1",
+   "caption": "Windows: ожидание производителя на полном буфере: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-full-frame-08.png",
+   "label": "win_full2",
+   "caption": "Windows: ожидание производителя на полном буфере: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-full-frame-09.png",
+   "label": "win_full3",
+   "caption": "Windows: ожидание производителя на полном буфере: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Завершение прогона: произведено и потреблено по 42 элементов, буфер пуст."
+  },
+  {
+   "type": "p",
+   "text": "Windows: ожидание потребителя на пустом буфере Консольный вывод показан на рисунках @рис:win_empty1, @рис:win_empty2, @рис:win_empty3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-empty-frame-01.png",
+   "label": "win_empty1",
+   "caption": "Windows: ожидание потребителя на пустом буфере: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-empty-frame-08.png",
+   "label": "win_empty2",
+   "caption": "Windows: ожидание потребителя на пустом буфере: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-empty-frame-09.png",
+   "label": "win_empty3",
+   "caption": "Windows: ожидание потребителя на пустом буфере: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Завершение прогона: произведено и потреблено по 39 элементов, буфер пуст."
+  },
+  {
+   "type": "p",
+   "text": "Ubuntu: ожидание производителя на полном буфере Консольный вывод показан на рисунках @рис:linux_full1, @рис:linux_full2, @рис:linux_full3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-full-frame-01.png",
+   "label": "linux_full1",
+   "caption": "Ubuntu: ожидание производителя на полном буфере: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-full-frame-08.png",
+   "label": "linux_full2",
+   "caption": "Ubuntu: ожидание производителя на полном буфере: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-full-frame-09.png",
+   "label": "linux_full3",
+   "caption": "Ubuntu: ожидание производителя на полном буфере: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Завершение прогона: произведено и потреблено по 44 элементов, буфер пуст."
+  },
+  {
+   "type": "p",
+   "text": "Ubuntu: ожидание потребителя на пустом буфере Консольный вывод показан на рисунках @рис:linux_empty1, @рис:linux_empty2, @рис:linux_empty3."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-empty-frame-01.png",
+   "label": "linux_empty1",
+   "caption": "Ubuntu: ожидание потребителя на пустом буфере: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-empty-frame-08.png",
+   "label": "linux_empty2",
+   "caption": "Ubuntu: ожидание потребителя на пустом буфере: кадр 2",
+   "width_cm": 16.0
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-empty-frame-09.png",
+   "label": "linux_empty3",
+   "caption": "Ubuntu: ожидание потребителя на пустом буфере: кадр 3",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Завершение прогона: произведено и потреблено по 41 элементов, буфер пуст."
+  },
+  {
+   "type": "h2",
+   "text": "Сложение матриц"
+  },
+  {
+   "type": "p",
+   "text": "Семь матриц 3×3 генерируются до запуска четырёх потоков. После первого барьера частичные суммы объединяются атомарно; второй барьер отделяет вычисление от печати. Код приведён в листинге @лист:bar."
+  },
+  {
+   "type": "p",
+   "text": "Windows: сумма семи матриц Консольный вывод показан на рисунке @рис:bar_win1."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-win-bar-frame-01.png",
+   "label": "bar_win1",
+   "caption": "Windows: сумма семи матриц: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Ubuntu: сумма семи матриц Консольный вывод показан на рисунке @рис:bar_linux1."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-linux-bar-frame-01.png",
+   "label": "bar_linux1",
+   "caption": "Ubuntu: сумма семи матриц: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "На обеих ОС получена одинаковая матрица. Перед выводом каждый элемент проверен последовательным сложением."
+  },
+  {
+   "type": "h2",
+   "text": "Выводы по разделу"
+  },
+  {
+   "type": "p",
+   "text": "Проверены оба состояния ожидания буфера и совпадение параллельной суммы матриц с последовательной."
+  },
+  {
+   "type": "h1",
+   "text": "Взаимоблокировка и алгоритм Банкира"
+  },
+  {
+   "type": "h2",
+   "text": "Обнаружение взаимоблокировки"
+  },
+  {
+   "type": "p",
+   "text": "Программа реализует проверку доступности запрошенных ресурсов и моделирует освобождение ресурсов процессов. Исходный текст приведён в листинге @лист:dl."
+  },
+  {
+   "type": "p",
+   "text": "Пошаговый расчёт алгоритма обнаружения взаимоблокировки Консольный вывод показан на рисунке @рис:dl_run1."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-dl-frame-01.png",
+   "label": "dl_run1",
+   "caption": "Пошаговый расчёт алгоритма обнаружения взаимоблокировки: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "table",
+   "caption": "Изменения рабочего вектора",
+   "head": [
+    "Этап",
+    "Рабочий вектор"
+   ],
+   "rows": [
+    [
+     "Начало",
+     "(0, 1, 0, 2, 1)"
+    ],
+    [
+     "После P2",
+     "(0, 2, 0, 3, 1)"
+    ],
+    [
+     "После P3",
+     "(0, 2, 0, 3, 2)"
+    ]
+   ]
+  },
+  {
+   "type": "p",
+   "text": "P2 и P3 могут завершиться. P1 удерживает RS3 и ждёт RS1; оба экземпляра RS1 удерживает P4, ожидающий RS3. Цикл ожидания выделен на рисунке @рис:resource_cycle. Полный ресурсный граф с остальными рёбрами задан файлом algorithms/task1.dot."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/resource-cycle.png",
+   "label": "resource_cycle",
+   "caption": "Ресурсный граф: цикл ожидания P1 и P4",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Взаимоблокировка не снимается после освобождения ресурсов P2 и P3."
+  },
+  {
+   "type": "h2",
+   "text": "Проверка безопасности и выдача ресурсов"
+  },
+  {
+   "type": "p",
+   "text": "Алгоритм Банкира вычисляет вектор потребностей и проверяет возможность завершения всех процессов. Запрос временно применяют к копии распределения и сохраняют только при безопасном результате. Реализация приведена в листингах @лист:bank и @лист:resources."
+  },
+  {
+   "type": "p",
+   "text": "Проверка напечатанных данных задачи 2 Консольный вывод показан на рисунке @рис:task21."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-task2-frame-01.png",
+   "label": "task21",
+   "caption": "Проверка напечатанных данных задачи 2: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Безопасная последовательность Банкира Консольный вывод показан на рисунке @рис:bank_run1."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-bank-frame-01.png",
+   "label": "bank_run1",
+   "caption": "Безопасная последовательность Банкира: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Выдача ресурсов по безопасному запросу Консольный вывод показан на рисунке @рис:grant1."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-grant-frame-01.png",
+   "label": "grant1",
+   "caption": "Выдача ресурсов по безопасному запросу: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Отказ в выдаче по небезопасному запросу Консольный вывод показан на рисунке @рис:deny1."
+  },
+  {
+   "type": "figure",
+   "file": "скрины/l6-deny-frame-01.png",
+   "label": "deny1",
+   "caption": "Отказ в выдаче по небезопасному запросу: кадр 1",
+   "width_cm": 16.0
+  },
+  {
+   "type": "p",
+   "text": "Для задачи 2 безопасного x нет. В последнем столбце выделена одна единица ресурса процессу A и свободна одна, при этом максимальная потребность A равна трём. Изменение x относится к третьему столбцу и не увеличивает запас пятого ресурса."
+  },
+  {
+   "type": "p",
+   "text": "Для исходных данных алгоритма Банкира существует последовательность P1, P3, P4, P0, P2. Запрос P1 (1, 0, 2) удовлетворяется, запрос P4 (3, 3, 0) отклоняется. При отказе исходные остатки сохраняются."
+  },
+  {
+   "type": "h2",
+   "text": "Выводы по разделу"
+  },
+  {
+   "type": "p",
+   "text": "Для заданных данных найдены два процесса во взаимоблокировке. Алгоритм Банкира разрешил безопасный запрос и сохранил исходное состояние при отказе."
+  },
+  {
+   "type": "element",
+   "text": "Заключение"
+  },
+  {
+   "type": "p",
+   "text": "Проверены взаимное исключение потоков и процессов, запуск дочерних процессов по событию, ожидание производителя и потребителя, параллельное сложение матриц и выделение ресурсов. При работе с напечатанным набором задачи 2 выявлена нехватка ресурса, не зависящая от параметра x."
+  }
+ ],
+ "listings": [
+  {
+   "title": "Lab-06a.c",
+   "label": "windows_a",
+   "code": "#include \"lab06_common.h\"\n\ntypedef struct Lab06ThreadContext {\n    const char *role;\n    DWORD delay_ms;\n    CRITICAL_SECTION *critical_section;\n    BOOL ok;\n} Lab06ThreadContext;\n\nstatic DWORD WINAPI lab06_thread_main(LPVOID parameter)\n{\n    Lab06ThreadContext *context = (Lab06ThreadContext *)parameter;\n    context->ok = lab06_run_worker(context->role, LAB06_ITERATIONS, context->delay_ms,\n                                   lab06_enter_critical, lab06_leave_critical,\n                                   context->critical_section, NULL, NULL);\n    return context->ok ? 0 : 1;\n}\n\nint main(int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    CRITICAL_SECTION critical_section;\n    Lab06ThreadContext contexts[2];\n    HANDLE threads[2] = { NULL, NULL };\n    BOOL ok = TRUE;\n    int index;\n\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06a - Critical Section\");\n    if (!lab06_parse_options(argc, argv, 1, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, TRUE))\n        return 1;\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n\n    InitializeCriticalSection(&critical_section);\n    contexts[0].role = \"A\";\n    contexts[0].delay_ms = delay_ms;\n    contexts[0].critical_section = &critical_section;\n    contexts[0].ok = FALSE;\n    contexts[1].role = \"B\";\n    contexts[1].delay_ms = delay_ms;\n    contexts[1].critical_section = &critical_section;\n    contexts[1].ok = FALSE;\n\n    for (index = 0; index < 2; index++) {\n        threads[index] = CreateThread(NULL, 0, lab06_thread_main, &contexts[index], 0, NULL);\n        if (threads[index] == NULL) {\n            fprintf(stderr, \"CreateThread failed (Win32 error %lu)\\n\",\n                    (unsigned long)GetLastError());\n            ok = FALSE;\n            break;\n        }\n    }\n\n    if (ok)\n        ok = lab06_run_worker(\"MAIN\", LAB06_ITERATIONS, delay_ms,\n                              lab06_enter_critical, lab06_leave_critical,\n                              &critical_section, NULL, NULL);\n    for (index = 0; index < 2; index++) {\n        if (threads[index] != NULL) {\n            if (WaitForSingleObject(threads[index], INFINITE) != WAIT_OBJECT_0)\n                ok = FALSE;\n            if (!contexts[index].ok)\n                ok = FALSE;\n            CloseHandle(threads[index]);\n        }\n    }\n\n    DeleteCriticalSection(&critical_section);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}"
+  },
+  {
+   "title": "Lab-06b.c",
+   "label": "windows_b",
+   "code": "#include \"lab06_common.h\"\n\nstatic int run_child(const char *role, const char *object_name, int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    HANDLE mutex;\n    BOOL ok;\n\n    if (!lab06_parse_options(argc, argv, 4, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, FALSE))\n        return 1;\n    mutex = OpenMutexA(SYNCHRONIZE | MUTEX_MODIFY_STATE, FALSE, object_name);\n    if (mutex == NULL) {\n        fprintf(stderr, \"OpenMutexA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        lab06_log_done();\n        return 1;\n    }\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06b child - named mutex\");\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n    ok = lab06_run_worker(role, LAB06_ITERATIONS, delay_ms,\n                          lab06_enter_mutex, lab06_leave_mutex, mutex, NULL, NULL);\n    CloseHandle(mutex);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}\n\nint main(int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    char object_name[96];\n    HANDLE mutex;\n    PROCESS_INFORMATION child_a;\n    PROCESS_INFORMATION child_b;\n    BOOL spawned_a = FALSE;\n    BOOL spawned_b = FALSE;\n    BOOL ok = TRUE;\n\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06b - Named Mutex\");\n    if (argc > 1 && strcmp(argv[1], \"--child\") == 0) {\n        if (argc < 4 || (strcmp(argv[2], \"A\") != 0 && strcmp(argv[2], \"B\") != 0)) {\n            fprintf(stderr, \"Child usage: --child A|B <mutex-name> [options]\\n\");\n            return 2;\n        }\n        return run_child(argv[2], argv[3], argc, argv);\n    }\n    if (!lab06_parse_options(argc, argv, 1, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, TRUE))\n        return 1;\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n\n    _snprintf_s(object_name, sizeof(object_name), _TRUNCATE, \"Local\\\\Lab06b_%lu\",\n                (unsigned long)GetCurrentProcessId());\n    mutex = CreateMutexA(NULL, FALSE, object_name);\n    if (mutex == NULL) {\n        fprintf(stderr, \"CreateMutexA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        lab06_log_done();\n        return 1;\n    }\n    spawned_a = lab06_spawn_child(\"A\", object_name, delay_ms, log_path, &child_a);\n    spawned_b = lab06_spawn_child(\"B\", object_name, delay_ms, log_path, &child_b);\n    if (!spawned_a || !spawned_b) {\n        ok = FALSE;\n    } else {\n        ok = lab06_run_worker(\"MAIN\", LAB06_ITERATIONS, delay_ms,\n                              lab06_enter_mutex, lab06_leave_mutex, mutex, NULL, NULL);\n    }\n    if (spawned_a && !lab06_wait_child(&child_a, \"A\"))\n        ok = FALSE;\n    if (spawned_b && !lab06_wait_child(&child_b, \"B\"))\n        ok = FALSE;\n    CloseHandle(mutex);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}"
+  },
+  {
+   "title": "Lab-06c.c",
+   "label": "windows_c",
+   "code": "#include \"lab06_common.h\"\n\nstatic int run_child(const char *role, const char *object_name, int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    HANDLE semaphore;\n    BOOL ok;\n\n    if (!lab06_parse_options(argc, argv, 4, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, FALSE))\n        return 1;\n    semaphore = OpenSemaphoreA(SYNCHRONIZE | SEMAPHORE_MODIFY_STATE, FALSE, object_name);\n    if (semaphore == NULL) {\n        fprintf(stderr, \"OpenSemaphoreA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        lab06_log_done();\n        return 1;\n    }\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06c child - binary semaphore\");\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n    ok = lab06_run_worker(role, LAB06_ITERATIONS, delay_ms,\n                          lab06_enter_semaphore, lab06_leave_semaphore,\n                          semaphore, NULL, NULL);\n    CloseHandle(semaphore);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}\n\nint main(int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    char object_name[96];\n    HANDLE semaphore;\n    PROCESS_INFORMATION child_a;\n    PROCESS_INFORMATION child_b;\n    BOOL spawned_a = FALSE;\n    BOOL spawned_b = FALSE;\n    BOOL ok = TRUE;\n\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06c - Binary Semaphore\");\n    if (argc > 1 && strcmp(argv[1], \"--child\") == 0) {\n        if (argc < 4 || (strcmp(argv[2], \"A\") != 0 && strcmp(argv[2], \"B\") != 0)) {\n            fprintf(stderr, \"Child usage: --child A|B <semaphore-name> [options]\\n\");\n            return 2;\n        }\n        return run_child(argv[2], argv[3], argc, argv);\n    }\n    if (!lab06_parse_options(argc, argv, 1, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, TRUE))\n        return 1;\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n\n    _snprintf_s(object_name, sizeof(object_name), _TRUNCATE, \"Local\\\\Lab06c_%lu\",\n                (unsigned long)GetCurrentProcessId());\n    semaphore = CreateSemaphoreA(NULL, 1, 1, object_name);\n    if (semaphore == NULL) {\n        fprintf(stderr, \"CreateSemaphoreA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        lab06_log_done();\n        return 1;\n    }\n    spawned_a = lab06_spawn_child(\"A\", object_name, delay_ms, log_path, &child_a);\n    spawned_b = lab06_spawn_child(\"B\", object_name, delay_ms, log_path, &child_b);\n    if (!spawned_a || !spawned_b) {\n        ok = FALSE;\n    } else {\n        ok = lab06_run_worker(\"MAIN\", LAB06_ITERATIONS, delay_ms,\n                              lab06_enter_semaphore, lab06_leave_semaphore,\n                              semaphore, NULL, NULL);\n    }\n    if (spawned_a && !lab06_wait_child(&child_a, \"A\"))\n        ok = FALSE;\n    if (spawned_b && !lab06_wait_child(&child_b, \"B\"))\n        ok = FALSE;\n    CloseHandle(semaphore);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}"
+  },
+  {
+   "title": "Lab-06d.c",
+   "label": "windows_d",
+   "code": "#include \"lab06_common.h\"\n\nstatic int run_child(const char *role, const char *event_name, int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    HANDLE event_handle;\n    BOOL ok;\n\n    if (!lab06_parse_options(argc, argv, 4, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, FALSE))\n        return 1;\n    event_handle = OpenEventA(SYNCHRONIZE, FALSE, event_name);\n    if (event_handle == NULL) {\n        fprintf(stderr, \"OpenEventA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        lab06_log_done();\n        return 1;\n    }\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06d child - manual-reset event\");\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n    if (WaitForSingleObject(event_handle, INFINITE) != WAIT_OBJECT_0) {\n        fprintf(stderr, \"Child event wait failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        CloseHandle(event_handle);\n        lab06_log_done();\n        return 1;\n    }\n    ok = lab06_run_worker(role, LAB06_EVENT_ITERATIONS, delay_ms,\n                          NULL, NULL, NULL, NULL, NULL);\n    CloseHandle(event_handle);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}\n\nstatic BOOL signal_children(void *context)\n{\n    HANDLE event_handle = (HANDLE)context;\n    lab06_logf(\"EVENT_SET\");\n    printf(\"EVENT_SET: parent starts iteration 16; children released\\n\");\n    fflush(stdout);\n    if (!SetEvent(event_handle)) {\n        fprintf(stderr, \"SetEvent failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        return FALSE;\n    }\n    return TRUE;\n}\n\nint main(int argc, char **argv)\n{\n    DWORD delay_ms;\n    const char *log_path;\n    char event_name[96];\n    HANDLE event_handle;\n    PROCESS_INFORMATION child_a;\n    PROCESS_INFORMATION child_b;\n    BOOL spawned_a = FALSE;\n    BOOL spawned_b = FALSE;\n    BOOL ok = TRUE;\n\n    SetConsoleOutputCP(CP_UTF8);\n    SetConsoleTitleA(\"Lab-06d - Manual-reset Event\");\n    if (argc > 1 && strcmp(argv[1], \"--child\") == 0) {\n        if (argc < 4 || (strcmp(argv[2], \"A\") != 0 && strcmp(argv[2], \"B\") != 0)) {\n            fprintf(stderr, \"Child usage: --child A|B <event-name> [options]\\n\");\n            return 2;\n        }\n        return run_child(argv[2], argv[3], argc, argv);\n    }\n    if (!lab06_parse_options(argc, argv, 1, &delay_ms, &log_path))\n        return 2;\n    if (!lab06_log_init(log_path, TRUE))\n        return 1;\n    if (delay_ms != LAB06_DEFAULT_DELAY_MS)\n        printf(\"[TEST ONLY] delay override: %lu ms (default: %u ms)\\n\",\n               (unsigned long)delay_ms, LAB06_DEFAULT_DELAY_MS);\n\n    _snprintf_s(event_name, sizeof(event_name), _TRUNCATE, \"Local\\\\Lab06d_%lu\",\n                (unsigned long)GetCurrentProcessId());\n    event_handle = CreateEventA(NULL, TRUE, FALSE, event_name);\n    if (event_handle == NULL) {\n        fprintf(stderr, \"CreateEventA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        lab06_log_done();\n        return 1;\n    }\n    spawned_a = lab06_spawn_child(\"A\", event_name, delay_ms, log_path, &child_a);\n    spawned_b = lab06_spawn_child(\"B\", event_name, delay_ms, log_path, &child_b);\n    if (!spawned_a || !spawned_b) {\n        ok = FALSE;\n    } else {\n        ok = lab06_run_worker(\"MAIN\", LAB06_EVENT_ITERATIONS, delay_ms,\n                              NULL, NULL, NULL, signal_children, event_handle);\n    }\n    if (!ok) {\n        if (spawned_a)\n            TerminateProcess(child_a.hProcess, 1);\n        if (spawned_b)\n            TerminateProcess(child_b.hProcess, 1);\n    }\n    if (spawned_a && !lab06_wait_child(&child_a, \"A\"))\n        ok = FALSE;\n    if (spawned_b && !lab06_wait_child(&child_b, \"B\"))\n        ok = FALSE;\n    CloseHandle(event_handle);\n    if (!lab06_log_done())\n        ok = FALSE;\n    return ok ? 0 : 1;\n}"
+  },
+  {
+   "title": "lab06_common.h",
+   "label": "windows_common",
+   "code": "#ifndef LAB06_COMMON_H\n#define LAB06_COMMON_H\n\n#define _CRT_SECURE_NO_WARNINGS\n#define WIN32_LEAN_AND_MEAN\n#include <windows.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <stdarg.h>\n\n#define LAB06_ITERATIONS 100\n#define LAB06_EVENT_ITERATIONS 1000\n#define LAB06_DEFAULT_DELAY_MS 100\n#define LAB06_FIRST_EXCLUSIVE_ITERATION 30\n#define LAB06_LAST_EXCLUSIVE_ITERATION 60\n#define LAB06_USER_NAME \"User-6d4ec851\"\n\ntypedef BOOL (*Lab06Action)(void *context);\n\nstatic HANDLE g_lab06_log = INVALID_HANDLE_VALUE;\nstatic HANDLE g_lab06_log_mutex = NULL;\nstatic volatile LONG g_lab06_log_failed = 0;\n\nstatic BOOL lab06_has_log_error(void)\n{\n    return InterlockedCompareExchange(&g_lab06_log_failed, 0, 0) != 0;\n}\n\nstatic BOOL lab06_log_init(const char *path, BOOL truncate_file)\n{\n    char mutex_name[64];\n    unsigned long hash = 2166136261u;\n    size_t index;\n    LARGE_INTEGER zero;\n\n    if (path == NULL)\n        return TRUE;\n\n    g_lab06_log = CreateFileA(path, GENERIC_READ | GENERIC_WRITE,\n                              FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,\n                              FILE_ATTRIBUTE_NORMAL, NULL);\n    if (g_lab06_log == INVALID_HANDLE_VALUE) {\n        fprintf(stderr, \"Cannot open log file '%s' (Win32 error %lu)\\n\",\n                path, (unsigned long)GetLastError());\n        return FALSE;\n    }\n    if (truncate_file) {\n        zero.QuadPart = 0;\n        if (!SetFilePointerEx(g_lab06_log, zero, NULL, FILE_BEGIN) || !SetEndOfFile(g_lab06_log)) {\n            fprintf(stderr, \"Cannot clear log file (Win32 error %lu)\\n\",\n                    (unsigned long)GetLastError());\n            CloseHandle(g_lab06_log);\n            g_lab06_log = INVALID_HANDLE_VALUE;\n            return FALSE;\n        }\n    }\n    for (index = 0; path[index] != '\\0'; index++)\n        hash = (hash ^ (unsigned char)path[index]) * 16777619u;\n    _snprintf_s(mutex_name, sizeof(mutex_name), _TRUNCATE,\n                \"Local\\\\Lab06Log_%08lX\", hash);\n    g_lab06_log_mutex = CreateMutexA(NULL, FALSE, mutex_name);\n    if (g_lab06_log_mutex == NULL) {\n        fprintf(stderr, \"Cannot create log mutex (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        CloseHandle(g_lab06_log);\n        g_lab06_log = INVALID_HANDLE_VALUE;\n        return FALSE;\n    }\n    return TRUE;\n}\n\nstatic void lab06_logf(const char *format, ...)\n{\n    char line[512];\n    int length;\n    DWORD written = 0;\n    LARGE_INTEGER file_end;\n    DWORD wait_result;\n    va_list args;\n\n    if (g_lab06_log == INVALID_HANDLE_VALUE || lab06_has_log_error())\n        return;\n\n    va_start(args, format);\n    length = _vsnprintf_s(line, sizeof(line) - 2, _TRUNCATE, format, args);\n    va_end(args);\n    if (length < 0) {\n        InterlockedExchange(&g_lab06_log_failed, 1);\n        return;\n    }\n    line[length++] = '\\r';\n    line[length++] = '\\n';\n    wait_result = WaitForSingleObject(g_lab06_log_mutex, INFINITE);\n    if (wait_result != WAIT_OBJECT_0 && wait_result != WAIT_ABANDONED) {\n        InterlockedExchange(&g_lab06_log_failed, 1);\n        return;\n    }\n    file_end.QuadPart = 0;\n    if (!SetFilePointerEx(g_lab06_log, file_end, NULL, FILE_END) ||\n        !WriteFile(g_lab06_log, line, (DWORD)length, &written, NULL) || written != (DWORD)length)\n        InterlockedExchange(&g_lab06_log_failed, 1);\n    if (!ReleaseMutex(g_lab06_log_mutex))\n        InterlockedExchange(&g_lab06_log_failed, 1);\n}\n\nstatic BOOL lab06_log_done(void)\n{\n    BOOL ok = !lab06_has_log_error();\n    if (g_lab06_log != INVALID_HANDLE_VALUE) {\n        if (!FlushFileBuffers(g_lab06_log))\n            ok = FALSE;\n        CloseHandle(g_lab06_log);\n        g_lab06_log = INVALID_HANDLE_VALUE;\n    }\n    if (g_lab06_log_mutex != NULL) {\n        CloseHandle(g_lab06_log_mutex);\n        g_lab06_log_mutex = NULL;\n    }\n    return ok;\n}\n\nstatic BOOL lab06_parse_options(int argc, char **argv, int first_option,\n                                DWORD *delay_ms, const char **log_path)\n{\n    int index;\n    *delay_ms = LAB06_DEFAULT_DELAY_MS;\n    *log_path = NULL;\n    for (index = first_option; index < argc; index++) {\n        if (strcmp(argv[index], \"--test-delay-ms\") == 0 && index + 1 < argc) {\n            char *end = NULL;\n            unsigned long value = strtoul(argv[++index], &end, 10);\n            if (end == argv[index] || *end != '\\0' || value > 1000) {\n                fprintf(stderr, \"--test-delay-ms must be an integer from 0 through 1000\\n\");\n                return FALSE;\n            }\n            *delay_ms = (DWORD)value;\n        } else if (strcmp(argv[index], \"--log-file\") == 0 && index + 1 < argc) {\n            *log_path = argv[++index];\n        } else {\n            fprintf(stderr, \"Unknown or incomplete option: %s\\n\", argv[index]);\n            return FALSE;\n        }\n    }\n    return TRUE;\n}\n\nstatic BOOL lab06_write_quoted_arg(char *line, size_t capacity, const char *arg)\n{\n    size_t pos = strlen(line);\n    size_t i = 0;\n    if (pos + 2 >= capacity)\n        return FALSE;\n    if (pos != 0)\n        line[pos++] = ' ';\n    line[pos++] = '\"';\n\n    while (arg[i] != '\\0') {\n        size_t slashes = 0;\n        while (arg[i] == '\\\\') {\n            slashes++;\n            i++;\n        }\n        if (arg[i] == '\"' || arg[i] == '\\0') {\n            size_t repeat = slashes * 2 + (arg[i] == '\"' ? 1 : 0);\n            while (repeat-- > 0) {\n                if (pos + 1 >= capacity)\n                    return FALSE;\n                line[pos++] = '\\\\';\n            }\n            if (arg[i] == '\"') {\n                if (pos + 1 >= capacity)\n                    return FALSE;\n                line[pos++] = arg[i++];\n            }\n        } else {\n            while (slashes-- > 0) {\n                if (pos + 1 >= capacity)\n                    return FALSE;\n                line[pos++] = '\\\\';\n            }\n            if (pos + 1 >= capacity)\n                return FALSE;\n            line[pos++] = arg[i++];\n        }\n    }\n    if (pos + 2 > capacity)\n        return FALSE;\n    line[pos++] = '\"';\n    line[pos] = '\\0';\n    return TRUE;\n}\n\nstatic BOOL lab06_spawn_child(const char *role, const char *object_name,\n                              DWORD delay_ms, const char *log_path, PROCESS_INFORMATION *process)\n{\n    char executable[MAX_PATH];\n    char command_line[MAX_PATH * 2 + 1024];\n    char delay_text[16];\n    STARTUPINFOA startup;\n\n    if (GetModuleFileNameA(NULL, executable, MAX_PATH) == 0) {\n        fprintf(stderr, \"GetModuleFileNameA failed (Win32 error %lu)\\n\",\n                (unsigned long)GetLastError());\n        return FALSE;\n    }\n    command_line[0] = '\\0';\n    _snprintf_s(delay_text, sizeof(delay_text), _TRUNCATE, \"%lu\", (unsigned long)delay_ms);\n    if (!lab06_write_quoted_arg(command_line, sizeof(command_line), executable) ||\n        !lab06_write_quoted_arg(command_line, sizeof(command_line), \"--child\") ||\n        !lab06_write_quoted_arg(command_line, sizeof(command_line), role) ||\n        !lab06_write_quoted_arg(command_line, sizeof(command_line), object_name) ||\n        !lab06_write_quoted_arg(command_line, sizeof(command_line), \"--test-delay-ms\") ||\n        !lab06_write_quoted_arg(command_line, sizeof(command_line), delay_text)) {\n        fprintf(stderr, \"Child command line is too long\\n\");\n        return FALSE;\n    }\n    if (log_path != NULL &&\n        (!lab06_write_quoted_arg(command_line, sizeof(command_line), \"--log-file\") ||\n         !lab06_write_quoted_arg(command_line, sizeof(command_line), log_path))) {\n        fprintf(stderr, \"Child command line is too long\\n\");\n        return FALSE;\n    }\n\n    ZeroMemory(&startup, sizeof(startup));\n    startup.cb = sizeof(startup);\n    ZeroMemory(process, sizeof(*process));\n    if (!CreateProcessA(NULL, command_line, NULL, NULL, FALSE, CREATE_NEW_CONSOLE,\n                        NULL, NULL, &startup, process)) {\n        fprintf(stderr, \"CreateProcessA for child %s failed (Win32 error %lu)\\n\",\n                role, (unsigned long)GetLastError());\n        return FALSE;\n    }\n    CloseHandle(process->hThread);\n    process->hThread = NULL;\n    return TRUE;\n}\n\nstatic BOOL lab06_wait_child(PROCESS_INFORMATION *process, const char *role)\n{\n    DWORD exit_code = 1;\n    BOOL ok = WaitForSingleObject(process->hProcess, INFINITE) == WAIT_OBJECT_0;\n    if (ok)\n        ok = GetExitCodeProcess(process->hProcess, &exit_code) && exit_code == 0;\n    if (!ok)\n        fprintf(stderr, \"Child %s failed (wait error %lu, exit code %lu)\\n\", role,\n                (unsigned long)GetLastError(), (unsigned long)exit_code);\n    CloseHandle(process->hProcess);\n    process->hProcess = NULL;\n    return ok;\n}\n\nstatic BOOL lab06_iteration(const char *role, int iteration, DWORD delay_ms)\n{\n    char user_char = LAB06_USER_NAME[(iteration - 1) % (sizeof(LAB06_USER_NAME) - 1)];\n    DWORD pid = GetCurrentProcessId();\n    DWORD tid = GetCurrentThreadId();\n    lab06_logf(\"ITER role=%s pid=%lu tid=%lu iteration=%d user=%c\",\n               role, (unsigned long)pid, (unsigned long)tid, iteration, user_char);\n    printf(\"%s pid=%lu tid=%lu iteration=%d user=%c\\n\",\n           role, (unsigned long)pid, (unsigned long)tid, iteration, user_char);\n    fflush(stdout);\n    if (delay_ms != 0)\n        Sleep(delay_ms);\n    return !lab06_has_log_error();\n}\n\nstatic BOOL lab06_run_worker(const char *role, int iterations, DWORD delay_ms,\n                             Lab06Action enter_exclusive, Lab06Action leave_exclusive,\n                             void *sync_context, Lab06Action before_iteration_16,\n                             void *event_context)\n{\n    int iteration;\n    for (iteration = 1; iteration <= iterations; iteration++) {\n        if (iteration == 16 && before_iteration_16 != NULL &&\n            !before_iteration_16(event_context))\n            return FALSE;\n        if (iteration == LAB06_FIRST_EXCLUSIVE_ITERATION && enter_exclusive != NULL) {\n            if (!enter_exclusive(sync_context))\n                return FALSE;\n            lab06_logf(\"ENTER role=%s iteration=%d\", role, iteration);\n        }\n        if (!lab06_iteration(role, iteration, delay_ms))\n            return FALSE;\n        if (iteration == LAB06_LAST_EXCLUSIVE_ITERATION && leave_exclusive != NULL) {\n            lab06_logf(\"LEAVE role=%s iteration=%d\", role, iteration);\n            if (!leave_exclusive(sync_context))\n                return FALSE;\n        }\n    }\n    return !lab06_has_log_error();\n}\n\nstatic BOOL lab06_enter_critical(void *context)\n{\n    EnterCriticalSection((CRITICAL_SECTION *)context);\n    return TRUE;\n}\n\nstatic BOOL lab06_leave_critical(void *context)\n{\n    LeaveCriticalSection((CRITICAL_SECTION *)context);\n    return TRUE;\n}\n\nstatic BOOL lab06_enter_mutex(void *context)\n{\n    DWORD result = WaitForSingleObject((HANDLE)context, INFINITE);\n    if (result == WAIT_OBJECT_0 || result == WAIT_ABANDONED)\n        return TRUE;\n    fprintf(stderr, \"WaitForSingleObject(mutex) failed (Win32 error %lu)\\n\",\n            (unsigned long)GetLastError());\n    return FALSE;\n}\n\nstatic BOOL lab06_leave_mutex(void *context)\n{\n    if (ReleaseMutex((HANDLE)context))\n        return TRUE;\n    fprintf(stderr, \"ReleaseMutex failed (Win32 error %lu)\\n\", (unsigned long)GetLastError());\n    return FALSE;\n}\n\nstatic BOOL lab06_enter_semaphore(void *context)\n{\n    if (WaitForSingleObject((HANDLE)context, INFINITE) == WAIT_OBJECT_0)\n        return TRUE;\n    fprintf(stderr, \"WaitForSingleObject(semaphore) failed (Win32 error %lu)\\n\",\n            (unsigned long)GetLastError());\n    return FALSE;\n}\n\nstatic BOOL lab06_leave_semaphore(void *context)\n{\n    if (ReleaseSemaphore((HANDLE)context, 1, NULL))\n        return TRUE;\n    fprintf(stderr, \"ReleaseSemaphore failed (Win32 error %lu)\\n\", (unsigned long)GetLastError());\n    return FALSE;\n}\n\n#endif"
+  },
+  {
+   "title": "Lab-06a.c",
+   "label": "linux_a",
+   "code": "#define _POSIX_C_SOURCE 200809L\n\n#include <pthread.h>\n#include <stdio.h>\n#include <string.h>\n\n#include \"lab06_common.h\"\n\ntypedef struct\n{\n    const char *name;\n    pthread_mutex_t *mutex;\n} worker_args;\n\nstatic char worker_failed;\n\nstatic void *run_worker(void *opaque)\n{\n    worker_args *args = opaque;\n\n    for (int iteration = 1; iteration <= LAB06_ITERATIONS; ++iteration)\n    {\n        if (iteration == LAB06_FIRST_EXCLUSIVE)\n        {\n            int rc = pthread_mutex_lock(args->mutex);\n            if (rc != 0)\n            {\n                fprintf(stderr, \"pthread_mutex_lock: %s\\n\", strerror(rc));\n                return &worker_failed;\n            }\n            lab06_print_boundary(\"ENTER\", args->name, iteration);\n        }\n\n        lab06_print_iteration(args->name, iteration);\n        if (lab06_delay() != 0)\n        {\n            if (iteration >= LAB06_FIRST_EXCLUSIVE && iteration <= LAB06_LAST_EXCLUSIVE)\n                (void)pthread_mutex_unlock(args->mutex);\n            return &worker_failed;\n        }\n\n        if (iteration == LAB06_LAST_EXCLUSIVE)\n        {\n            lab06_print_boundary(\"LEAVE\", args->name, iteration);\n            int rc = pthread_mutex_unlock(args->mutex);\n            if (rc != 0)\n            {\n                fprintf(stderr, \"pthread_mutex_unlock: %s\\n\", strerror(rc));\n                return &worker_failed;\n            }\n        }\n    }\n    return NULL;\n}\n\nstatic int join_worker(pthread_t thread, const char *name)\n{\n    void *result = NULL;\n    int rc = pthread_join(thread, &result);\n    if (rc != 0)\n    {\n        fprintf(stderr, \"pthread_join %s: %s\\n\", name, strerror(rc));\n        return -1;\n    }\n    if (result != NULL)\n    {\n        fprintf(stderr, \"worker %s failed\\n\", name);\n        return -1;\n    }\n    return 0;\n}\n\nint main(void)\n{\n    pthread_mutex_t mutex;\n    int rc = pthread_mutex_init(&mutex, NULL);\n    if (rc != 0)\n    {\n        fprintf(stderr, \"pthread_mutex_init: %s\\n\", strerror(rc));\n        return 1;\n    }\n\n    worker_args args_a = {\"A\", &mutex};\n    worker_args args_b = {\"B\", &mutex};\n    worker_args args_main = {\"main\", &mutex};\n    pthread_t thread_a;\n    pthread_t thread_b;\n\n    rc = pthread_create(&thread_a, NULL, run_worker, &args_a);\n    if (rc != 0)\n    {\n        fprintf(stderr, \"pthread_create A: %s\\n\", strerror(rc));\n        (void)pthread_mutex_destroy(&mutex);\n        return 1;\n    }\n\n    rc = pthread_create(&thread_b, NULL, run_worker, &args_b);\n    if (rc != 0)\n    {\n        fprintf(stderr, \"pthread_create B: %s\\n\", strerror(rc));\n        int status = join_worker(thread_a, \"A\");\n        (void)pthread_mutex_destroy(&mutex);\n        return status == 0 ? 1 : status;\n    }\n\n    int status = run_worker(&args_main) == NULL ? 0 : 1;\n    if (join_worker(thread_a, \"A\") != 0)\n        status = 1;\n    if (join_worker(thread_b, \"B\") != 0)\n        status = 1;\n\n    rc = pthread_mutex_destroy(&mutex);\n    if (rc != 0)\n    {\n        fprintf(stderr, \"pthread_mutex_destroy: %s\\n\", strerror(rc));\n        status = 1;\n    }\n    return status;\n}"
+  },
+  {
+   "title": "Lab-06b.c",
+   "label": "linux_b",
+   "code": "#define _GNU_SOURCE\n\n#include <errno.h>\n#include <semaphore.h>\n#include <stdio.h>\n#include <string.h>\n#include <sys/mman.h>\n#include <sys/types.h>\n#include <sys/wait.h>\n#include <unistd.h>\n\n#include \"lab06_common.h\"\n\ntypedef struct\n{\n    sem_t mutex;\n} shared_state;\n\nstatic int lock_shared(sem_t *mutex)\n{\n    while (sem_wait(mutex) == -1)\n    {\n        if (errno != EINTR)\n        {\n            perror(\"sem_wait\");\n            return -1;\n        }\n    }\n    return 0;\n}\n\nstatic int run_worker(sem_t *mutex, const char *name)\n{\n    for (int iteration = 1; iteration <= LAB06_ITERATIONS; ++iteration)\n    {\n        if (iteration == LAB06_FIRST_EXCLUSIVE)\n        {\n            if (lock_shared(mutex) != 0)\n                return -1;\n            lab06_print_boundary(\"ENTER\", name, iteration);\n        }\n\n        lab06_print_iteration(name, iteration);\n        if (lab06_delay() != 0)\n        {\n            if (iteration >= LAB06_FIRST_EXCLUSIVE && iteration <= LAB06_LAST_EXCLUSIVE &&\n                sem_post(mutex) == -1)\n                perror(\"sem_post after delay failure\");\n            return -1;\n        }\n\n        if (iteration == LAB06_LAST_EXCLUSIVE)\n        {\n            lab06_print_boundary(\"LEAVE\", name, iteration);\n            if (sem_post(mutex) == -1)\n            {\n                perror(\"sem_post\");\n                return -1;\n            }\n        }\n    }\n    return 0;\n}\n\nstatic int wait_for_child(pid_t child, const char *name)\n{\n    int child_status;\n    pid_t result;\n    do\n    {\n        result = waitpid(child, &child_status, 0);\n    } while (result == -1 && errno == EINTR);\n\n    if (result == -1)\n    {\n        perror(\"waitpid\");\n        return -1;\n    }\n    if (!WIFEXITED(child_status) || WEXITSTATUS(child_status) != 0)\n    {\n        fprintf(stderr, \"child %s did not exit successfully\\n\", name);\n        return -1;\n    }\n    return 0;\n}\n\nstatic int run_child(sem_t *mutex, const char *name, const char *tty)\n{\n    if (tty)\n    {\n        lab06_terminal = fopen(tty, \"a\");\n        if (!lab06_terminal || !isatty(fileno(lab06_terminal)))\n        {\n            fprintf(stderr, \"not a writable terminal: %s\\n\", tty);\n            return 1;\n        }\n        setvbuf(lab06_terminal, NULL, _IOLBF, 0);\n    }\n    int rc = run_worker(mutex, name);\n    if (lab06_terminal && fclose(lab06_terminal) != 0)\n        rc = -1;\n    return rc != 0;\n}\n\nint main(int argc, char **argv)\n{\n    if (argc != 1 && (argc != 3 || strcmp(argv[1], argv[2]) == 0 ||\n                      strncmp(argv[1], \"/dev/pts/\", 9) || strncmp(argv[2], \"/dev/pts/\", 9)))\n    {\n        fprintf(stderr, \"usage: Lab-06b [/dev/pts/A /dev/pts/B]\\n\");\n        return 2;\n    }\n    (void)setvbuf(stdout, NULL, _IOLBF, 0);\n    shared_state *shared = mmap(NULL, sizeof(*shared), PROT_READ | PROT_WRITE,\n                                MAP_SHARED | MAP_ANONYMOUS, -1, 0);\n    if (shared == MAP_FAILED)\n    {\n        perror(\"mmap\");\n        return 1;\n    }\n    if (sem_init(&shared->mutex, 1, 1) == -1)\n    {\n        perror(\"sem_init\");\n        (void)munmap(shared, sizeof(*shared));\n        return 1;\n    }\n\n    pid_t child_a = fork();\n    if (child_a == -1)\n    {\n        perror(\"fork A\");\n        (void)sem_destroy(&shared->mutex);\n        (void)munmap(shared, sizeof(*shared));\n        return 1;\n    }\n    if (child_a == 0)\n        _exit(run_child(&shared->mutex, \"A\", argc == 3 ? argv[1] : NULL));\n\n    pid_t child_b = fork();\n    if (child_b == -1)\n    {\n        perror(\"fork B\");\n        (void)wait_for_child(child_a, \"A\");\n        (void)sem_destroy(&shared->mutex);\n        (void)munmap(shared, sizeof(*shared));\n        return 1;\n    }\n    if (child_b == 0)\n        _exit(run_child(&shared->mutex, \"B\", argc == 3 ? argv[2] : NULL));\n\n    int status = run_worker(&shared->mutex, \"main\");\n    if (wait_for_child(child_a, \"A\") != 0)\n        status = -1;\n    if (wait_for_child(child_b, \"B\") != 0)\n        status = -1;\n    if (sem_destroy(&shared->mutex) == -1)\n    {\n        perror(\"sem_destroy\");\n        status = -1;\n    }\n    if (munmap(shared, sizeof(*shared)) == -1)\n    {\n        perror(\"munmap\");\n        status = -1;\n    }\n    return status == 0 ? 0 : 1;\n}"
+  },
+  {
+   "title": "lab06_common.h",
+   "label": "linux_common",
+   "code": "#ifndef LAB06_COMMON_H\n#define LAB06_COMMON_H\n\n#include <errno.h>\n#include <stdio.h>\n#include <time.h>\n#include <unistd.h>\n\n#define LAB06_ITERATIONS 100\n#define LAB06_FIRST_EXCLUSIVE 30\n#define LAB06_LAST_EXCLUSIVE 60\n#define LAB06_DELAY_MS 100\n#define LAB06_USER_NAME \"User-6d4ec851\"\n\nstatic FILE *lab06_terminal;\n\nstatic void lab06_print_iteration(const char *worker, int iteration)\n{\n    size_t user_length = sizeof(LAB06_USER_NAME) - 1;\n    char symbol = LAB06_USER_NAME[(iteration - 1) % user_length];\n\n    printf(\"ITER worker=%s pid=%ld i=%d user=%c\\n\",\n           worker, (long)getpid(), iteration, symbol);\n    fflush(stdout);\n    if (lab06_terminal)\n        fprintf(lab06_terminal, \"ITER worker=%s pid=%ld i=%d user=%c\\n\",\n                worker, (long)getpid(), iteration, symbol);\n}\n\nstatic void lab06_print_boundary(const char *kind, const char *worker, int iteration)\n{\n    printf(\"%s worker=%s pid=%ld i=%d\\n\", kind, worker, (long)getpid(), iteration);\n    fflush(stdout);\n    if (lab06_terminal)\n        fprintf(lab06_terminal, \"%s worker=%s pid=%ld i=%d\\n\", kind, worker, (long)getpid(), iteration);\n}\n\nstatic int lab06_delay(void)\n{\n    struct timespec remaining = {\n        .tv_sec = LAB06_DELAY_MS / 1000,\n        .tv_nsec = (LAB06_DELAY_MS % 1000) * 1000000L,\n    };\n\n    while (nanosleep(&remaining, &remaining) == -1)\n    {\n        if (errno != EINTR)\n        {\n            perror(\"nanosleep\");\n            return -1;\n        }\n    }\n    return 0;\n}\n\n#endif"
+  },
+  {
+   "title": "Lab-06-conds.cpp",
+   "label": "conds",
+   "code": "#include <charconv>\n#include <chrono>\n#include <deque>\n#include <iomanip>\n#include <iostream>\n#include <mutex>\n#include <random>\n#include <stdexcept>\n#include <string_view>\n#include <thread>\n#ifdef _WIN32\n#define NOMINMAX\n#include <windows.h>\n#else\n#include <pthread.h>\n#endif\n\nusing Clock = std::chrono::steady_clock;\nusing namespace std::chrono_literals;\n\nstatic void check(bool ok)\n{\n    if (!ok) std::terminate();\n}\n\nstruct Mutex {\n#ifdef _WIN32\n    CRITICAL_SECTION native;\n    Mutex() { InitializeCriticalSection(&native); }\n    ~Mutex() { DeleteCriticalSection(&native); }\n    void lock() { EnterCriticalSection(&native); }\n    void unlock() { LeaveCriticalSection(&native); }\n#else\n    pthread_mutex_t native = PTHREAD_MUTEX_INITIALIZER;\n    ~Mutex() { check(pthread_mutex_destroy(&native) == 0); }\n    void lock() { check(pthread_mutex_lock(&native) == 0); }\n    void unlock() { check(pthread_mutex_unlock(&native) == 0); }\n#endif\n};\n\nstruct Condition {\n#ifdef _WIN32\n    CONDITION_VARIABLE native = CONDITION_VARIABLE_INIT;\n    void wait(Mutex &m) { check(SleepConditionVariableCS(&native, &m.native, INFINITE) != 0); }\n    void wake() { WakeConditionVariable(&native); }\n#else\n    pthread_cond_t native = PTHREAD_COND_INITIALIZER;\n    ~Condition() { check(pthread_cond_destroy(&native) == 0); }\n    void wait(Mutex &m) { check(pthread_cond_wait(&native, &m.native) == 0); }\n    void wake() { check(pthread_cond_signal(&native) == 0); }\n#endif\n};\n\nstruct Stats {\n    unsigned long long count = 0, last_count = 0;\n    double delay_ms = 0, ended = 0;\n    Clock::time_point first{}, last{};\n    void record(Clock::time_point now, double delay)\n    {\n        if (!count) first = now;\n        last = now;\n        ++count;\n        delay_ms += delay;\n    }\n};\n\nclass Buffer {\n    const std::size_t capacity;\n    const Clock::time_point start = Clock::now();\n    Mutex mutex;\n    Condition nonempty, nonfull;\n    std::deque<unsigned long long> queue;\n    bool stopping = false, producer_done = false;\n    Stats produced, consumed;\n    unsigned long long removed = 0, last_removed = 0;\n    double last_report = 0;\n\n    static double seconds(Clock::duration d) { return std::chrono::duration<double>(d).count(); }\n\npublic:\n    explicit Buffer(std::size_t cap) : capacity(cap) {}\n\n    void produce(int lo, int hi)\n    {\n        std::mt19937 rng(42);\n        std::uniform_int_distribution<int> delay(lo, hi);\n        for (;;) {\n            {\n                std::lock_guard lock(mutex);\n                while (queue.size() == capacity && !stopping) {\n                    std::cout << \"producer waits (full)\\n\";\n                    nonfull.wait(mutex);\n                    std::cout << \"producer wakes\\n\";\n                }\n                if (stopping) break;\n                queue.push_back(produced.count + 1);\n                produced.record(Clock::now(), 0);\n                std::cout << \"added=\" << produced.count << \" buffer=\" << queue.size() << '\\n';\n                nonempty.wake();\n            }\n            std::this_thread::sleep_for(std::chrono::milliseconds(delay(rng)));\n        }\n        std::lock_guard lock(mutex);\n        producer_done = true;\n        produced.ended = seconds(Clock::now() - start);\n        nonempty.wake();\n    }\n\n    void consume(int lo, int hi)\n    {\n        std::mt19937 rng(43);\n        std::uniform_int_distribution<int> delay(lo, hi);\n        for (;;) {\n            unsigned long long item;\n            {\n                std::lock_guard lock(mutex);\n                while (queue.empty() && !producer_done) {\n                    std::cout << \"consumer waits (empty)\\n\";\n                    nonempty.wait(mutex);\n                    std::cout << \"consumer wakes\\n\";\n                }\n                if (queue.empty()) break;\n                item = queue.front();\n                queue.pop_front();\n                ++removed;\n                std::cout << \"removed=\" << item << \" buffer=\" << queue.size() << '\\n';\n                nonfull.wake();\n            }\n            const auto begin = Clock::now();\n            std::this_thread::sleep_for(std::chrono::milliseconds(delay(rng)));\n            const auto end = Clock::now();\n            std::lock_guard lock(mutex);\n            consumed.record(end, seconds(end - begin) * 1000);\n        }\n        std::lock_guard lock(mutex);\n        consumed.ended = seconds(Clock::now() - start);\n    }\n\n    void stop()\n    {\n        std::lock_guard lock(mutex);\n        stopping = true;\n        nonfull.wake();\n    }\n\n    void report()\n    {\n        std::lock_guard lock(mutex);\n        const double elapsed = seconds(Clock::now() - start);\n        const auto added = produced.count - produced.last_count;\n        const auto taken = removed - last_removed;\n        const double period = elapsed - last_report;\n        std::cout << std::fixed << std::setprecision(2)\n                  << \"stats elapsed=\" << elapsed << \"s produced=\" << produced.count\n                  << \" consumed=\" << removed << \" buffer=\" << queue.size()\n                  << \" fill=\" << 100.0 * queue.size() / capacity << \"%\\n\"\n                  << \"  producer count=\" << added << \" mean_interval_ms=\"\n                  << (produced.count > 1 ? seconds(produced.last - produced.first) * 1000 / (produced.count - 1) : 0)\n                  << \" speed=\" << added / period << \"/s total_s=\" << (producer_done ? produced.ended : elapsed) << '\\n'\n                  << \"  consumer count=\" << taken << \" mean_processing_ms=\"\n                  << (consumed.count ? consumed.delay_ms / consumed.count : 0)\n                  << \" speed=\" << taken / period << \"/s total_s=\" << (consumed.ended ? consumed.ended : elapsed) << '\\n';\n        produced.last_count = produced.count;\n        last_removed = removed;\n        last_report = elapsed;\n    }\n\n    int finish()\n    {\n        std::cout << \"final produced=\" << produced.count << \" consumed=\" << consumed.count\n                  << \" buffer=\" << queue.size() << '\\n';\n        return queue.empty() && produced.count == consumed.count ? 0 : 1;\n    }\n};\n\nstatic int number(std::string_view s, int lo, int hi)\n{\n    int v = 0;\n    const auto [end, err] = std::from_chars(s.data(), s.data() + s.size(), v);\n    if (err != std::errc{} || end != s.data() + s.size() || v < lo || v > hi)\n        throw std::invalid_argument(\"integer argument is outside the supported range\");\n    return v;\n}\n\nint main(int argc, char **argv)\n{\n    try {\n        if (argc != 6 && (argc != 8 || std::string_view(argv[6]) != \"--seconds\"))\n            throw std::invalid_argument(\"usage: Lab-06-conds CAPACITY PROD_MIN_MS PROD_MAX_MS CONS_MIN_MS CONS_MAX_MS [--seconds N]\");\n        const int cap = number(argv[1], 1, 10000);\n        const int p0 = number(argv[2], 0, 10000), p1 = number(argv[3], p0, 10000);\n        const int c0 = number(argv[4], 0, 10000), c1 = number(argv[5], c0, 10000);\n        const auto duration = std::chrono::seconds(argc == 8 ? number(argv[7], 1, 3600) : 15);\n        std::cout << std::unitbuf << \"user=User-6d4ec851 buffer=0 capacity=\" << cap << '\\n';\n        Buffer buffer(cap);\n        const auto start = Clock::now();\n        std::jthread producer([&] { buffer.produce(p0, p1); });\n        std::jthread consumer;\n        try {\n            consumer = std::jthread([&] { buffer.consume(c0, c1); });\n            for (auto tick = 5s; tick <= duration; tick += 5s) {\n                std::this_thread::sleep_until(start + tick);\n                buffer.report();\n            }\n            std::this_thread::sleep_until(start + duration);\n            buffer.stop();\n            producer.join();\n            consumer.join();\n        } catch (...) {\n            buffer.stop();\n            throw;\n        }\n        return buffer.finish();\n    } catch (const std::exception &e) {\n        std::cerr << e.what() << '\\n';\n        return 1;\n    }\n}"
+  },
+  {
+   "title": "Lab-06-bar.cpp",
+   "label": "bar",
+   "code": "#include <atomic>\n#include <barrier>\n#include <charconv>\n#include <iostream>\n#include <latch>\n#include <random>\n#include <stdexcept>\n#include <string_view>\n#include <thread>\n#include <vector>\n\nstatic int positive(std::string_view s, int limit)\n{\n    int value = 0;\n    const auto [end, error] = std::from_chars(s.data(), s.data() + s.size(), value);\n    if (error != std::errc{} || end != s.data() + s.size() || value < 1 || value > limit)\n        throw std::invalid_argument(\"parameter outside supported range\");\n    return value;\n}\n\nint main(int argc, char **argv)\n{\n    try {\n        if (argc != 4)\n            throw std::invalid_argument(\"usage: Lab-06-bar THREADS MATRICES SIZE\");\n        const int workers = positive(argv[1], 256);\n        const int count = positive(argv[2], 10000000);\n        const int size = positive(argv[3], 10000);\n        const auto cells = static_cast<std::size_t>(size) * size;\n        constexpr std::size_t max_values = 10000000;\n        if (cells > max_values || static_cast<std::size_t>(count) > max_values / cells ||\n            static_cast<std::size_t>(workers) > max_values / cells)\n            throw std::invalid_argument(\"matrix data or worker buffers exceed 10 million entries\");\n        std::mt19937 rng(42);\n        std::uniform_int_distribution<int> value(-2000, 2000);\n        std::vector<int> matrices(cells * count);\n        for (auto &entry : matrices)\n            entry = value(rng);\n        std::vector<std::vector<long long>> partial(workers, std::vector<long long>(cells));\n        std::vector<std::atomic<long long>> total(cells);\n        std::barrier phase(static_cast<std::ptrdiff_t>(workers));\n        std::latch start(1);\n        bool abort_start = false;\n        std::vector<std::jthread> threads;\n        threads.reserve(workers);\n        try {\n            for (int id = 0; id < workers; ++id) {\n                threads.emplace_back([&, id] {\n                    start.wait();\n                    if (abort_start)\n                        return;\n                    for (int m = id; m < count; m += workers) {\n                        for (std::size_t k = 0; k < cells; ++k)\n                            partial[id][k] += matrices[static_cast<std::size_t>(m) * cells + k];\n                    }\n                    phase.arrive_and_wait();\n                    for (std::size_t k = 0; k < cells; ++k)\n                        total[k].fetch_add(partial[id][k], std::memory_order_relaxed);\n                    phase.arrive_and_wait();\n                });\n            }\n        } catch (...) {\n            abort_start = true;\n            start.count_down();\n            throw;\n        }\n        start.count_down();\n        for (auto &thread : threads)\n            thread.join();\n        std::cout << \"threads=\" << workers << \" matrices=\" << count << \" size=\" << size << \" seed=42\\n\";\n        for (std::size_t k = 0; k < cells; ++k) {\n            long long reference = 0;\n            for (int m = 0; m < count; ++m)\n                reference += matrices[static_cast<std::size_t>(m) * cells + k];\n            const auto result = total[k].load(std::memory_order_relaxed);\n            if (reference != result)\n                throw std::logic_error(\"parallel result differs from serial reference\");\n            std::cout << result << ((k + 1) % size ? ' ' : '\\n');\n        }\n        std::cout << \"serial check: OK\\n\";\n        return 0;\n    } catch (const std::exception &e) {\n        std::cerr << e.what() << '\\n';\n        return 1;\n    }\n}"
+  },
+  {
+   "title": "Lab-06-dl.py",
+   "label": "dl",
+   "code": "from resources import DEADLOCK, detect\n\n\ndef main():\n    allocation, requests, available = DEADLOCK\n    print('Lab-06-dl | RS1 RS2 RS3 RS4 RS5')\n    for i, (held, pending) in enumerate(zip(allocation, requests, strict=True), 1):\n        print(f'P{i}: allocation={held}; request={pending}')\n    trace = detect(allocation, requests, available)\n    print(f'Initial Work = {trace.work[0]}')\n    for i, work in zip(trace.order, trace.work[1:], strict=True):\n        print(f'P{i + 1} finishes; Work = {work}')\n    print('Deadlocked:', ', '.join(f'P{i + 1}' for i in trace.blocked) or 'none')\n\n\nif __name__ == '__main__':\n    main()"
+  },
+  {
+   "title": "Lab-06-bank.py",
+   "label": "bank",
+   "code": "import argparse\n\nfrom resources import BANK, TASK2, request, safety\n\n\ndef sequence(trace, labels):\n    return ' -> '.join(labels[i] for i in trace.order) or 'none'\n\n\ndef main():\n    parser = argparse.ArgumentParser(description='Lab-06-bank: safety and resource grants')\n    options = parser.add_mutually_exclusive_group()\n    options.add_argument('--request', nargs=4, type=int, metavar=('PID', 'A', 'B', 'C'))\n    options.add_argument('--task2', type=int, metavar='X')\n    args = parser.parse_args()\n    if args.task2 is not None:\n        if args.task2 < 0:\n            parser.error('X must be nonnegative')\n        result = safety(*TASK2, (0, 0, args.task2, 1, 1))\n        print(f'Task 2: x={args.task2}; finishable: {sequence(result, \"ABCD\")}')\n        print('The stated fifth-resource maximum of process A is 3; the total is 2, independent of x.')\n        print('No nonnegative x makes this state safe.')\n        return\n    labels = tuple(f'P{i}' for i in range(len(BANK[0])))\n    allocation, maximum, available = BANK\n    if args.request is None:\n        trace = safety(*BANK)\n        print('Lab-06-bank | total A/B/C = (10, 5, 7)')\n        print(f'Safe sequence: {sequence(trace, labels)}')\n        print('Work:', *trace.work, sep=' -> ')\n        return\n    pid, *amounts = args.request\n    try:\n        decision = request(allocation, maximum, available, pid, amounts)\n    except ValueError as error:\n        parser.error(str(error))\n    print(f'P{pid} requests {tuple(amounts)}: {decision.status}')\n    print(f'Available after decision: {decision.available}')\n    if decision.status == 'granted' and decision.trace is not None:\n        print(f'Safe sequence: {sequence(decision.trace, labels)}')\n\n\nif __name__ == '__main__':\n    main()"
+  },
+  {
+   "title": "resources.py",
+   "label": "resources",
+   "code": "from dataclasses import dataclass\n\nVector = tuple[int, ...]\nMatrix = tuple[Vector, ...]\n\nDEADLOCK = (\n    ((0, 1, 1, 1, 2), (0, 1, 0, 1, 0), (0, 0, 0, 0, 1), (2, 1, 0, 0, 0)),\n    ((1, 1, 0, 2, 1), (0, 1, 0, 2, 1), (0, 2, 0, 3, 1), (0, 2, 1, 1, 0)),\n    (0, 1, 0, 2, 1),\n)\nTASK2 = (\n    ((1, 0, 2, 1, 1), (2, 0, 1, 1, 0), (1, 1, 0, 1, 0), (1, 1, 1, 1, 0)),\n    ((1, 1, 2, 1, 3), (2, 2, 2, 1, 0), (2, 1, 3, 1, 0), (1, 1, 2, 2, 1)),\n)\nBANK = (\n    ((0, 1, 0), (2, 0, 0), (3, 0, 2), (2, 1, 1), (0, 0, 2)),\n    ((7, 5, 3), (3, 2, 2), (9, 0, 2), (2, 2, 2), (4, 3, 3)),\n    (3, 3, 2),\n)\n\n\n@dataclass(frozen=True)\nclass Trace:\n    order: tuple[int, ...]\n    blocked: tuple[int, ...]\n    work: tuple[Vector, ...]\n\n\n@dataclass(frozen=True)\nclass Decision:\n    status: str\n    allocation: Matrix\n    available: Vector\n    trace: Trace | None = None\n\n\ndef vector(values, width):\n    values = tuple(values)\n    if len(values) != width or any(type(v) is not int or v < 0 for v in values):\n        raise ValueError('expected a nonnegative integer resource vector of the required width')\n    return values\n\n\ndef state(allocation, demands, available):\n    available = tuple(available)\n    width = len(available)\n    if width == 0:\n        raise ValueError('at least one resource type is required')\n    allocation = tuple(vector(row, width) for row in allocation)\n    demands = tuple(vector(row, width) for row in demands)\n    if len(allocation) != len(demands):\n        raise ValueError('process counts differ')\n    return allocation, demands, vector(available, width)\n\n\ndef leq(left, right):\n    return all(a <= b for a, b in zip(left, right, strict=True))\n\n\ndef add(left, right):\n    return tuple(a + b for a, b in zip(left, right, strict=True))\n\n\ndef sub(left, right):\n    return tuple(a - b for a, b in zip(left, right, strict=True))\n\n\ndef scan(allocation, demands, available, *, detect_only):\n    done = [detect_only and not any(row) for row in allocation]\n    order = []\n    work = [available]\n    while True:\n        count = len(order)\n        for pid, required in enumerate(demands):\n            if not done[pid] and leq(required, work[-1]):\n                work.append(add(work[-1], allocation[pid]))\n                order.append(pid)\n                done[pid] = True\n        if count == len(order):\n            return Trace(tuple(order), tuple(i for i, value in enumerate(done) if not value), tuple(work))\n\n\ndef detect(allocation, requests, available):\n    return scan(*state(allocation, requests, available), detect_only=True)\n\n\ndef need(allocation, maximum):\n    if any(not leq(a, m) for a, m in zip(allocation, maximum, strict=True)):\n        raise ValueError('allocation cannot exceed maximum')\n    return tuple(sub(m, a) for a, m in zip(allocation, maximum, strict=True))\n\n\ndef safety(allocation, maximum, available):\n    allocation, maximum, available = state(allocation, maximum, available)\n    return scan(allocation, need(allocation, maximum), available, detect_only=False)\n\n\ndef request(allocation, maximum, available, pid, amounts):\n    allocation, maximum, available = state(allocation, maximum, available)\n    if type(pid) is not int or not 0 <= pid < len(allocation):\n        raise ValueError('unknown process')\n    amounts = vector(amounts, len(available))\n    if not leq(amounts, need(allocation, maximum)[pid]):\n        return Decision('exceeds-need', allocation, available)\n    if not leq(amounts, available):\n        return Decision('unavailable', allocation, available)\n    proposed = allocation[:pid] + (add(allocation[pid], amounts),) + allocation[pid + 1:]\n    balance = sub(available, amounts)\n    trace = safety(proposed, maximum, balance)\n    if trace.blocked:\n        return Decision('unsafe', allocation, available, trace)\n    return Decision('granted', proposed, balance, trace)"
+  }
+ ]
+}

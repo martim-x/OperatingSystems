@@ -1,0 +1,175 @@
+command=wsl.exe -d Ubuntu -u User-6d4ec851 -- ./build/Lab-06-conds 2 120 180 2 7 --seconds 6
+cwd=C:\Users\User-6d4ec851\OS5\lab6\linux
+exit=0
+completed=2026-11-23T21:41:01.693+03:00
+wall_seconds=6.109069
+User-6d4ec851@Ubuntu /mnt/c/Users/User-6d4ec851/OS5/lab6/linux
+user=User-6d4ec851 buffer=0 capacity=2
+added=1 buffer=1
+removed=1 buffer=0
+consumer waits (empty)
+added=2 buffer=1
+consumer wakes
+removed=2 buffer=0
+consumer waits (empty)
+added=3 buffer=1
+consumer wakes
+removed=3 buffer=0
+consumer waits (empty)
+added=4 buffer=1
+consumer wakes
+removed=4 buffer=0
+consumer waits (empty)
+added=5 buffer=1
+consumer wakes
+removed=5 buffer=0
+consumer waits (empty)
+added=6 buffer=1
+consumer wakes
+removed=6 buffer=0
+consumer waits (empty)
+added=7 buffer=1
+consumer wakes
+removed=7 buffer=0
+consumer waits (empty)
+added=8 buffer=1
+consumer wakes
+removed=8 buffer=0
+consumer waits (empty)
+added=9 buffer=1
+consumer wakes
+removed=9 buffer=0
+consumer waits (empty)
+added=10 buffer=1
+consumer wakes
+removed=10 buffer=0
+consumer waits (empty)
+added=11 buffer=1
+consumer wakes
+removed=11 buffer=0
+consumer waits (empty)
+added=12 buffer=1
+consumer wakes
+removed=12 buffer=0
+consumer waits (empty)
+added=13 buffer=1
+consumer wakes
+removed=13 buffer=0
+consumer waits (empty)
+added=14 buffer=1
+consumer wakes
+removed=14 buffer=0
+consumer waits (empty)
+added=15 buffer=1
+consumer wakes
+removed=15 buffer=0
+consumer waits (empty)
+added=16 buffer=1
+consumer wakes
+removed=16 buffer=0
+consumer waits (empty)
+added=17 buffer=1
+consumer wakes
+removed=17 buffer=0
+consumer waits (empty)
+added=18 buffer=1
+consumer wakes
+removed=18 buffer=0
+consumer waits (empty)
+added=19 buffer=1
+consumer wakes
+removed=19 buffer=0
+consumer waits (empty)
+added=20 buffer=1
+consumer wakes
+removed=20 buffer=0
+consumer waits (empty)
+added=21 buffer=1
+consumer wakes
+removed=21 buffer=0
+consumer waits (empty)
+added=22 buffer=1
+consumer wakes
+removed=22 buffer=0
+consumer waits (empty)
+added=23 buffer=1
+consumer wakes
+removed=23 buffer=0
+consumer waits (empty)
+added=24 buffer=1
+consumer wakes
+removed=24 buffer=0
+consumer waits (empty)
+added=25 buffer=1
+consumer wakes
+removed=25 buffer=0
+consumer waits (empty)
+added=26 buffer=1
+consumer wakes
+removed=26 buffer=0
+consumer waits (empty)
+added=27 buffer=1
+consumer wakes
+removed=27 buffer=0
+consumer waits (empty)
+added=28 buffer=1
+consumer wakes
+removed=28 buffer=0
+consumer waits (empty)
+added=29 buffer=1
+consumer wakes
+removed=29 buffer=0
+consumer waits (empty)
+added=30 buffer=1
+consumer wakes
+removed=30 buffer=0
+consumer waits (empty)
+added=31 buffer=1
+consumer wakes
+removed=31 buffer=0
+consumer waits (empty)
+added=32 buffer=1
+consumer wakes
+removed=32 buffer=0
+consumer waits (empty)
+added=33 buffer=1
+consumer wakes
+removed=33 buffer=0
+consumer waits (empty)
+added=34 buffer=1
+consumer wakes
+removed=34 buffer=0
+consumer waits (empty)
+stats elapsed=5.00s produced=34 consumed=34 buffer=0 fill=0.00%
+  producer count=34 mean_interval_ms=148.80 speed=6.80/s total_s=5.00
+  consumer count=34 mean_processing_ms=4.01 speed=6.80/s total_s=5.00
+added=35 buffer=1
+consumer wakes
+removed=35 buffer=0
+consumer waits (empty)
+added=36 buffer=1
+consumer wakes
+removed=36 buffer=0
+consumer waits (empty)
+added=37 buffer=1
+consumer wakes
+removed=37 buffer=0
+consumer waits (empty)
+added=38 buffer=1
+consumer wakes
+removed=38 buffer=0
+consumer waits (empty)
+added=39 buffer=1
+consumer wakes
+removed=39 buffer=0
+consumer waits (empty)
+added=40 buffer=1
+consumer wakes
+removed=40 buffer=0
+consumer waits (empty)
+added=41 buffer=1
+consumer wakes
+removed=41 buffer=0
+consumer waits (empty)
+consumer wakes
+final produced=41 consumed=41 buffer=0
