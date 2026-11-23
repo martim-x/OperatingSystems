@@ -1,0 +1,30 @@
+command=python -B lab05_basic.py sjf
+exit=0
+INPUT: id  arrival  burst  priority
+       1        0     80         3
+       2       20     45         5
+       3       30     60         2
+       4       50     30         4
+       5       70     90         1
+       6      100     55         3
+       7      120     75         2
+       8      150     40         5
+       9      180     65         4
+      10      200     85         1
+
+RESULTS: id  arrival  burst  prio  start  finish  wait  service  turn
+         1        0     80     3      0      80     0       80    80
+         2       20     45     5    110     155    90       45   135
+         3       30     60     2    250     310   220       60   280
+         4       50     30     4     80     110    30       30    60
+         5       70     90     1    535     625   465       90   555
+         6      100     55     3    195     250    95       55   150
+         7      120     75     2    375     450   255       75   330
+         8      150     40     5    155     195     5       40    45
+         9      180     65     4    310     375   130       65   195
+        10      200     85     1    450     535   250       85   335
+Metrics: average waiting=154.00, average service=62.50, average turnaround=216.50, throughput=0.0160 tasks/time-unit
+Metric formulas: average waiting=mean(finish-arrival-burst); average service=mean(burst); average turnaround=mean(finish-arrival); throughput=task count / elapsed time from t=0 to last finish.
+TIMELINE:
+  0-80:P1 | 80-110:P4 | 110-155:P2 | 155-195:P8 | 195-250:P6 | 250-310:P3 | 310-375:P9 | 375-450:P7 | 450-535:P10 | 535-625:P5
+Selection criterion: non-preemptive shortest burst; ties by arrival then input order.

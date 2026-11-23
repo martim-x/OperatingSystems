@@ -136,12 +136,11 @@ static inline void lab05_worker(void)
     clock_gettime(CLOCK_MONOTONIC, &t0);
     for (long i = 0; i < iterations; i++)
     {
-        if (i % period == 0)
+        if ((i + 1) % period == 0)
         {
-            if (i != 0)
-                lab05_pause();
+            lab05_pause();
             printf("%9ld | PID %6d | TID %6d | nice %3d | CPU %d\n",
-                   i, pid, tid, lab05_nice(tid), lab05_cpu());
+                   i + 1, pid, tid, lab05_nice(tid), lab05_cpu());
             fflush(stdout);
         }
     }

@@ -1,0 +1,115 @@
+command=python -B lab05_mq.py --seed 42 --full
+exit=0
+Lab-05MQ — Multilevel Feedback Queue scheduler
+Seed: 42
+Workload: 100 tasks; 60% CPU-bound, 40% I/O-bound; arrivals 0–250 ms
+Ranges: CPU-bound CPU 300–900 ms; I/O-bound CPU 100–350 ms, CPU burst 10–35 ms, I/O 20–80 ms
+Policy: Q0 RR 15 ms (50), Q1 RR 60 ms (30), Q2 FCFS 150 ms (20); weights divide runnable CPU time
+I/O return promotes one level; Q0 remains Q0. Q0/Q1 quantum expiry demotes; Q2 expiry equally chooses Q0/Q1/Q2 by seed.
+Processes completed: 100/100
+Queue completion cohorts (average ready-wait / turnaround, ms):
+  Q0: n=28, wait=13755.32, turnaround=14487.82
+  Q1: n=27, wait=25131.52, turnaround=25788.85
+  Q2: n=45, wait=33808.53, turnaround=34381.73
+System: avg_wait=25850.84 ms, avg_turnaround=26491.36 ms, total_execution=44683 ms, context_switches=1035, CPU_utilization=100.00%, throughput=0.0022 tasks/ms, queue_transitions=647, end_time=44684 ms
+Processes (PID, arrival, execution, waiting, turnaround, I/O, final queue, type):
+PID 001: arrival=54 ms, execution=880 ms, waiting=39833 ms, turnaround=40713 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 002: arrival=224 ms, execution=622 ms, waiting=42900 ms, turnaround=43522 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 003: arrival=54 ms, execution=267 ms, waiting=17529 ms, turnaround=18246 ms, io=450 ms, final=Q1, type=I/O-bound
+PID 004: arrival=226 ms, execution=769 ms, waiting=37727 ms, turnaround=38496 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 005: arrival=36 ms, execution=167 ms, waiting=5717 ms, turnaround=6269 ms, io=385 ms, final=Q0, type=I/O-bound
+PID 006: arrival=190 ms, execution=874 ms, waiting=43520 ms, turnaround=44394 ms, io=0 ms, final=Q0, type=CPU-bound
+PID 007: arrival=137 ms, execution=569 ms, waiting=33996 ms, turnaround=34565 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 008: arrival=191 ms, execution=249 ms, waiting=17465 ms, turnaround=18484 ms, io=770 ms, final=Q1, type=I/O-bound
+PID 009: arrival=149 ms, execution=708 ms, waiting=41202 ms, turnaround=41910 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 010: arrival=92 ms, execution=156 ms, waiting=5661 ms, turnaround=6389 ms, io=572 ms, final=Q0, type=I/O-bound
+PID 011: arrival=126 ms, execution=123 ms, waiting=13896 ms, turnaround=14088 ms, io=69 ms, final=Q1, type=I/O-bound
+PID 012: arrival=220 ms, execution=412 ms, waiting=25814 ms, turnaround=26226 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 013: arrival=39 ms, execution=463 ms, waiting=8375 ms, turnaround=8838 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 014: arrival=202 ms, execution=732 ms, waiting=36670 ms, turnaround=37402 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 015: arrival=152 ms, execution=116 ms, waiting=14900 ms, turnaround=15236 ms, io=220 ms, final=Q0, type=I/O-bound
+PID 016: arrival=152 ms, execution=779 ms, waiting=43499 ms, turnaround=44278 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 017: arrival=135 ms, execution=557 ms, waiting=40639 ms, turnaround=41196 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 018: arrival=248 ms, execution=241 ms, waiting=6937 ms, turnaround=8690 ms, io=1512 ms, final=Q0, type=I/O-bound
+PID 019: arrival=184 ms, execution=129 ms, waiting=14066 ms, turnaround=14499 ms, io=304 ms, final=Q0, type=I/O-bound
+PID 020: arrival=137 ms, execution=573 ms, waiting=33723 ms, turnaround=34296 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 021: arrival=196 ms, execution=648 ms, waiting=42287 ms, turnaround=42935 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 022: arrival=28 ms, execution=600 ms, waiting=39410 ms, turnaround=40010 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 023: arrival=111 ms, execution=461 ms, waiting=32430 ms, turnaround=32891 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 024: arrival=116 ms, execution=100 ms, waiting=12668 ms, turnaround=12996 ms, io=228 ms, final=Q0, type=I/O-bound
+PID 025: arrival=184 ms, execution=167 ms, waiting=15647 ms, turnaround=16222 ms, io=408 ms, final=Q0, type=I/O-bound
+PID 026: arrival=45 ms, execution=819 ms, waiting=30297 ms, turnaround=31116 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 027: arrival=233 ms, execution=127 ms, waiting=14162 ms, turnaround=14445 ms, io=156 ms, final=Q0, type=I/O-bound
+PID 028: arrival=215 ms, execution=819 ms, waiting=42615 ms, turnaround=43434 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 029: arrival=155 ms, execution=150 ms, waiting=5557 ms, turnaround=6137 ms, io=430 ms, final=Q0, type=I/O-bound
+PID 030: arrival=195 ms, execution=465 ms, waiting=36197 ms, turnaround=36662 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 031: arrival=138 ms, execution=843 ms, waiting=40756 ms, turnaround=41599 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 032: arrival=235 ms, execution=300 ms, waiting=27321 ms, turnaround=27621 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 033: arrival=153 ms, execution=631 ms, waiting=41621 ms, turnaround=42252 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 034: arrival=125 ms, execution=104 ms, waiting=4752 ms, turnaround=5409 ms, io=553 ms, final=Q0, type=I/O-bound
+PID 035: arrival=92 ms, execution=324 ms, waiting=16997 ms, turnaround=17672 ms, io=351 ms, final=Q0, type=I/O-bound
+PID 036: arrival=61 ms, execution=359 ms, waiting=31604 ms, turnaround=31963 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 037: arrival=61 ms, execution=324 ms, waiting=17411 ms, turnaround=18615 ms, io=880 ms, final=Q1, type=I/O-bound
+PID 038: arrival=20 ms, execution=387 ms, waiting=10488 ms, turnaround=10875 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 039: arrival=187 ms, execution=224 ms, waiting=6487 ms, turnaround=7935 ms, io=1224 ms, final=Q0, type=I/O-bound
+PID 040: arrival=136 ms, execution=428 ms, waiting=33581 ms, turnaround=34009 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 041: arrival=32 ms, execution=786 ms, waiting=43500 ms, turnaround=44286 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 042: arrival=242 ms, execution=862 ms, waiting=43069 ms, turnaround=43931 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 043: arrival=42 ms, execution=571 ms, waiting=30164 ms, turnaround=30735 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 044: arrival=135 ms, execution=733 ms, waiting=40701 ms, turnaround=41434 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 045: arrival=246 ms, execution=516 ms, waiting=43417 ms, turnaround=43933 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 046: arrival=237 ms, execution=238 ms, waiting=16178 ms, turnaround=16812 ms, io=396 ms, final=Q1, type=I/O-bound
+PID 047: arrival=176 ms, execution=151 ms, waiting=14822 ms, turnaround=15129 ms, io=156 ms, final=Q1, type=I/O-bound
+PID 048: arrival=102 ms, execution=271 ms, waiting=17259 ms, turnaround=17917 ms, io=387 ms, final=Q0, type=I/O-bound
+PID 049: arrival=112 ms, execution=829 ms, waiting=40280 ms, turnaround=41109 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 050: arrival=115 ms, execution=423 ms, waiting=32774 ms, turnaround=33197 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 051: arrival=63 ms, execution=157 ms, waiting=5990 ms, turnaround=6680 ms, io=533 ms, final=Q0, type=I/O-bound
+PID 052: arrival=5 ms, execution=867 ms, waiting=38926 ms, turnaround=39793 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 053: arrival=58 ms, execution=525 ms, waiting=31028 ms, turnaround=31553 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 054: arrival=1 ms, execution=372 ms, waiting=626 ms, turnaround=998 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 055: arrival=181 ms, execution=360 ms, waiting=23642 ms, turnaround=24002 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 056: arrival=58 ms, execution=369 ms, waiting=31253 ms, turnaround=31622 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 057: arrival=231 ms, execution=332 ms, waiting=37763 ms, turnaround=38095 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 058: arrival=220 ms, execution=184 ms, waiting=6149 ms, turnaround=7113 ms, io=780 ms, final=Q0, type=I/O-bound
+PID 059: arrival=60 ms, execution=585 ms, waiting=31320 ms, turnaround=31905 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 060: arrival=171 ms, execution=224 ms, waiting=17937 ms, turnaround=18863 ms, io=702 ms, final=Q1, type=I/O-bound
+PID 061: arrival=33 ms, execution=884 ms, waiting=39495 ms, turnaround=40379 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 062: arrival=147 ms, execution=784 ms, waiting=40930 ms, turnaround=41714 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 063: arrival=62 ms, execution=784 ms, waiting=31362 ms, turnaround=32146 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 064: arrival=206 ms, execution=204 ms, waiting=18014 ms, turnaround=18530 ms, io=312 ms, final=Q0, type=I/O-bound
+PID 065: arrival=24 ms, execution=268 ms, waiting=17847 ms, turnaround=18577 ms, io=462 ms, final=Q0, type=I/O-bound
+PID 066: arrival=108 ms, execution=720 ms, waiting=31983 ms, turnaround=32703 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 067: arrival=119 ms, execution=321 ms, waiting=17516 ms, turnaround=18044 ms, io=207 ms, final=Q1, type=I/O-bound
+PID 068: arrival=172 ms, execution=400 ms, waiting=36060 ms, turnaround=36460 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 069: arrival=15 ms, execution=203 ms, waiting=15317 ms, turnaround=15766 ms, io=246 ms, final=Q0, type=I/O-bound
+PID 070: arrival=204 ms, execution=411 ms, waiting=25284 ms, turnaround=25695 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 071: arrival=63 ms, execution=496 ms, waiting=31695 ms, turnaround=32191 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 072: arrival=48 ms, execution=237 ms, waiting=17452 ms, turnaround=17941 ms, io=252 ms, final=Q1, type=I/O-bound
+PID 073: arrival=108 ms, execution=487 ms, waiting=32444 ms, turnaround=32931 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 074: arrival=71 ms, execution=218 ms, waiting=17733 ms, turnaround=18851 ms, io=900 ms, final=Q0, type=I/O-bound
+PID 075: arrival=236 ms, execution=377 ms, waiting=38090 ms, turnaround=38467 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 076: arrival=113 ms, execution=306 ms, waiting=17920 ms, turnaround=18512 ms, io=286 ms, final=Q0, type=I/O-bound
+PID 077: arrival=12 ms, execution=853 ms, waiting=43417 ms, turnaround=44270 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 078: arrival=214 ms, execution=103 ms, waiting=4977 ms, turnaround=5712 ms, io=632 ms, final=Q0, type=I/O-bound
+PID 079: arrival=192 ms, execution=317 ms, waiting=19294 ms, turnaround=20151 ms, io=540 ms, final=Q0, type=I/O-bound
+PID 080: arrival=104 ms, execution=224 ms, waiting=17333 ms, turnaround=17821 ms, io=264 ms, final=Q1, type=I/O-bound
+PID 081: arrival=221 ms, execution=202 ms, waiting=6682 ms, turnaround=7424 ms, io=540 ms, final=Q0, type=I/O-bound
+PID 082: arrival=97 ms, execution=302 ms, waiting=17087 ms, turnaround=17389 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 083: arrival=99 ms, execution=571 ms, waiting=18331 ms, turnaround=18902 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 084: arrival=237 ms, execution=300 ms, waiting=17089 ms, turnaround=17781 ms, io=392 ms, final=Q1, type=I/O-bound
+PID 085: arrival=73 ms, execution=208 ms, waiting=15866 ms, turnaround=16470 ms, io=396 ms, final=Q1, type=I/O-bound
+PID 086: arrival=200 ms, execution=869 ms, waiting=42556 ms, turnaround=43425 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 087: arrival=169 ms, execution=798 ms, waiting=41801 ms, turnaround=42599 ms, io=0 ms, final=Q0, type=CPU-bound
+PID 088: arrival=39 ms, execution=148 ms, waiting=16079 ms, turnaround=16458 ms, io=231 ms, final=Q0, type=I/O-bound
+PID 089: arrival=247 ms, execution=359 ms, waiting=38910 ms, turnaround=39269 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 090: arrival=148 ms, execution=288 ms, waiting=17709 ms, turnaround=18227 ms, io=230 ms, final=Q1, type=I/O-bound
+PID 091: arrival=191 ms, execution=180 ms, waiting=6401 ms, turnaround=6949 ms, io=368 ms, final=Q0, type=I/O-bound
+PID 092: arrival=149 ms, execution=788 ms, waiting=43434 ms, turnaround=44222 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 093: arrival=128 ms, execution=843 ms, waiting=40298 ms, turnaround=41141 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 094: arrival=40 ms, execution=358 ms, waiting=9139 ms, turnaround=9497 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 095: arrival=245 ms, execution=820 ms, waiting=43619 ms, turnaround=44439 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 096: arrival=20 ms, execution=490 ms, waiting=29201 ms, turnaround=29691 ms, io=0 ms, final=Q1, type=CPU-bound
+PID 097: arrival=17 ms, execution=252 ms, waiting=6615 ms, turnaround=8127 ms, io=1260 ms, final=Q0, type=I/O-bound
+PID 098: arrival=220 ms, execution=540 ms, waiting=37294 ms, turnaround=37834 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 099: arrival=103 ms, execution=422 ms, waiting=31866 ms, turnaround=32288 ms, io=0 ms, final=Q2, type=CPU-bound
+PID 100: arrival=241 ms, execution=327 ms, waiting=17789 ms, turnaround=18501 ms, io=385 ms, final=Q1, type=I/O-bound
